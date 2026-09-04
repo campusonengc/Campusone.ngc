@@ -2690,7 +2690,7 @@
 
             </div>
 
-            <span class="badge badge-purple">
+            <span id="adminPanelRoleBadge" class="badge badge-purple">
               Administrator
             </span>
 
@@ -2700,6 +2700,7 @@
           <div class="admin-grid">
 
             <div
+              id="adminNoticeAction"
               class="admin-action"
               onclick="openNoticeModal()"
             >
@@ -2716,6 +2717,7 @@
 
 
             <div
+              id="adminMaterialAction"
               class="admin-action"
               onclick="openMaterialModal()"
             >
@@ -2732,6 +2734,7 @@
 
 
             <div
+              id="adminRoutineAction"
               class="admin-action"
               onclick="openRoutineModal()"
             >
@@ -2748,6 +2751,7 @@
 
 
             <div
+              id="adminEventAction"
               class="admin-action"
               onclick="openEventModal()"
             >
@@ -2764,6 +2768,7 @@
 
 
             <div
+              id="adminResultAction"
               class="admin-action"
               onclick="openResultModal()"
             >
@@ -2781,6 +2786,7 @@
 
 
             <div
+              id="adminSupportAction"
               class="admin-action"
               onclick="loadAdminSupport()"
             >
@@ -2790,6 +2796,7 @@
             </div>
 
             <div
+              id="adminUsersAction"
               class="admin-action"
               onclick="loadAdminUsers()"
             >
@@ -2807,6 +2814,18 @@
           </div>
 
 
+
+
+          <div id="moderatorPermissionPanel" class="card hidden" style="margin-top:20px;">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Moderator Access Control</div>
+                <div style="color:#64748b;font-size:12px;margin-top:3px;">Admin যেগুলো unlock করবেন, Moderator শুধু সেগুলোই করতে পারবে।</div>
+              </div>
+              <button class="primary-btn" type="button" onclick="saveModeratorPermissions()">Save Access</button>
+            </div>
+            <div id="moderatorPermissionList" class="card-body"></div>
+          </div>
 
           <div id="adminSupportSection" class="card hidden" style="margin-top:20px;">
             <div class="card-header">
@@ -2849,7 +2868,7 @@
                   <tr>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Role</th>
+                    <th>Role / Access</th>
                     <th>Created</th>
                   </tr>
 
@@ -3047,6 +3066,27 @@
     let eventsCache = [];
 
     let resultsCache = [];
+
+    // Moderator permissions are controlled by Admin.
+    let moderatorPermissions = {
+      notices: false,
+      materials: false,
+      routine: false,
+      events: false,
+      results: false,
+      support: false,
+      users: false
+    };
+
+    const moderatorPermissionLabels = {
+      notices: "Notices",
+      materials: "Study Materials",
+      routine: "Class Routine",
+      events: "Events",
+      results: "Results",
+      support: "Support Messages",
+      users: "User Management"
+    };
 
 
     const dayOrder = [
@@ -3698,10 +3738,53 @@
       }
 
 
+      await loadModeratorPermissions();
       updateUserUI();
 
     }
 
+
+    function isAdmin() {
+      return currentProfile?.role === "admin";
+    }
+
+    function isModerator() {
+      return currentProfile?.role === "moderator";
+    }
+
+    function canManage(permission) {
+      return isAdmin() || (isModerator() && moderatorPermissions[permission] === true);
+    }
+
+    async function loadModeratorPermissions() {
+      if (isAdmin()) {
+        moderatorPermissions = {
+          notices: true, materials: true, routine: true, events: true,
+          results: true, support: true, users: true
+        };
+        return;
+      }
+
+      moderatorPermissions = {
+        notices: false, materials: false, routine: false, events: false,
+        results: false, support: false, users: false
+      };
+
+      if (!isModerator()) return;
+
+      try {
+        const ref = doc(db, "settings", "moderatorAccess");
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          const data = snap.data() || {};
+          Object.keys(moderatorPermissions).forEach(key => {
+            moderatorPermissions[key] = data[key] === true;
+          });
+        }
+      } catch (error) {
+        console.error("Moderator permissions load error:", error);
+      }
+    }
 
     function updateUserUI() {
 
@@ -3746,7 +3829,9 @@
         .textContent =
         role === "admin"
           ? "Administrator"
-          : "Student";
+          : role === "moderator"
+            ? "Moderator"
+            : "Student";
 
 
       document
@@ -3789,7 +3874,9 @@
         .textContent =
         role === "admin"
           ? "Administrator"
-          : "Student";
+          : role === "moderator"
+            ? "Moderator"
+            : "Student";
 
 
       document
@@ -3803,51 +3890,40 @@
         .textContent =
         role === "admin"
           ? "Administrator"
-          : "Student";
+          : role === "moderator"
+            ? "Moderator"
+            : "Student";
 
 
       const isAdmin =
         role === "admin";
 
+      const isMod = role === "moderator";
 
-      document
-        .getElementById("adminNav")
-        .classList.toggle(
-          "hidden",
-          !isAdmin
-        );
+      document.getElementById("adminNav").classList.toggle("hidden", !(isAdmin || isMod));
+      if (isAdmin) renderModeratorPermissionPanel();
+      const adminBadge = document.getElementById("adminPanelRoleBadge");
+      if (adminBadge) adminBadge.textContent = isAdmin ? "Administrator" : "Moderator";
 
-
-      document
-        .getElementById("noticeAdminBtn")
-        .classList.toggle(
-          "hidden",
-          !isAdmin
-        );
-
-
-      document
-        .getElementById("materialAdminBtn")
-        .classList.toggle(
-          "hidden",
-          !isAdmin
-        );
-
-
-      document
-        .getElementById("routineAdminBtn")
-        .classList.toggle(
-          "hidden",
-          !isAdmin
-        );
+      const permissionElements = {
+        notices: "adminNoticeAction",
+        materials: "adminMaterialAction",
+        routine: "adminRoutineAction",
+        events: "adminEventAction",
+        results: "adminResultAction",
+        support: "adminSupportAction",
+        users: "adminUsersAction"
+      };
+      Object.entries(permissionElements).forEach(([key, id]) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("hidden", !canManage(key));
+      });
+      const permPanel = document.getElementById("moderatorPermissionPanel");
+      if (permPanel) permPanel.classList.toggle("hidden", !isAdmin);
 
 
-      document
-        .getElementById("eventAdminBtn")
-        .classList.toggle(
-          "hidden",
-          !isAdmin
-        );
+
+
 
     }
 
@@ -3860,7 +3936,7 @@
 
       if (
         page === "admin" &&
-        currentProfile?.role !== "admin"
+        !isAdmin() && !isModerator()
       ) {
 
         showToast(
@@ -3893,6 +3969,9 @@
 
       target.classList.add("active");
 
+      if (isModerator()) {
+        loadModeratorPermissions().then(() => updateUserUI());
+      }
 
       currentPage = page;
 
@@ -4147,8 +4226,7 @@
       }
 
 
-      const isAdmin =
-        currentProfile?.role === "admin";
+      const isAdmin = canManage("notices");
 
 
       container.innerHTML =
@@ -4274,7 +4352,7 @@
 
     window.openNoticeModal = function(existing = null) {
 
-      if (currentProfile?.role !== "admin") {
+      if (!canManage("notices")) {
 
         showToast(
           "শুধুমাত্র Admin Notice manage করতে পারবেন।",
@@ -4453,7 +4531,7 @@
     window.deleteNotice = async function(id) {
 
       if (
-        currentProfile?.role !== "admin"
+        !canManage("notices")
       ) return;
 
 
@@ -4603,8 +4681,7 @@
       }
 
 
-      const isAdmin =
-        currentProfile?.role === "admin";
+      const isAdmin = canManage("materials");
 
 
       grid.innerHTML =
@@ -4687,7 +4764,7 @@
 
     window.openMaterialModal = function() {
 
-      if (currentProfile?.role !== "admin") {
+      if (!canManage("materials")) {
 
         showToast(
           "শুধুমাত্র Admin Material upload করতে পারবেন।",
@@ -5032,7 +5109,7 @@
     window.deleteMaterial = async function(id) {
 
       if (
-        currentProfile?.role !== "admin"
+        !canManage("materials")
       ) return;
 
 
@@ -5167,8 +5244,7 @@
         );
 
 
-      const isAdmin =
-        currentProfile?.role === "admin";
+      const isAdmin = canManage("routine");
 
 
       grid.innerHTML =
@@ -5269,7 +5345,7 @@
     window.openRoutineModal = function() {
 
       if (
-        currentProfile?.role !== "admin"
+        !canManage("routine")
       ) {
 
         showToast(
@@ -5489,7 +5565,7 @@
     window.deleteRoutine = async function(id) {
 
       if (
-        currentProfile?.role !== "admin"
+        !canManage("routine")
       ) return;
 
 
@@ -5638,8 +5714,7 @@
       }
 
 
-      const isAdmin =
-        currentProfile?.role === "admin";
+      const isAdmin = canManage("events");
 
 
       grid.innerHTML =
@@ -5753,7 +5828,7 @@
     window.openEventModal = function() {
 
       if (
-        currentProfile?.role !== "admin"
+        !canManage("events")
       ) {
 
         showToast(
@@ -5968,7 +6043,7 @@
     window.deleteEvent = async function(id) {
 
       if (
-        currentProfile?.role !== "admin"
+        !canManage("events")
       ) return;
 
 
@@ -6027,7 +6102,7 @@
 
       try {
 
-        if (currentProfile?.role === "admin") {
+        if (isAdmin() || isModerator()) {
 
           const snap = await getDocs(collection(db, "results"));
 
@@ -6079,7 +6154,7 @@
       const tbody = document.getElementById("resultsTable");
 
       const visibleResults =
-        currentProfile?.role === "admin"
+        isAdmin() || isModerator()
           ? resultsCache
           : resultsCache.filter(r =>
               r.published === true &&
@@ -6177,7 +6252,7 @@
 
     window.openResultModal = function() {
 
-      if (currentProfile?.role !== "admin") {
+      if (!canManage("results")) {
 
         showToast(
           "শুধুমাত্র Admin result manage করতে পারবেন।",
@@ -6292,6 +6367,11 @@
 
 
     async function saveResult() {
+
+      if (!canManage("results")) {
+        showToast("Result access lock করা আছে।", "error");
+        return;
+      }
 
       const email = document.getElementById("resultStudentEmail").value.trim().toLowerCase();
       const exam = document.getElementById("resultExam").value.trim();
@@ -6878,8 +6958,8 @@
 
     window.loadAdminSupport = async function() {
 
-      if (currentProfile?.role !== "admin") {
-        showToast("Admin access প্রয়োজন।", "error");
+      if (!canManage("support")) {
+        showToast("Support Messages access lock করা আছে।", "error");
         return;
       }
 
@@ -7005,7 +7085,7 @@
 
     window.replySupport = async function(id) {
 
-      if (currentProfile?.role !== "admin") return;
+      if (!canManage("support")) return;
 
       const reply =
         document.getElementById(`reply-${id}`)?.value.trim() || "";
@@ -7044,8 +7124,8 @@
 
     window.deleteSupport = async function(id) {
 
-      if (currentProfile?.role !== "admin") {
-        showToast("Admin access প্রয়োজন।", "error");
+      if (!canManage("support")) {
+        showToast("Support Messages access lock করা আছে।", "error");
         return;
       }
 
@@ -7083,12 +7163,10 @@
 
     window.loadAdminUsers = async function() {
 
-      if (
-        currentProfile?.role !== "admin"
-      ) {
+      if (!canManage("users")) {
 
         showToast(
-          "Admin access প্রয়োজন।",
+          "User Management access lock করা আছে।",
           "error"
         );
 
@@ -7116,7 +7194,7 @@
 
       tbody.innerHTML =
         `<tr>
-          <td colspan="4">
+          <td colspan="5">
             Loading...
           </td>
         </tr>`;
@@ -7155,7 +7233,7 @@
 
           tbody.innerHTML =
             `<tr>
-              <td colspan="4">
+              <td colspan="5">
                 কোনো user পাওয়া যায়নি।
               </td>
             </tr>`;
@@ -7183,21 +7261,18 @@
               </td>
 
               <td>
-
-                ${
-                  u.role === "admin"
-                    ? `
-                      <span class="badge badge-purple">
-                        Admin
-                      </span>
-                    `
-                    : `
-                      <span class="badge badge-info">
-                        Student
-                      </span>
-                    `
-                }
-
+                ${u.role === "admin" ? `
+                  <span class="badge badge-purple">Admin</span>
+                ` : isAdmin() ? `
+                  <select class="form-select" style="min-width:130px;" onchange="changeUserRole('${escapeHtml(u.uid || "")}', this.value)">
+                    <option value="student" ${u.role === "student" ? "selected" : ""}>Student</option>
+                    <option value="moderator" ${u.role === "moderator" ? "selected" : ""}>Moderator</option>
+                  </select>
+                ` : u.role === "moderator" ? `
+                  <span class="badge badge-info">Moderator</span>
+                ` : `
+                  <span class="badge badge-info">Student</span>
+                `} 
               </td>
 
               <td>
@@ -7216,7 +7291,7 @@
 
         tbody.innerHTML =
           `<tr>
-            <td colspan="4">
+            <td colspan="5">
               Users load করতে সমস্যা হয়েছে।
             </td>
           </tr>`;
@@ -7225,6 +7300,47 @@
 
     };
 
+
+    function renderModeratorPermissionPanel() {
+      const container = document.getElementById("moderatorPermissionList");
+      if (!container) return;
+      container.innerHTML = Object.keys(moderatorPermissionLabels).map(key => `
+        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eef2f7;cursor:pointer;">
+          <span><strong>${escapeHtml(moderatorPermissionLabels[key])}</strong><br><small style="color:#94a3b8;">${moderatorPermissions[key] ? "Unlocked" : "Locked"}</small></span>
+          <input id="modPerm-${key}" type="checkbox" ${moderatorPermissions[key] ? "checked" : ""} style="width:18px;height:18px;">
+        </label>`).join("");
+    }
+
+    window.saveModeratorPermissions = async function() {
+      if (!isAdmin()) return;
+      const next = {};
+      Object.keys(moderatorPermissionLabels).forEach(key => {
+        next[key] = !!document.getElementById(`modPerm-${key}`)?.checked;
+      });
+      try {
+        await setDoc(doc(db, "settings", "moderatorAccess"), { ...next, updatedAt: serverTimestamp(), updatedBy: currentUser.uid }, { merge: true });
+        moderatorPermissions = next;
+        renderModeratorPermissionPanel();
+        showToast("Moderator access settings save হয়েছে।", "success");
+      } catch (error) {
+        console.error(error);
+        showToast("Moderator access settings save করতে সমস্যা হয়েছে।", "error");
+      }
+    };
+
+    window.changeUserRole = async function(uid, role) {
+      if (!isAdmin() || !uid) return;
+      if (!["student", "moderator"].includes(role)) return;
+      if (!confirm(`এই user-কে ${role === "moderator" ? "Moderator" : "Student"} হিসেবে সেট করতে চান?`)) return;
+      try {
+        await updateDoc(doc(db, "users", uid), { role, updatedAt: serverTimestamp() });
+        showToast("User role update হয়েছে।", "success");
+        await loadAdminUsers();
+      } catch (error) {
+        console.error(error);
+        showToast("User role update করতে সমস্যা হয়েছে।", "error");
+      }
+    };
 
     /* =========================
        DASHBOARD
