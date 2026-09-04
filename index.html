@@ -3964,6 +3964,12 @@
 
       }
 
+      if (page === "support") {
+
+        loadMySupport();
+
+      }
+
     };
 
 
@@ -6973,6 +6979,10 @@
                 Save Reply & Status
               </button>
 
+              <button class="danger-btn" type="button" onclick="deleteSupport('${t.id}')">
+                🗑 Delete
+              </button>
+
             </div>
 
           </div>
@@ -7024,6 +7034,41 @@
 
         showToast(
           "Support reply update করতে সমস্যা হয়েছে।",
+          "error"
+        );
+
+      }
+
+    };
+
+
+    window.deleteSupport = async function(id) {
+
+      if (currentProfile?.role !== "admin") {
+        showToast("Admin access প্রয়োজন।", "error");
+        return;
+      }
+
+      if (!confirm("এই Support message এবং তার reply delete করতে চান?")) {
+        return;
+      }
+
+      try {
+
+        await deleteDoc(
+          doc(db, "supportTickets", id)
+        );
+
+        showToast("Support message delete হয়েছে।", "success");
+
+        await loadAdminSupport();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Support message delete করতে সমস্যা হয়েছে।",
           "error"
         );
 
