@@ -3741,30 +3741,26 @@
     }
 
     async function loadModeratorPermissions() {
-      if (isAdmin()) {
-        moderatorPermissions = {
-          notices: true, materials: true, routine: true, events: true,
-          results: true, support: true, users: true, staff: true
-        };
-        return;
-      }
-
       moderatorPermissions = {
         notices: false, materials: false, routine: false, events: false,
         results: false, support: false, users: false, staff: false
       };
+
+      if (isAdmin()) {
+        Object.keys(moderatorPermissions).forEach(key => moderatorPermissions[key] = true);
+        return;
+      }
 
       if (!isModerator()) return;
 
       try {
         const ref = doc(db, "settings", "moderatorAccess");
         const snap = await getDoc(ref);
-        if (snap.exists()) {
-          const data = snap.data() || {};
-          Object.keys(moderatorPermissions).forEach(key => {
-            moderatorPermissions[key] = data[key] === true;
-          });
-        }
+        if (!snap.exists()) return;
+        const data = snap.data() || {};
+        Object.keys(moderatorPermissions).forEach(key => {
+          moderatorPermissions[key] = data[key] === true;
+        });
       } catch (error) {
         console.error("Moderator permissions load error:", error);
       }
@@ -6521,7 +6517,7 @@
     ========================= */
 
     async function loadAdminUsers() {
-      if (!canManage("users")) { showToast("User Management access lock করা আছে।", "error"); return; }
+      if (!isAdmin() && !moderatorPermissions.users) { showToast("User Management access lock করা আছে।", "error"); return; }
       const section=document.getElementById("adminUsersSection"), tbody=document.getElementById("adminUsersTable");
       section.classList.remove("hidden");
       tbody.innerHTML=`<tr><td colspan="6">Loading...</td></tr>`;
