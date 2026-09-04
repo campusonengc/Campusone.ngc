@@ -1395,8 +1395,6 @@
        UPLOAD
     ========================= */
 
-    .material-grid .card img { display:block; }
-
     .upload-box {
       border: 2px dashed #cbd5e1;
       border-radius: 14px;
@@ -1702,26 +1700,6 @@
 
 
             <div class="form-group">
-              <label class="form-label">Roll</label>
-              <div class="input-wrap">
-                <span>🎓</span>
-                <input id="loginRoll" class="form-input" type="text" placeholder="তোমার Roll">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Academic Year</label>
-              <div class="input-wrap">
-                <span>📚</span>
-                <select id="loginAcademicYear" class="form-input">
-                  <option value="">Academic Year নির্বাচন করুন</option>
-                  <option value="HSC 1st Year">HSC 1st Year</option>
-                  <option value="HSC 2nd Year">HSC 2nd Year</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="form-group">
 
               <label class="form-label">Password</label>
 
@@ -1792,16 +1770,6 @@
 
             </div>
 
-
-            <div class="form-group">
-              <label class="form-label">Roll</label>
-              <div class="input-wrap"><span>🎓</span><input id="registerRoll" class="form-input" type="text" placeholder="তোমার Roll"></div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Academic Year</label>
-              <div class="input-wrap"><span>📚</span><select id="registerAcademicYear" class="form-input"><option value="">Academic Year নির্বাচন করুন</option><option value="HSC 1st Year">HSC 1st Year</option><option value="HSC 2nd Year">HSC 2nd Year</option></select></div>
-            </div>
 
             <div class="form-group">
 
@@ -1945,7 +1913,7 @@
           onclick="showPage('results', this)"
         >
           <span class="nav-icon">📊</span>
-          <span>Results</span>
+          <span>My Results</span>
         </button>
 
 
@@ -2442,15 +2410,88 @@
         ========================= -->
 
         <section id="page-results" class="page">
+
           <div class="section-header">
+
             <div class="section-heading">
-              <h2>Academic Results</h2>
-              <p>Academic Year, Group ও Subject অনুযায়ী result picture দেখুন।</p>
+
+              <h2>My Results</h2>
+
+              <p>
+                শুধুমাত্র published result এখানে দেখা যাবে।
+              </p>
+
             </div>
+
           </div>
-          <div id="resultsGallery" class="material-grid">
-            <div class="empty">Loading...</div>
+
+
+          <div class="result-summary">
+
+            <div class="result-box">
+
+              <strong id="resultCount">0</strong>
+
+              <span>Published Results</span>
+
+            </div>
+
+
+            <div class="result-box">
+
+              <strong id="resultAverage">—</strong>
+
+              <span>Average GPA</span>
+
+            </div>
+
+
+            <div class="result-box">
+
+              <strong id="resultLatest">—</strong>
+
+              <span>Latest Result</span>
+
+            </div>
+
           </div>
+
+
+          <div class="card table-card">
+
+            <table>
+
+              <thead>
+
+                <tr>
+                  <th>Exam / Semester</th>
+                  <th>Course</th>
+                  <th>Marks</th>
+                  <th>Grade</th>
+                  <th>GPA</th>
+                  <th>Status</th>
+                  <th>Notice</th>
+                  <th>Picture</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="resultsTable">
+
+                <tr>
+                  <td colspan="8">
+                    <div class="empty">
+                      Loading...
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
         </section>
 
 
@@ -2788,26 +2829,26 @@
 
             </div>
 
-            <div id="adminStaffAction" class="admin-action" onclick="loadAdminStaff()">
-              <div class="admin-action-icon">👨‍🏫</div>
-              <h3>Teachers & Staff</h3>
-              <p>Teacher ও staff information add/manage করুন।</p>
-            </div>
-
           </div>
 
 
 
 
-          <div id="adminStatsGrid" class="stat-grid" style="margin-top:20px;">
-            <div class="stat-card"><div class="stat-icon">👥</div><div><div id="adminTotalUsers" class="stat-number">0</div><div class="stat-label">Total Users</div></div></div>
-            <div class="stat-card"><div class="stat-icon">🟢</div><div><div id="adminActiveUsers" class="stat-number">0</div><div class="stat-label">Active Users</div></div></div>
-            <div class="stat-card"><div class="stat-icon">👁️</div><div><div id="adminTodayViews" class="stat-number">0</div><div class="stat-label">Today's Views</div></div></div>
-            <div class="stat-card"><div class="stat-icon">🚫</div><div><div id="adminBlockedUsers" class="stat-number">0</div><div class="stat-label">Blocked Users</div></div></div>
+          <div
+            id="adminStaffAction"
+            class="admin-action"
+            onclick="openStaffModal()"
+          >
+            <div class="admin-action-icon">👨‍🏫</div>
+            <h3>Teachers & Staff</h3>
+            <p>Teacher ও staff information add/manage করুন।</p>
           </div>
 
           <div id="adminStaffSection" class="card hidden" style="margin-top:20px;">
-            <div class="card-header"><div class="card-title">Teachers & Staff</div><button class="small-btn" onclick="loadAdminStaff()">Refresh</button></div>
+            <div class="card-header">
+              <div class="card-title">Teachers & Staff Management</div>
+              <button class="small-btn" onclick="loadStaff(true)">Refresh</button>
+            </div>
             <div id="adminStaffList" class="card-body"></div>
           </div>
 
@@ -2862,11 +2903,9 @@
 
                   <tr>
                     <th>Name</th>
-                    <th>Roll</th>
-                    <th>Academic Year</th>
                     <th>Email</th>
                     <th>Role / Access</th>
-                    <th>Block</th>
+                    <th>Created</th>
                   </tr>
 
                 </thead>
@@ -2992,7 +3031,6 @@
       where,
       orderBy,
       limit,
-      increment,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
@@ -3085,7 +3123,7 @@
       results: "Results",
       support: "Support Messages",
       users: "User Management",
-      staff: "Teacher & Staff Management"
+      staff: "Teachers & Staff"
     };
 
 
@@ -3405,9 +3443,6 @@
           .value
           .trim();
 
-      const roll = document.getElementById("registerRoll")?.value.trim();
-      const academicYear = document.getElementById("registerAcademicYear")?.value;
-
       const email =
         document
           .getElementById("registerEmail")
@@ -3432,11 +3467,6 @@
 
       }
 
-
-      if (!roll || !academicYear) {
-        setMessage("registerMessage", "Roll এবং Academic Year দিন।", "error");
-        return;
-      }
 
       if (!email) {
 
@@ -3497,10 +3527,6 @@
             name: name,
             email: email,
             role: "student",
-            roll,
-            academicYear,
-            blocked: false,
-            lastActiveAt: serverTimestamp(),
             photoURL: credential.user.photoURL || "",
             createdAt: serverTimestamp()
           }
@@ -3554,13 +3580,22 @@
           .value
           .trim();
 
-      const password = document.getElementById("loginPassword").value;
-      const roll = document.getElementById("loginRoll")?.value.trim();
-      const academicYear = document.getElementById("loginAcademicYear")?.value;
+      const password =
+        document
+          .getElementById("loginPassword")
+          .value;
 
-      if (!email || !password || !roll || !academicYear) {
-        setMessage("loginMessage", "Email, Roll, Academic Year এবং Password দিন।", "error");
+
+      if (!email || !password) {
+
+        setMessage(
+          "loginMessage",
+          "Email এবং Password দুটোই দিন।",
+          "error"
+        );
+
         return;
+
       }
 
 
@@ -3574,21 +3609,12 @@
 
       try {
 
-        const credential = await signInWithEmailAndPassword(auth, email, password);
-        const profileSnap = await getDoc(doc(db, "users", credential.user.uid));
-        const profile = profileSnap.exists() ? profileSnap.data() : {};
-        if (profile.roll || profile.academicYear) {
-          if (String(profile.roll || "") !== roll || String(profile.academicYear || "") !== academicYear) {
-            await signOut(auth);
-            throw new Error("Roll বা Academic Year account-এর সাথে মেলেনি।");
-          }
-        } else {
-          try { await updateDoc(doc(db,"users",credential.user.uid),{roll,academicYear,updatedAt:serverTimestamp()}); } catch(e) {}
-        }
-        if (profile.blocked === true) {
-          await signOut(auth);
-          throw new Error("এই accountটি Admin block করেছেন।");
-        }
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
 
         showToast(
           "Login সফল হয়েছে।",
@@ -3600,7 +3626,11 @@
 
         console.error(error);
 
-        setMessage("loginMessage", error?.message || friendlyAuthError(error), "error");
+        setMessage(
+          "loginMessage",
+          friendlyAuthError(error),
+          "error"
+        );
 
       } finally {
 
@@ -3643,10 +3673,6 @@
             name: user.displayName || user.email?.split("@")[0] || "Student",
             email: user.email || "",
             role: "student",
-            roll: "",
-            academicYear: "",
-            blocked: false,
-            lastActiveAt: serverTimestamp(),
             photoURL: user.photoURL || "",
             createdAt: serverTimestamp()
           });
@@ -3926,14 +3952,12 @@
         results: "adminResultAction",
         support: "adminSupportAction",
         users: "adminUsersAction",
-        staff: "adminStaffAction"
+         staff: "adminStaffAction"
       };
       Object.entries(permissionElements).forEach(([key, id]) => {
         const el = document.getElementById(id);
         if (el) el.classList.toggle("hidden", !canManage(key));
       });
-      const pageAdminButtons = {notices:"noticeAdminBtn", materials:"materialAdminBtn", routine:"routineAdminBtn", events:"eventAdminBtn"};
-      Object.entries(pageAdminButtons).forEach(([key,id])=>{const el=document.getElementById(id);if(el)el.classList.toggle("hidden",!canManage(key));});
       const permPanel = document.getElementById("moderatorPermissionPanel");
       if (permPanel) permPanel.classList.toggle("hidden", !isAdmin);
 
@@ -3990,7 +4014,6 @@
       }
 
       currentPage = page;
-      updateActivityAndViews(page);
 
 
       document
@@ -4030,10 +4053,6 @@
 
       }
 
-      if (page === "admin" && isAdmin()) {
-        loadAdminUsers();
-      }
-
       if (page === "notices") {
 
         loadNotices();
@@ -4065,10 +4084,15 @@
       }
 
       if (page === "support") {
+
         loadMySupport();
+
       }
+
       if (page === "staff") {
-        loadStaff();
+
+        loadStaff(false);
+
       }
 
     };
@@ -4269,7 +4293,6 @@
                   ${escapeHtml(n.description || n.content || "")}
                 </p>
 
-                ${n.imageUrl ? `<img src="${escapeHtml(n.imageUrl)}" alt="Notice" style="width:100%;max-height:260px;object-fit:cover;border-radius:12px;margin-top:10px;">` : ""}
                 <div class="notice-date">
                   ${formatDateTime(n.createdAt)}
                 </div>
@@ -4423,12 +4446,6 @@
 
         </div>
 
-        <div class="upload-box">
-          <div style="font-size:30px;">🖼️</div><div style="font-weight:700;">Notice Picture (optional)</div><div style="color:#64748b;font-size:12px;">JPG, PNG বা WebP • Max 5 MB</div>
-          <input id="noticeImage" type="file" accept="image/jpeg,image/png,image/webp">
-          <div id="noticeImagePreview" style="margin-top:8px;"></div>
-        </div>
-
       `;
 
 
@@ -4457,7 +4474,6 @@
               .trim();
 
 
-          const imageFile = document.getElementById("noticeImage")?.files?.[0] || null;
           if (!title || !description) {
 
             showToast(
@@ -4471,9 +4487,6 @@
 
 
           try {
-            let imageUrl = existing?.imageUrl || "";
-            let imagePublicId = existing?.imagePublicId || "";
-            if (imageFile) { const d = await uploadImageToCloudinary(imageFile); imageUrl=d.secure_url||""; imagePublicId=d.public_id||""; }
 
             if (existing) {
 
@@ -4486,8 +4499,6 @@
                 {
                   title,
                   description,
-                  imageUrl,
-                  imagePublicId,
                   updatedAt:
                     serverTimestamp()
                 }
@@ -4509,8 +4520,6 @@
                 {
                   title,
                   description,
-                  imageUrl,
-                  imagePublicId,
                   createdAt:
                     serverTimestamp()
                 }
@@ -5800,9 +5809,11 @@
 
 
               <div class="event-title">
-                ${escapeHtml(e.title || "Campus Event")}
+                ${escapeHtml(
+                  e.title ||
+                  "Campus Event"
+                )}
               </div>
-              ${e.imageUrl ? `<img src="${escapeHtml(e.imageUrl)}" alt="Event" style="width:100%;height:180px;object-fit:cover;border-radius:12px;margin:10px 0;">` : ""}
 
 
               <div class="event-info">
@@ -5952,8 +5963,6 @@
 
         </div>
 
-        <div class="upload-box"><div style="font-size:30px;">🖼️</div><div style="font-weight:700;">Event Picture (optional)</div><div style="color:#64748b;font-size:12px;">JPG, PNG বা WebP • Max 5 MB</div><input id="eventImage" type="file" accept="image/jpeg,image/png,image/webp"><div id="eventImagePreview" style="margin-top:8px;"></div></div>
-
       `;
 
 
@@ -6006,7 +6015,6 @@
               .trim();
 
 
-          const imageFile = document.getElementById("eventImage")?.files?.[0] || null;
           if (!title || !date) {
 
             showToast(
@@ -6020,8 +6028,6 @@
 
 
           try {
-            let imageUrl="", imagePublicId="";
-            if(imageFile){const d=await uploadImageToCloudinary(imageFile);imageUrl=d.secure_url||"";imagePublicId=d.public_id||"";}
 
             await addDoc(
               collection(
@@ -6039,8 +6045,6 @@
                 location,
 
                 description,
-                imageUrl,
-                imagePublicId,
 
                 createdAt:
                   serverTimestamp(),
@@ -6135,15 +6139,579 @@
        RESULTS
     ========================= */
 
-    async function loadResults(){
-      const box=document.getElementById("resultsGallery"); if(!box)return; box.innerHTML=`<div class="empty">Loading...</div>`;
-      try{const snap=await getDocs(collection(db,"results"));resultsCache=snap.docs.map(d=>({id:d.id,...d.data()})).filter(r=>r.published!==false);resultsCache.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));renderResults();}catch(e){console.error(e);box.innerHTML=`<div class="empty">Result load করতে সমস্যা হয়েছে।</div>`;}
-    }
-    function renderResults(){const box=document.getElementById("resultsGallery");if(!resultsCache.length){box.innerHTML=`<div class="empty">কোনো Result Picture পাওয়া যায়নি।</div>`;return;}box.innerHTML=resultsCache.map(r=>`<div class="card"><div class="card-body"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;"><div><h3>${escapeHtml(r.subject||"Result")}</h3><div style="color:#64748b;margin-top:4px;">${escapeHtml(r.academicYear||"—")} • ${escapeHtml(r.group||"—")}</div></div></div>${r.imageUrl?`<a href="${escapeHtml(r.imageUrl)}" target="_blank" rel="noopener"><img src="${escapeHtml(r.imageUrl)}" style="width:100%;max-height:520px;object-fit:contain;background:#f8fafc;border-radius:14px;margin-top:14px;border:1px solid #e2e8f0;"></a>`:`<div class="empty" style="margin-top:12px;">Picture নেই।</div>`}</div></div>`).join("");}
-    window.openResultModal=function(){if(!canManage("results")){showToast("Result access lock করা আছে।","error");return;}openModal("Upload Result Picture",`<div class="form-group"><label class="form-label">Academic Year</label><select id="resultAcademicYear" class="form-select"><option value="">Select</option><option>HSC 1st Year</option><option>HSC 2nd Year</option></select></div><div class="form-group"><label class="form-label">Group</label><select id="resultGroup" class="form-select"><option value="">Select Group</option><option>Science</option><option>Humanities</option><option>Business Studies</option></select></div><div class="form-group"><label class="form-label">Subject</label><input id="resultSubject" class="form-input" placeholder="Mathematics"></div><div class="upload-box"><div style="font-size:34px;">🖼️</div><div style="font-weight:700;">Result Picture</div><div style="color:#64748b;font-size:12px;">JPG, PNG বা WebP • Max 5 MB</div><input id="resultImage" type="file" accept="image/jpeg,image/png,image/webp"><div id="resultImagePreview" style="margin-top:10px;"></div></div>`,saveResult,"Upload Result");const input=document.getElementById("resultImage");input?.addEventListener("change",()=>{const f=input.files?.[0],p=document.getElementById("resultImagePreview");if(!f||!p)return;if(!["image/jpeg","image/png","image/webp"].includes(f.type)||f.size>5*1024*1024){p.innerHTML=`<span style="color:#b91c1c">JPG/PNG/WebP, সর্বোচ্চ 5 MB দিন।</span>`;input.value="";return;}const r=new FileReader();r.onload=e=>p.innerHTML=`<img src="${e.target.result}" style="width:100%;max-height:200px;object-fit:contain;border-radius:10px;">`;r.readAsDataURL(f);});};
-    async function saveResult(){if(!canManage("results")){showToast("Result access lock করা আছে।","error");return;}const academicYear=document.getElementById("resultAcademicYear").value,group=document.getElementById("resultGroup").value,subject=document.getElementById("resultSubject").value.trim(),file=document.getElementById("resultImage")?.files?.[0];if(!academicYear||!group||!subject||!file){showToast("Academic Year, Group, Subject এবং Picture দিন।","warning");return;}if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){showToast("JPG/PNG/WebP, সর্বোচ্চ 5 MB দিন।","error");return;}const btn=document.getElementById("modalSaveBtn");try{btn.disabled=true;btn.textContent="Uploading...";const d=await uploadImageToCloudinary(file);await addDoc(collection(db,"results"),{academicYear,group,subject,imageUrl:d.secure_url||"",imagePublicId:d.public_id||"",published:true,createdAt:serverTimestamp(),createdBy:currentUser.uid});closeModal();showToast("Result picture সবার জন্য publish হয়েছে।","success");await loadResults();}catch(e){console.error(e);showToast("Result picture upload করতে সমস্যা হয়েছে।","error");}finally{if(btn){btn.disabled=false;btn.textContent="Upload Result";}}}
+    async function loadResults() {
 
-    /* =========================\n       SUPPORT
+      const tbody = document.getElementById("resultsTable");
+
+      tbody.innerHTML = `
+        <tr><td colspan="8"><div class="empty">Loading...</div></td></tr>`;
+
+      try {
+
+        if (isAdmin() || isModerator()) {
+
+          const snap = await getDocs(collection(db, "results"));
+
+          resultsCache = snap.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+          }));
+
+        } else {
+
+          const q = query(
+            collection(db, "results"),
+            where("studentUid", "==", currentUser.uid),
+            where("published", "==", true)
+          );
+
+          const snap = await getDocs(q);
+
+          resultsCache = snap.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+          }));
+
+        }
+
+        resultsCache.sort((a,b) =>
+          (b.createdAt?.toMillis?.() || 0) -
+          (a.createdAt?.toMillis?.() || 0)
+        );
+
+        renderResults();
+
+      } catch (error) {
+
+        console.error(error);
+
+        tbody.innerHTML = `
+          <tr><td colspan="8">
+            <div class="empty">Result load করতে সমস্যা হয়েছে।</div>
+          </td></tr>`;
+
+      }
+
+    }
+
+
+    function renderResults() {
+
+      const tbody = document.getElementById("resultsTable");
+
+      const visibleResults =
+        isAdmin() || isModerator()
+          ? resultsCache
+          : resultsCache.filter(r =>
+              r.published === true &&
+              r.studentUid === currentUser.uid
+            );
+
+      document.getElementById("resultCount").textContent =
+        visibleResults.length;
+
+      if (!visibleResults.length) {
+
+        tbody.innerHTML = `
+          <tr><td colspan="8">
+            <div class="empty">
+              <div class="empty-icon">📊</div>
+              এখনো কোনো Published Result নেই।
+            </div>
+          </td></tr>`;
+
+        document.getElementById("resultAverage").textContent = "—";
+        document.getElementById("resultLatest").textContent = "—";
+        return;
+
+      }
+
+      const gpas = visibleResults
+        .map(r => Number(r.gpa))
+        .filter(n => !isNaN(n));
+
+      const average = gpas.length
+        ? (
+            gpas.reduce((a,b) => a + b, 0) /
+            gpas.length
+          ).toFixed(2)
+        : "—";
+
+      document.getElementById("resultAverage").textContent = average;
+
+      document.getElementById("resultLatest").textContent =
+        visibleResults[0]?.exam ||
+        visibleResults[0]?.semester ||
+        "—";
+
+      tbody.innerHTML = visibleResults.map(r => `
+
+        <tr>
+          <td>${escapeHtml(r.exam || r.semester || "—")}</td>
+          <td>${escapeHtml(r.course || r.subject || "—")}</td>
+          <td>${escapeHtml(r.marks ?? "—")}</td>
+          <td>${escapeHtml(r.grade || "—")}</td>
+          <td><strong>${escapeHtml(r.gpa ?? "—")}</strong></td>
+
+          <td>
+            ${
+              r.published
+                ? `<span class="badge badge-success">Published</span>`
+                : `<span class="badge badge-warning">Unpublished</span>`
+            }
+          </td>
+
+          <td>
+            ${
+              r.notice
+                ? `<div class="result-row-note">${escapeHtml(r.notice)}</div>`
+                : `<span style="color:#94a3b8;">—</span>`
+            }
+          </td>
+
+          <td>
+            ${
+              r.noticeImageUrl
+                ? `
+                  <a href="${escapeHtml(r.noticeImageUrl)}" target="_blank" rel="noopener" title="Picture দেখুন">
+                    <img
+                      src="${escapeHtml(r.noticeImageUrl)}"
+                      alt="Result Notice"
+                      style="width:80px;height:55px;object-fit:cover;border-radius:8px;border:1px solid #e2e8f0;"
+                    >
+                  </a>
+                `
+                : `<span style="color:#94a3b8;">—</span>`
+            }
+          </td>
+
+        </tr>
+
+      `).join("");
+
+    }
+
+
+    /* =========================
+       RESULT MODAL
+    ========================= */
+
+    window.openResultModal = function() {
+
+      if (!canManage("results")) {
+
+        showToast(
+          "শুধুমাত্র Admin result manage করতে পারবেন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+      const body = `
+
+        <div class="form-group">
+          <label class="form-label">Student Email</label>
+          <input id="resultStudentEmail" class="form-input" type="email" placeholder="student@gmail.com">
+          <div style="color:#64748b;font-size:11px;margin-top:5px;">
+            Registered student's exact email দিন।
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Exam / Semester</label>
+          <input id="resultExam" class="form-input" placeholder="1st Semester">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Course / Subject</label>
+          <input id="resultCourse" class="form-input" placeholder="Mathematics">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Marks</label>
+          <input id="resultMarks" class="form-input" placeholder="85">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Grade</label>
+          <input id="resultGrade" class="form-input" placeholder="A+">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">GPA</label>
+          <input id="resultGpa" class="form-input" type="number" step="0.01" min="0" max="5" placeholder="5.00">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Result Notice</label>
+          <textarea id="resultNotice" class="form-textarea" placeholder="Result সম্পর্কে কোনো notice/announcement লিখুন..."></textarea>
+        </div>
+
+        <div class="upload-box">
+          <div style="font-size:34px;">🖼️</div>
+          <div style="font-weight:700;">Result Notice Picture</div>
+          <div style="color:#64748b;font-size:12px;margin-top:4px;">
+            JPG, PNG বা WebP • Maximum 5 MB
+          </div>
+          <input id="resultNoticeImage" type="file" accept="image/jpeg,image/png,image/webp">
+          <div id="resultImagePreview" style="margin-top:10px;"></div>
+        </div>
+
+        <div class="form-group">
+          <label style="display:flex;align-items:center;gap:9px;cursor:pointer;">
+            <input id="resultPublished" type="checkbox">
+            <span>এখনই Publish করুন</span>
+          </label>
+        </div>
+
+      `;
+
+      openModal(
+        "Publish Student Result",
+        body,
+        saveResult,
+        "Save Result"
+      );
+
+      const imageInput = document.getElementById("resultNoticeImage");
+
+      imageInput?.addEventListener("change", () => {
+
+        const file = imageInput.files?.[0];
+        const preview = document.getElementById("resultImagePreview");
+
+        if (!file || !preview) return;
+
+        if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
+          preview.innerHTML = `<div style="color:#b91c1c;font-size:12px;">JPG, PNG বা WebP image দিন।</div>`;
+          imageInput.value = "";
+          return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+          preview.innerHTML = `<div style="color:#b91c1c;font-size:12px;">Image সর্বোচ্চ 5 MB হতে পারবে।</div>`;
+          imageInput.value = "";
+          return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = event => {
+          preview.innerHTML = `
+            <img src="${event.target.result}" alt="Preview"
+              style="width:100%;max-height:180px;object-fit:contain;border-radius:10px;border:1px solid #e2e8f0;">
+          `;
+        };
+
+        reader.readAsDataURL(file);
+
+      });
+
+    };
+
+
+    async function saveResult() {
+
+      if (!canManage("results")) {
+        showToast("Result access lock করা আছে।", "error");
+        return;
+      }
+
+      const email = document.getElementById("resultStudentEmail").value.trim().toLowerCase();
+      const exam = document.getElementById("resultExam").value.trim();
+      const course = document.getElementById("resultCourse").value.trim();
+      const marks = document.getElementById("resultMarks").value.trim();
+      const grade = document.getElementById("resultGrade").value.trim();
+      const gpa = document.getElementById("resultGpa").value.trim();
+      const notice = document.getElementById("resultNotice").value.trim();
+      const imageFile = document.getElementById("resultNoticeImage")?.files?.[0] || null;
+      const published = document.getElementById("resultPublished").checked;
+
+      if (!email || !exam || !course) {
+        showToast("Student Email, Exam এবং Course দিন।", "warning");
+        return;
+      }
+
+      if (imageFile) {
+
+        if (!["image/jpeg","image/png","image/webp"].includes(imageFile.type)) {
+          showToast("Result picture হিসেবে JPG, PNG বা WebP দিন।", "error");
+          return;
+        }
+
+        if (imageFile.size > 5 * 1024 * 1024) {
+          showToast("Result picture সর্বোচ্চ 5 MB হতে পারবে।", "error");
+          return;
+        }
+
+      }
+
+      const saveBtn = document.getElementById("modalSaveBtn");
+
+      try {
+
+        saveBtn.disabled = true;
+        saveBtn.textContent = imageFile ? "Uploading..." : "Saving...";
+
+        const userQuery = query(
+          collection(db, "users"),
+          where("email", "==", email)
+        );
+
+        const userSnap = await getDocs(userQuery);
+
+        if (userSnap.empty) {
+          showToast("এই Email-এর কোনো registered student পাওয়া যায়নি।", "error");
+          return;
+        }
+
+        const student = userSnap.docs[0].data();
+
+        let noticeImageUrl = "";
+        let noticeImagePublicId = "";
+
+        if (imageFile) {
+
+          const imageData = await uploadImageToCloudinary(imageFile);
+
+          noticeImageUrl = imageData.secure_url || "";
+          noticeImagePublicId = imageData.public_id || "";
+
+        }
+
+        await addDoc(
+          collection(db, "results"),
+          {
+            studentUid: student.uid,
+            studentEmail: email,
+            studentName: student.name || "",
+            exam,
+            course,
+            marks,
+            grade,
+            gpa: gpa ? Number(gpa) : null,
+            notice,
+            noticeImageUrl,
+            noticeImagePublicId,
+            published,
+            createdAt: serverTimestamp(),
+            createdBy: currentUser.uid
+          }
+        );
+
+        showToast(
+          published
+            ? "Result notice সহ publish হয়েছে।"
+            : "Result notice সহ save হয়েছে।",
+          "success"
+        );
+
+        closeModal();
+
+        if (currentPage === "results") {
+          await loadResults();
+        }
+
+        await loadDashboard();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast("Result save করতে সমস্যা হয়েছে।", "error");
+
+      } finally {
+
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Save Result";
+        }
+
+      }
+
+    }
+
+
+    /* =========================
+       PROFILE PHOTO
+    ========================= */
+
+    async function uploadImageToCloudinary(file) {
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_PRESET);
+
+      const response = await fetch(
+        CLOUDINARY_URL,
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Cloudinary image upload failed");
+      }
+
+      const data = await response.json();
+
+      if (!data.secure_url) {
+        throw new Error("Image URL পাওয়া যায়নি");
+      }
+
+      return data;
+
+    }
+
+
+    window.uploadProfilePhoto = async function(input) {
+
+      if (!currentUser || !input?.files?.[0]) return;
+
+      const file = input.files[0];
+
+      if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
+        showToast("শুধুমাত্র JPG, PNG বা WebP image দিন।", "error");
+        input.value = "";
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("Profile picture সর্বোচ্চ 5 MB হতে পারবে।", "error");
+        input.value = "";
+        return;
+      }
+
+      try {
+        showToast("Profile picture upload হচ্ছে...", "info");
+        const imageData = await uploadImageToCloudinary(file);
+        const photoURL = imageData.secure_url;
+        const photoPublicId = imageData.public_id || "";
+
+        await updateDoc(doc(db, "users", currentUser.uid), { photoURL, photoPublicId, photoUpdatedAt: serverTimestamp() });
+        try { await updateProfile(currentUser, { photoURL }); } catch (e) { console.warn(e); }
+
+        currentProfile = { ...(currentProfile || {}), photoURL };
+        updateUserUI();
+        showToast("Profile picture সফলভাবে update হয়েছে।", "success");
+      } catch (error) {
+        console.error("Profile upload error:", error);
+        showToast("Profile picture upload হয়নি। Cloudinary Upload Preset ঠিক আছে কিনা দেখুন।", "error");
+      } finally {
+        input.value = "";
+      }
+    };
+
+    window.removeProfilePhoto = async function() {
+      if (!currentUser) return;
+      if (!currentProfile?.photoURL) {
+        showToast("কোনো profile picture দেওয়া নেই।", "info");
+        return;
+      }
+      if (!confirm("Profile picture remove করতে চান?")) return;
+      try {
+        // Cloudinary unsigned uploads cannot be securely deleted from the browser.
+        // We clear the Firestore URL so the old image is no longer used by the app.
+        await updateDoc(doc(db, "users", currentUser.uid), { photoURL: "", photoPublicId: "" });
+        try { await updateProfile(currentUser, { photoURL: "" }); } catch (e) {}
+        currentProfile.photoURL = "";
+        updateUserUI();
+        showToast("Profile picture remove হয়েছে।", "success");
+      } catch (error) {
+        console.error(error);
+        showToast("Profile picture remove করতে সমস্যা হয়েছে।", "error");
+      }
+    };
+
+
+    /* =========================
+       TEACHERS & STAFF
+    ========================= */
+
+    async function loadStaff(adminView = false) {
+      const grid = document.getElementById("staffGrid");
+      const adminList = document.getElementById("adminStaffList");
+      const target = adminView && adminList ? adminList : grid;
+      if (!target) return;
+      target.innerHTML = `<div class="empty">Loading...</div>`;
+      try {
+        const snap = await getDocs(collection(db, "staff"));
+        const staff = snap.docs.map(d => ({ id:d.id, ...d.data() })).sort((a,b)=>String(a.name||"").localeCompare(String(b.name||"")));
+        if (adminView) document.getElementById("adminStaffSection")?.classList.remove("hidden");
+        if (!staff.length) { target.innerHTML = `<div class="empty"><div class="empty-icon">👨‍🏫</div>কোনো teacher/staff information নেই।</div>`; return; }
+        if (!adminView) {
+          target.innerHTML = staff.map(x => `
+            <div class="material-card">
+              <div class="material-cover">${x.photoURL ? `<img src="${escapeHtml(x.photoURL)}" alt="" style="width:100%;height:100%;object-fit:cover;">` : "👨‍🏫"}</div>
+              <div class="material-body">
+                <div class="material-title">${escapeHtml(x.name || "—")}</div>
+                <div class="material-meta"><b>${escapeHtml(x.designation || "")}</b><br>${escapeHtml(x.department || "")}<br>${escapeHtml(x.phone || "")}</div>
+              </div>
+            </div>`).join("");
+        } else {
+          target.innerHTML = staff.map(x => `
+            <div class="support-ticket">
+              <div class="support-ticket-head"><div><div class="support-ticket-title">${escapeHtml(x.name || "—")}</div><div class="support-ticket-meta">${escapeHtml(x.designation || "")} • ${escapeHtml(x.department || "")}</div></div>
+              <button class="danger-btn" onclick="deleteStaff('${x.id}')">Delete</button></div>
+              <div class="support-message">Phone: ${escapeHtml(x.phone || "—")}</div>
+            </div>`).join("");
+        }
+      } catch (error) {
+        console.error("Staff load error:", error);
+        target.innerHTML = `<div class="empty">Teachers & Staff load করতে সমস্যা হয়েছে।</div>`;
+      }
+    }
+
+    window.openStaffModal = function(editId = "") {
+      if (!canManage("staff")) { showToast("Teachers & Staff access lock করা আছে।", "error"); return; }
+      const body = `
+        <div class="form-group"><label class="form-label">Name *</label><input id="staffName" class="form-input" placeholder="Teacher/Staff name"></div>
+        <div class="form-group"><label class="form-label">Designation *</label><input id="staffDesignation" class="form-input" placeholder="Lecturer / Professor / Office Assistant"></div>
+        <div class="form-group"><label class="form-label">Department</label><input id="staffDepartment" class="form-input" placeholder="Science / Commerce / Office"></div>
+        <div class="form-group"><label class="form-label">Phone</label><input id="staffPhone" class="form-input" placeholder="01XXXXXXXXX"></div>
+        <div class="form-group"><label class="form-label">Photo (optional)</label><input id="staffPhoto" type="file" accept="image/jpeg,image/png,image/webp" class="form-input"></div>`;
+      openModal("Add Teacher / Staff", body, saveStaff, "Save");
+    };
+
+    async function saveStaff() {
+      if (!canManage("staff")) return;
+      const name = document.getElementById("staffName")?.value.trim();
+      const designation = document.getElementById("staffDesignation")?.value.trim();
+      const department = document.getElementById("staffDepartment")?.value.trim();
+      const phone = document.getElementById("staffPhone")?.value.trim();
+      const file = document.getElementById("staffPhoto")?.files?.[0] || null;
+      if (!name || !designation) { showToast("Name এবং Designation দিন।", "warning"); return; }
+      try {
+        let photoURL = "";
+        const ref = doc(collection(db,"staff"));
+        let photoPublicId = "";
+        if (file) {
+          if (!["image/jpeg","image/png","image/webp"].includes(file.type)) throw new Error("JPG, PNG বা WebP photo দিন");
+          if (file.size > 5*1024*1024) throw new Error("Photo 5MB এর বেশি হতে পারবে না");
+          const imageData = await uploadImageToCloudinary(file);
+          photoURL = imageData.secure_url || "";
+          photoPublicId = imageData.public_id || "";
+        }
+        await setDoc(ref,{name,designation,department,phone,photoURL,photoPublicId,createdAt:serverTimestamp(),createdBy:currentUser.uid});
+        closeModal(); showToast("Teacher/Staff add হয়েছে।","success"); await loadStaff(true);
+      } catch(e) { console.error(e); showToast(e.message || "Teacher/Staff save করতে সমস্যা হয়েছে।","error"); }
+    }
+
+    window.deleteStaff = async function(id) {
+      if (!canManage("staff")) return;
+      if (!confirm("এই teacher/staff information delete করতে চান?")) return;
+      try {
+        await deleteDoc(doc(db,"staff",id));
+        showToast("Teacher/Staff delete হয়েছে।","success"); await loadStaff(true);
+      } catch(e) { console.error(e); showToast("Delete করতে সমস্যা হয়েছে।","error"); }
+    };
+
+
+    /* =========================
+       SUPPORT
     ========================= */
 
     async function loadMySupport() {
@@ -6549,48 +7117,145 @@
        ADMIN USERS
     ========================= */
 
-    async function loadAdminUsers() {
-      if (!canManage("users")) { showToast("User Management access lock করা আছে।", "error"); return; }
-      const section=document.getElementById("adminUsersSection"), tbody=document.getElementById("adminUsersTable");
-      section.classList.remove("hidden");
-      tbody.innerHTML=`<tr><td colspan="6">Loading...</td></tr>`;
-      try {
-        const snap=await getDocs(collection(db,"users"));
-        const users=snap.docs.map(d=>({id:d.id,...d.data()}));
-        const activeCutoff=Date.now()-15*60*1000;
-        const active=users.filter(u=>{const t=u.lastActiveAt?.toDate?.()?.getTime?.()||0; return !u.blocked && t>=activeCutoff;}).length;
-        const blocked=users.filter(u=>u.blocked===true).length;
-        document.getElementById("adminTotalUsers").textContent=users.length;
-        document.getElementById("adminActiveUsers").textContent=active;
-        document.getElementById("adminBlockedUsers").textContent=blocked;
-        const dayKey=new Date().toISOString().slice(0,10);
-        try { const vs=await getDoc(doc(db,"siteStats",dayKey)); document.getElementById("adminTodayViews").textContent=vs.exists()?Number(vs.data().views||0):0; } catch { document.getElementById("adminTodayViews").textContent="—"; }
-        users.sort((a,b)=>String(a.name||"").localeCompare(String(b.name||"")));
-        tbody.innerHTML=users.map(u=>`<tr>
-          <td>${escapeHtml(u.name||"—")}</td><td>${escapeHtml(u.roll||"—")}</td><td>${escapeHtml(u.academicYear||"—")}</td><td>${escapeHtml(u.email||"—")}</td>
-          <td>${u.role==="admin"?`<span class="badge badge-purple">Admin</span>`:isAdmin()?`<select class="form-select" style="min-width:120px" onchange="changeUserRole('${u.id}',this.value)"><option value="student" ${u.role==="student"?'selected':''}>Student</option><option value="moderator" ${u.role==="moderator"?'selected':''}>Moderator</option></select>`:`<span class="badge badge-info">${escapeHtml(u.role||"Student")}</span>`}</td>
-          <td>${u.role==="admin"?`<span class="badge badge-purple">Protected</span>`:`<button class="small-btn" onclick="toggleUserBlock('${u.id}',${u.blocked===true})">${u.blocked===true?"Unblock":"Block"}</button>`}</td>
-        </tr>`).join("") || `<tr><td colspan="6">কোনো user পাওয়া যায়নি।</td></tr>`;
-      } catch(error){ console.error(error); tbody.innerHTML=`<tr><td colspan="6">Users load করতে সমস্যা হয়েছে।</td></tr>`; }
-    }
+    window.loadAdminUsers = async function() {
 
-    window.toggleUserBlock=async function(uid,isBlocked){
-      if(!isAdmin()||!uid) return;
-      if(!confirm(isBlocked?"এই user-কে Unblock করতে চান?":"এই user-কে Block করতে চান?")) return;
-      try { await updateDoc(doc(db,"users",uid),{blocked:!isBlocked,updatedAt:serverTimestamp()}); showToast(isBlocked?"User unblock হয়েছে।":"User block হয়েছে।","success"); await loadAdminUsers(); }
-      catch(error){ console.error(error); showToast("User block/unblock করতে সমস্যা হয়েছে।","error"); }
+      if (!canManage("users")) {
+
+        showToast(
+          "User Management access lock করা আছে।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const section =
+        document.getElementById(
+          "adminUsersSection"
+        );
+
+
+      const tbody =
+        document.getElementById(
+          "adminUsersTable"
+        );
+
+
+      section.classList.remove(
+        "hidden"
+      );
+
+
+      tbody.innerHTML =
+        `<tr>
+          <td colspan="5">
+            Loading...
+          </td>
+        </tr>`;
+
+
+      try {
+
+        const snap =
+          await getDocs(
+            collection(
+              db,
+              "users"
+            )
+          );
+
+
+        const users =
+          snap.docs.map(
+            d => d.data()
+          );
+
+
+        users.sort(
+          (a,b) =>
+            String(
+              a.name || ""
+            ).localeCompare(
+              String(
+                b.name || ""
+              )
+            )
+        );
+
+
+        if (!users.length) {
+
+          tbody.innerHTML =
+            `<tr>
+              <td colspan="5">
+                কোনো user পাওয়া যায়নি।
+              </td>
+            </tr>`;
+
+          return;
+
+        }
+
+
+        tbody.innerHTML =
+          users.map(u => `
+
+            <tr>
+
+              <td>
+                ${escapeHtml(
+                  u.name || "—"
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  u.email || "—"
+                )}
+              </td>
+
+              <td>
+                ${u.role === "admin" ? `
+                  <span class="badge badge-purple">Admin</span>
+                ` : isAdmin() ? `
+                  <select class="form-select" style="min-width:130px;" onchange="changeUserRole('${escapeHtml(u.uid || "")}', this.value)">
+                    <option value="student" ${u.role === "student" ? "selected" : ""}>Student</option>
+                    <option value="moderator" ${u.role === "moderator" ? "selected" : ""}>Moderator</option>
+                  </select>
+                ` : u.role === "moderator" ? `
+                  <span class="badge badge-info">Moderator</span>
+                ` : `
+                  <span class="badge badge-info">Student</span>
+                `} 
+              </td>
+
+              <td>
+                ${formatDate(
+                  u.createdAt
+                )}
+              </td>
+
+            </tr>
+
+          `).join("");
+
+      } catch (error) {
+
+        console.error(error);
+
+        tbody.innerHTML =
+          `<tr>
+            <td colspan="5">
+              Users load করতে সমস্যা হয়েছে।
+            </td>
+          </tr>`;
+
+      }
+
     };
 
-    async function loadAdminStaff(){
-      if(!canManage("staff")) { showToast("Teacher & Staff access lock করা আছে।","error"); return; }
-      const sec=document.getElementById("adminStaffSection"), box=document.getElementById("adminStaffList"); sec.classList.remove("hidden");
-      try { const snap=await getDocs(collection(db,"staff")); const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
-        box.innerHTML=`<div style="display:flex;justify-content:flex-end;margin-bottom:12px;"><button class="primary-btn" onclick="openStaffModal()">+ Add Teacher / Staff</button></div>`+ (rows.length?`<div class="table-card"><table><thead><tr><th>Name</th><th>Designation</th><th>Department</th><th>Phone</th><th>Action</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${escapeHtml(x.name||"—")}</td><td>${escapeHtml(x.designation||"—")}</td><td>${escapeHtml(x.department||"—")}</td><td>${escapeHtml(x.phone||"—")}</td><td><button class="danger-btn" onclick="deleteStaff('${x.id}')">Delete</button></td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">এখনো কোনো Teacher/Staff তথ্য নেই।</div>`);
-      } catch(e){console.error(e); box.innerHTML=`<div class="empty">Staff load করতে সমস্যা হয়েছে।</div>`;}
-    }
-    window.openStaffModal=function(){ if(!canManage("staff")){showToast("Teacher & Staff access lock করা আছে।","error");return;} openModal("Add Teacher / Staff",`<div class="form-group"><label class="form-label">Name</label><input id="staffName" class="form-input" placeholder="Teacher/Staff name"></div><div class="form-group"><label class="form-label">Designation</label><input id="staffDesignation" class="form-input" placeholder="Lecturer / Office Staff"></div><div class="form-group"><label class="form-label">Department</label><input id="staffDepartment" class="form-input" placeholder="Department"></div><div class="form-group"><label class="form-label">Phone</label><input id="staffPhone" class="form-input" placeholder="01XXXXXXXXX"></div><div class="form-group"><label class="form-label">Photo (optional)</label><input id="staffPhoto" type="file" accept="image/jpeg,image/png,image/webp"></div><div class="form-group"><label class="form-label">Bio</label><textarea id="staffBio" class="form-textarea" placeholder="Short information"></textarea></div>`,async()=>{const name=document.getElementById("staffName").value.trim(); if(!name){showToast("Name দিন।","warning");return;} const file=document.getElementById("staffPhoto").files?.[0]; let photoURL=""; if(file){if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){showToast("JPG/PNG/WebP, সর্বোচ্চ 5 MB।","error");return;} const data=await uploadImageToCloudinary(file); photoURL=data.secure_url||"";} await addDoc(collection(db,"staff"),{name,designation:document.getElementById("staffDesignation").value.trim(),department:document.getElementById("staffDepartment").value.trim(),phone:document.getElementById("staffPhone").value.trim(),bio:document.getElementById("staffBio").value.trim(),photoURL,createdAt:serverTimestamp(),createdBy:currentUser.uid}); closeModal();showToast("Teacher/Staff add হয়েছে।","success");await loadAdminStaff();await loadStaff();},"Save"); };
-    window.deleteStaff=async function(id){if(!canManage("staff")||!confirm("এই Teacher/Staff তথ্য delete করতে চান?"))return;try{await deleteDoc(doc(db,"staff",id));showToast("Staff তথ্য delete হয়েছে।","success");await loadAdminStaff();await loadStaff();}catch(e){console.error(e);showToast("Delete করতে সমস্যা হয়েছে।","error");}};
-    async function loadStaff(){const box=document.getElementById("staffGrid");if(!box)return;box.innerHTML=`<div class="empty">Loading...</div>`;try{const snap=await getDocs(collection(db,"staff"));const rows=snap.docs.map(d=>d.data());box.innerHTML=rows.length?rows.map(x=>`<div class="card"><div class="card-body" style="display:flex;gap:18px;align-items:flex-start;"><div style="width:90px;height:90px;border-radius:18px;overflow:hidden;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:32px;flex:none;">${x.photoURL?`<img src="${escapeHtml(x.photoURL)}" style="width:100%;height:100%;object-fit:cover;">`:`👨‍🏫`}</div><div><h3>${escapeHtml(x.name||"—")}</h3><div style="color:#4f46e5;font-weight:700;margin:4px 0;">${escapeHtml(x.designation||"")}</div><div>🏫 ${escapeHtml(x.department||"—")}</div><div>📞 ${escapeHtml(x.phone||"—")}</div><p style="margin-top:8px;color:#64748b;">${escapeHtml(x.bio||"")}</p></div></div></div>`).join(""):`<div class="empty">এখনো কোনো Teacher/Staff তথ্য নেই।</div>`;}catch(e){console.error(e);box.innerHTML=`<div class="empty">Staff load করতে সমস্যা হয়েছে।</div>`;}}
 
     function renderModeratorPermissionPanel() {
       const container = document.getElementById("moderatorPermissionList");
@@ -6810,14 +7475,6 @@
        AUTH STATE
     ========================= */
 
-    async function updateActivityAndViews(page="dashboard") {
-      if(!currentUser) return;
-      try { await updateDoc(doc(db,"users",currentUser.uid),{lastActiveAt:serverTimestamp()}); } catch(e) {}
-      try { const key=new Date().toISOString().slice(0,10); await setDoc(doc(db,"siteStats",key),{views:increment(1),updatedAt:serverTimestamp()},{merge:true}); } catch(e) { console.warn("View tracking:",e); }
-    }
-
-    setInterval(()=>{ if(currentUser) updateActivityAndViews(currentPage); }, 5*60*1000);
-
     onAuthStateChanged(
       auth,
       async user => {
@@ -6834,13 +7491,6 @@
               user
             );
 
-            if (currentProfile?.blocked === true) {
-              await signOut(auth);
-              showToast("এই accountটি Admin block করেছেন।", "error");
-              return;
-            }
-
-            await updateActivityAndViews("dashboard");
 
             document
               .getElementById(
