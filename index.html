@@ -1701,25 +1701,6 @@
             </div>
 
 
-            <div class="form-group">
-              <label class="form-label">Roll</label>
-              <div class="input-wrap">
-                <span>🎓</span>
-                <input id="loginRoll" class="form-input" type="text" placeholder="তোমার Roll">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">Academic Year</label>
-              <div class="input-wrap">
-                <span>📚</span>
-                <select id="loginAcademicYear" class="form-input">
-                  <option value="">Academic Year নির্বাচন করুন</option>
-                  <option value="HSC 1st Year">HSC 1st Year</option>
-                  <option value="HSC 2nd Year">HSC 2nd Year</option>
-                </select>
-              </div>
-            </div>
 
             <div class="form-group">
 
@@ -3555,11 +3536,9 @@
           .trim();
 
       const password = document.getElementById("loginPassword").value;
-      const roll = document.getElementById("loginRoll")?.value.trim();
-      const academicYear = document.getElementById("loginAcademicYear")?.value;
 
-      if (!email || !password || !roll || !academicYear) {
-        setMessage("loginMessage", "Email, Roll, Academic Year এবং Password দিন।", "error");
+      if (!email || !password) {
+        setMessage("loginMessage", "Email এবং Password দিন।", "error");
         return;
       }
 
@@ -3577,14 +3556,6 @@
         const credential = await signInWithEmailAndPassword(auth, email, password);
         const profileSnap = await getDoc(doc(db, "users", credential.user.uid));
         const profile = profileSnap.exists() ? profileSnap.data() : {};
-        if (profile.roll || profile.academicYear) {
-          if (String(profile.roll || "") !== roll || String(profile.academicYear || "") !== academicYear) {
-            await signOut(auth);
-            throw new Error("Roll বা Academic Year account-এর সাথে মেলেনি।");
-          }
-        } else {
-          try { await updateDoc(doc(db,"users",credential.user.uid),{roll,academicYear,updatedAt:serverTimestamp()}); } catch(e) {}
-        }
         if (profile.blocked === true) {
           await signOut(auth);
           throw new Error("এই accountটি Admin block করেছেন।");
