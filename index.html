@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <meta name="theme-color" content="#4f46e5" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="CampusOne" />
+  <link rel="manifest" href="manifest.json" />
   <title>CampusOne — Student Portal</title>
   <meta name="description" content="CampusOne Student Management Portal" />
 
@@ -1551,6 +1556,25 @@
         flex-direction: column;
       }
     }
+  
+    /* Added features */
+    .profile-photo-wrap{position:relative;width:120px;height:120px;margin:0 auto 15px;}
+    .profile-avatar,.avatar{overflow:hidden;}
+    .profile-avatar img,.avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+    .profile-photo-camera{position:absolute;right:0;bottom:0;width:34px;height:34px;border:3px solid white;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 5px 15px rgba(15,23,42,.18);}
+    .profile-photo-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:10px;}
+    .photo-note{color:var(--muted);font-size:11px;margin-top:8px;}
+    .support-list{display:grid;gap:14px;}
+    .support-ticket{border:1px solid var(--border);border-radius:15px;padding:17px;background:white;}
+    .support-ticket-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
+    .support-ticket-title{font-weight:700;font-size:15px;}
+    .support-ticket-meta{color:var(--muted);font-size:11px;margin-top:3px;}
+    .support-message{background:#f8fafc;border-radius:11px;padding:12px;line-height:1.7;font-size:13px;white-space:pre-wrap;word-break:break-word;}
+    .support-reply{margin-top:10px;background:#eef2ff;border-left:3px solid var(--primary);border-radius:10px;padding:12px;font-size:13px;line-height:1.7;white-space:pre-wrap;word-break:break-word;}
+    .support-reply-label{font-weight:700;color:var(--primary);margin-bottom:3px;}
+    .status-select{min-width:130px;padding:7px 9px;border:1px solid var(--border);border-radius:8px;background:white;}
+    .result-row-note{max-width:260px;white-space:pre-wrap;line-height:1.5;}
+
   </style>
 </head>
 
@@ -1705,6 +1729,12 @@
             </button>
 
             <div id="loginMessage" class="auth-message"></div>
+            <div style="display:flex;align-items:center;gap:10px;margin:18px 0;color:#94a3b8;font-size:12px;">
+              <span style="height:1px;background:#e2e8f0;flex:1;"></span><span>অথবা</span><span style="height:1px;background:#e2e8f0;flex:1;"></span>
+            </div>
+            <button id="googleLoginBtn" class="secondary-btn" style="width:100%;padding:13px;" onclick="loginWithGoogle()">
+              <span style="font-weight:800;">G</span>&nbsp; Google দিয়ে Login
+            </button>
 
           </div>
 
@@ -1887,7 +1917,13 @@
         </button>
 
 
-        <div class="nav-title">Account</div>
+        
+        <button class="nav-item" data-page="support" onclick="showPage('support', this)">
+          <span class="nav-icon">🎧</span>
+          <span>Support</span>
+        </button>
+
+<div class="nav-title">Account</div>
 
 
         <button
@@ -2429,6 +2465,8 @@
                   <th>Grade</th>
                   <th>GPA</th>
                   <th>Status</th>
+                  <th>Notice</th>
+                  <th>Picture</th>
                 </tr>
 
               </thead>
@@ -2436,7 +2474,7 @@
               <tbody id="resultsTable">
 
                 <tr>
-                  <td colspan="6">
+                  <td colspan="8">
                     <div class="empty">
                       Loading...
                     </div>
@@ -2455,6 +2493,23 @@
         <!-- =========================
              PROFILE
         ========================= -->
+
+        
+        <!-- =========================
+             SUPPORT
+        ========================= -->
+        <section id="page-support" class="page">
+          <div class="section-header">
+            <div class="section-heading">
+              <h2>Support Center</h2>
+              <p>যেকোনো সমস্যা বা সাহায্যের জন্য Admin-কে message পাঠাও।</p>
+            </div>
+            <button class="primary-btn" onclick="openSupportModal()">+ New Support Message</button>
+          </div>
+          <div id="mySupportList" class="support-list">
+            <div class="empty">Loading...</div>
+          </div>
+        </section>
 
         <section id="page-profile" class="page">
 
@@ -2477,9 +2532,16 @@
 
             <div class="card profile-card">
 
-              <div id="profileAvatar" class="profile-avatar">
-                U
+              <div class="profile-photo-wrap">
+                <div id="profileAvatar" class="profile-avatar">U</div>
+                <label class="profile-photo-camera" for="profilePhotoInput" title="Profile picture পরিবর্তন করুন">📷</label>
               </div>
+              <input id="profilePhotoInput" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="uploadProfilePhoto(this)">
+              <div class="profile-photo-actions">
+                <button class="secondary-btn" type="button" onclick="document.getElementById('profilePhotoInput').click()">📷 Change Photo</button>
+                <button class="danger-btn" type="button" onclick="removeProfilePhoto()">Remove</button>
+              </div>
+              <div class="photo-note">JPG, PNG বা WebP • সর্বোচ্চ 5 MB</div>
 
               <div
                 id="profileName"
@@ -2717,6 +2779,16 @@
             </div>
 
 
+
+            <div
+              class="admin-action"
+              onclick="loadAdminSupport()"
+            >
+              <div class="admin-action-icon">🎧</div>
+              <h3>Support Messages</h3>
+              <p>Student support message ও reply manage করুন।</p>
+            </div>
+
             <div
               class="admin-action"
               onclick="loadAdminUsers()"
@@ -2734,6 +2806,17 @@
 
           </div>
 
+
+
+          <div id="adminSupportSection" class="card hidden" style="margin-top:20px;">
+            <div class="card-header">
+              <div class="card-title">Student Support Messages</div>
+              <button class="small-btn" onclick="loadAdminSupport()">Refresh</button>
+            </div>
+            <div id="adminSupportList" class="card-body">
+              <div class="empty">Loading...</div>
+            </div>
+          </div>
 
           <div
             id="adminUsersSection"
@@ -2864,7 +2947,7 @@
 
     import {
       initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 
     import {
@@ -2872,9 +2955,11 @@
       onAuthStateChanged,
       createUserWithEmailAndPassword,
       signInWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup,
       updateProfile,
       signOut
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
     import {
@@ -2892,7 +2977,7 @@
       orderBy,
       limit,
       serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
     /* =========================
@@ -2983,6 +3068,7 @@
       routine: "Class Routine",
       events: "Campus Events",
       results: "My Results",
+      support: "Support Center",
       profile: "My Profile",
       admin: "Admin Panel"
 
@@ -3018,6 +3104,22 @@
         .charAt(0)
         .toUpperCase();
 
+    }
+
+
+    function setAvatar(element, initial, photoURL) {
+      if (!element) return;
+      if (photoURL) {
+        element.innerHTML = "";
+        const img = document.createElement("img");
+        img.alt = "Profile";
+        img.referrerPolicy = "no-referrer";
+        img.src = photoURL;
+        img.onerror = () => { element.textContent = initial || "U"; };
+        element.appendChild(img);
+      } else {
+        element.textContent = initial || "U";
+      }
     }
 
 
@@ -3178,7 +3280,16 @@
           "Firebase API key valid নয়। Firebase Console থেকে Web App-এর config/API key check করুন।",
 
         "auth/operation-not-allowed":
-          "Firebase Authentication-এ Email/Password Sign-in চালু নেই।"
+          "Firebase Authentication-এ এই Sign-in method চালু নেই।",
+
+        "auth/popup-closed-by-user":
+          "Google Login window বন্ধ করা হয়েছে।",
+
+        "auth/popup-blocked":
+          "Browser popup block করেছে। Google Login-এর জন্য popup allow করুন।",
+
+        "auth/account-exists-with-different-credential":
+          "এই email অন্য একটি sign-in method-এর সাথে যুক্ত।"
 
       };
 
@@ -3337,6 +3448,7 @@
             name: name,
             email: email,
             role: "student",
+            photoURL: credential.user.photoURL || "",
             createdAt: serverTimestamp()
           }
         );
@@ -3447,6 +3559,64 @@
 
         btn.textContent =
           "Login করুন";
+
+      }
+
+    };
+
+
+    /* =========================
+       GOOGLE LOGIN
+    ========================= */
+
+    window.loginWithGoogle = async function() {
+
+      const btn = document.getElementById("googleLoginBtn");
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Google Login হচ্ছে...";
+      }
+
+      try {
+
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        const ref = doc(db, "users", user.uid);
+        const snap = await getDoc(ref);
+
+        if (!snap.exists()) {
+
+          await setDoc(ref, {
+            uid: user.uid,
+            name: user.displayName || user.email?.split("@")[0] || "Student",
+            email: user.email || "",
+            role: "student",
+            photoURL: user.photoURL || "",
+            createdAt: serverTimestamp()
+          });
+
+        } else if (user.photoURL && !snap.data()?.photoURL) {
+
+          await updateDoc(ref, { photoURL: user.photoURL });
+
+        }
+
+        showToast("Google Login সফল হয়েছে।", "success");
+
+      } catch (error) {
+
+        console.error(error);
+        setMessage("loginMessage", friendlyAuthError(error), "error");
+
+      } finally {
+
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span style="font-weight:800;">G</span>&nbsp; Google দিয়ে Login';
+        }
 
       }
 
@@ -3589,19 +3759,9 @@
         .textContent = email;
 
 
-      document
-        .getElementById("sideAvatar")
-        .textContent = initial;
-
-
-      document
-        .getElementById("topAvatar")
-        .textContent = initial;
-
-
-      document
-        .getElementById("profileAvatar")
-        .textContent = initial;
+      setAvatar(document.getElementById("sideAvatar"), initial, currentProfile?.photoURL);
+      setAvatar(document.getElementById("topAvatar"), initial, currentProfile?.photoURL);
+      setAvatar(document.getElementById("profileAvatar"), initial, currentProfile?.photoURL);
 
 
       document
@@ -5035,6 +5195,10 @@
                           ${escapeHtml(c.time || "")}
                         </div>
 
+                        <div style="font-size:10px;color:#7c3aed;font-weight:800;margin-bottom:2px;">
+                          ${escapeHtml(c.academicClass || "HSC 1st Year")}
+                        </div>
+
                         <div class="class-name">
                           ${escapeHtml(
                             c.subject ||
@@ -5157,7 +5321,21 @@
         <div class="form-group">
 
           <label class="form-label">
-            Subject / Class
+            Academic Class
+          </label>
+
+          <select id="routineAcademicClass" class="form-select">
+            <option value="HSC 1st Year">HSC 1st Year</option>
+            <option value="HSC 2nd Year">HSC 2nd Year</option>
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Subject
           </label>
 
           <input
@@ -5208,6 +5386,13 @@
               .trim();
 
 
+          const academicClass =
+            document
+              .getElementById(
+                "routineAcademicClass"
+              )
+              .value;
+
           const subject =
             document
               .getElementById(
@@ -5250,6 +5435,8 @@
                 day,
 
                 time,
+
+                academicClass,
 
                 subject,
 
@@ -5827,104 +6014,43 @@
 
     async function loadResults() {
 
-      const tbody =
-        document.getElementById(
-          "resultsTable"
-        );
+      const tbody = document.getElementById("resultsTable");
 
-
-      tbody.innerHTML =
-        `<tr>
-          <td colspan="6">
-            <div class="empty">
-              Loading...
-            </div>
-          </td>
-        </tr>`;
-
+      tbody.innerHTML = `
+        <tr><td colspan="8"><div class="empty">Loading...</div></td></tr>`;
 
       try {
 
-        /*
-          IMPORTANT:
+        if (currentProfile?.role === "admin") {
 
-          Student query MUST include
-          published == true because
-          Firestore Security Rules are
-          not filters.
-        */
+          const snap = await getDocs(collection(db, "results"));
 
-        if (
-          currentProfile?.role === "admin"
-        ) {
-
-          const snap =
-            await getDocs(
-              collection(
-                db,
-                "results"
-              )
-            );
-
-
-          resultsCache =
-            snap.docs.map(
-              d => ({
-                id: d.id,
-                ...d.data()
-              })
-            );
+          resultsCache = snap.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+          }));
 
         } else {
 
-          const q =
-            query(
-              collection(
-                db,
-                "results"
-              ),
-              where(
-                "studentUid",
-                "==",
-                currentUser.uid
-              ),
-              where(
-                "published",
-                "==",
-                true
-              )
-            );
+          const q = query(
+            collection(db, "results"),
+            where("studentUid", "==", currentUser.uid),
+            where("published", "==", true)
+          );
 
+          const snap = await getDocs(q);
 
-          const snap =
-            await getDocs(q);
-
-
-          resultsCache =
-            snap.docs.map(
-              d => ({
-                id: d.id,
-                ...d.data()
-              })
-            );
+          resultsCache = snap.docs.map(d => ({
+            id: d.id,
+            ...d.data()
+          }));
 
         }
 
-
-        resultsCache.sort(
-          (a,b) => {
-
-            const da =
-              a.createdAt?.toMillis?.() || 0;
-
-            const dbb =
-              b.createdAt?.toMillis?.() || 0;
-
-            return dbb - da;
-
-          }
+        resultsCache.sort((a,b) =>
+          (b.createdAt?.toMillis?.() || 0) -
+          (a.createdAt?.toMillis?.() || 0)
         );
-
 
         renderResults();
 
@@ -5932,14 +6058,10 @@
 
         console.error(error);
 
-        tbody.innerHTML =
-          `<tr>
-            <td colspan="6">
-              <div class="empty">
-                Result load করতে সমস্যা হয়েছে।
-              </div>
-            </td>
-          </tr>`;
+        tbody.innerHTML = `
+          <tr><td colspan="8">
+            <div class="empty">Result load করতে সমস্যা হয়েছে।</div>
+          </td></tr>`;
 
       }
 
@@ -5948,170 +6070,97 @@
 
     function renderResults() {
 
-      const tbody =
-        document.getElementById(
-          "resultsTable"
-        );
-
+      const tbody = document.getElementById("resultsTable");
 
       const visibleResults =
         currentProfile?.role === "admin"
           ? resultsCache
-          : resultsCache.filter(
-              r =>
-                r.published === true &&
-                r.studentUid ===
-                  currentUser.uid
+          : resultsCache.filter(r =>
+              r.published === true &&
+              r.studentUid === currentUser.uid
             );
 
-
-      document
-        .getElementById(
-          "resultCount"
-        )
-        .textContent =
+      document.getElementById("resultCount").textContent =
         visibleResults.length;
-
 
       if (!visibleResults.length) {
 
-        tbody.innerHTML =
-          `<tr>
-            <td colspan="6">
-              <div class="empty">
-                <div class="empty-icon">📊</div>
-                এখনো কোনো Published Result নেই।
-              </div>
-            </td>
-          </tr>`;
+        tbody.innerHTML = `
+          <tr><td colspan="8">
+            <div class="empty">
+              <div class="empty-icon">📊</div>
+              এখনো কোনো Published Result নেই।
+            </div>
+          </td></tr>`;
 
-
-        document
-          .getElementById(
-            "resultAverage"
-          )
-          .textContent = "—";
-
-
-        document
-          .getElementById(
-            "resultLatest"
-          )
-          .textContent = "—";
-
-
+        document.getElementById("resultAverage").textContent = "—";
+        document.getElementById("resultLatest").textContent = "—";
         return;
 
       }
 
+      const gpas = visibleResults
+        .map(r => Number(r.gpa))
+        .filter(n => !isNaN(n));
 
-      const gpas =
-        visibleResults
-          .map(
-            r => Number(
-              r.gpa
-            )
-          )
-          .filter(
-            n => !isNaN(n)
-          );
+      const average = gpas.length
+        ? (
+            gpas.reduce((a,b) => a + b, 0) /
+            gpas.length
+          ).toFixed(2)
+        : "—";
 
+      document.getElementById("resultAverage").textContent = average;
 
-      const average =
-        gpas.length
-          ? (
-              gpas.reduce(
-                (a,b) => a + b,
-                0
-              ) /
-              gpas.length
-            ).toFixed(2)
-          : "—";
-
-
-      document
-        .getElementById(
-          "resultAverage"
-        )
-        .textContent =
-        average;
-
-
-      document
-        .getElementById(
-          "resultLatest"
-        )
-        .textContent =
+      document.getElementById("resultLatest").textContent =
         visibleResults[0]?.exam ||
         visibleResults[0]?.semester ||
         "—";
 
+      tbody.innerHTML = visibleResults.map(r => `
 
-      tbody.innerHTML =
-        visibleResults.map(r => `
+        <tr>
+          <td>${escapeHtml(r.exam || r.semester || "—")}</td>
+          <td>${escapeHtml(r.course || r.subject || "—")}</td>
+          <td>${escapeHtml(r.marks ?? "—")}</td>
+          <td>${escapeHtml(r.grade || "—")}</td>
+          <td><strong>${escapeHtml(r.gpa ?? "—")}</strong></td>
 
-          <tr>
+          <td>
+            ${
+              r.published
+                ? `<span class="badge badge-success">Published</span>`
+                : `<span class="badge badge-warning">Unpublished</span>`
+            }
+          </td>
 
-            <td>
-              ${escapeHtml(
-                r.exam ||
-                r.semester ||
-                "—"
-              )}
-            </td>
+          <td>
+            ${
+              r.notice
+                ? `<div class="result-row-note">${escapeHtml(r.notice)}</div>`
+                : `<span style="color:#94a3b8;">—</span>`
+            }
+          </td>
 
-            <td>
-              ${escapeHtml(
-                r.course ||
-                r.subject ||
-                "—"
-              )}
-            </td>
+          <td>
+            ${
+              r.noticeImageUrl
+                ? `
+                  <a href="${escapeHtml(r.noticeImageUrl)}" target="_blank" rel="noopener" title="Picture দেখুন">
+                    <img
+                      src="${escapeHtml(r.noticeImageUrl)}"
+                      alt="Result Notice"
+                      style="width:80px;height:55px;object-fit:cover;border-radius:8px;border:1px solid #e2e8f0;"
+                    >
+                  </a>
+                `
+                : `<span style="color:#94a3b8;">—</span>`
+            }
+          </td>
 
-            <td>
-              ${escapeHtml(
-                r.marks ??
-                "—"
-              )}
-            </td>
+        </tr>
 
-            <td>
-              ${escapeHtml(
-                r.grade ||
-                "—"
-              )}
-            </td>
-
-            <td>
-              <strong>
-                ${escapeHtml(
-                  r.gpa ??
-                  "—"
-                )}
-              </strong>
-            </td>
-
-            <td>
-
-              ${
-                r.published
-                  ? `
-                    <span class="badge badge-success">
-                      Published
-                    </span>
-                  `
-                  : `
-                    <span class="badge badge-warning">
-                      Unpublished
-                    </span>
-                  `
-              }
-
-            </td>
-
-          </tr>
-
-        `).join("");
+      `).join("");
 
     }
 
@@ -6122,9 +6171,7 @@
 
     window.openResultModal = function() {
 
-      if (
-        currentProfile?.role !== "admin"
-      ) {
+      if (currentProfile?.role !== "admin") {
 
         showToast(
           "শুধুমাত্র Admin result manage করতে পারবেন।",
@@ -6135,140 +6182,64 @@
 
       }
 
-
       const body = `
 
         <div class="form-group">
-
-          <label class="form-label">
-            Student Email
-          </label>
-
-          <input
-            id="resultStudentEmail"
-            class="form-input"
-            type="email"
-            placeholder="student@gmail.com"
-          >
-
-          <div
-            style="
-              color:#64748b;
-              font-size:11px;
-              margin-top:5px;
-            "
-          >
+          <label class="form-label">Student Email</label>
+          <input id="resultStudentEmail" class="form-input" type="email" placeholder="student@gmail.com">
+          <div style="color:#64748b;font-size:11px;margin-top:5px;">
             Registered student's exact email দিন।
           </div>
-
         </div>
 
-
         <div class="form-group">
-
-          <label class="form-label">
-            Exam / Semester
-          </label>
-
-          <input
-            id="resultExam"
-            class="form-input"
-            placeholder="1st Semester"
-          >
-
+          <label class="form-label">Exam / Semester</label>
+          <input id="resultExam" class="form-input" placeholder="1st Semester">
         </div>
 
-
         <div class="form-group">
-
-          <label class="form-label">
-            Course / Subject
-          </label>
-
-          <input
-            id="resultCourse"
-            class="form-input"
-            placeholder="Mathematics"
-          >
-
+          <label class="form-label">Course / Subject</label>
+          <input id="resultCourse" class="form-input" placeholder="Mathematics">
         </div>
 
-
         <div class="form-group">
-
-          <label class="form-label">
-            Marks
-          </label>
-
-          <input
-            id="resultMarks"
-            class="form-input"
-            placeholder="85"
-          >
-
+          <label class="form-label">Marks</label>
+          <input id="resultMarks" class="form-input" placeholder="85">
         </div>
 
-
         <div class="form-group">
-
-          <label class="form-label">
-            Grade
-          </label>
-
-          <input
-            id="resultGrade"
-            class="form-input"
-            placeholder="A+"
-          >
-
+          <label class="form-label">Grade</label>
+          <input id="resultGrade" class="form-input" placeholder="A+">
         </div>
 
-
         <div class="form-group">
-
-          <label class="form-label">
-            GPA
-          </label>
-
-          <input
-            id="resultGpa"
-            class="form-input"
-            type="number"
-            step="0.01"
-            min="0"
-            max="5"
-            placeholder="5.00"
-          >
-
+          <label class="form-label">GPA</label>
+          <input id="resultGpa" class="form-input" type="number" step="0.01" min="0" max="5" placeholder="5.00">
         </div>
 
+        <div class="form-group">
+          <label class="form-label">Result Notice</label>
+          <textarea id="resultNotice" class="form-textarea" placeholder="Result সম্পর্কে কোনো notice/announcement লিখুন..."></textarea>
+        </div>
+
+        <div class="upload-box">
+          <div style="font-size:34px;">🖼️</div>
+          <div style="font-weight:700;">Result Notice Picture</div>
+          <div style="color:#64748b;font-size:12px;margin-top:4px;">
+            JPG, PNG বা WebP • Maximum 5 MB
+          </div>
+          <input id="resultNoticeImage" type="file" accept="image/jpeg,image/png,image/webp">
+          <div id="resultImagePreview" style="margin-top:10px;"></div>
+        </div>
 
         <div class="form-group">
-
-          <label
-            style="
-              display:flex;
-              align-items:center;
-              gap:9px;
-              cursor:pointer;
-            "
-          >
-
-            <input
-              id="resultPublished"
-              type="checkbox"
-            >
-
-            <span>
-              এখনই Publish করুন
-            </span>
-
+          <label style="display:flex;align-items:center;gap:9px;cursor:pointer;">
+            <input id="resultPublished" type="checkbox">
+            <span>এখনই Publish করুন</span>
           </label>
-
         </div>
 
       `;
-
 
       openModal(
         "Publish Student Result",
@@ -6277,197 +6248,288 @@
         "Save Result"
       );
 
+      const imageInput = document.getElementById("resultNoticeImage");
+
+      imageInput?.addEventListener("change", () => {
+
+        const file = imageInput.files?.[0];
+        const preview = document.getElementById("resultImagePreview");
+
+        if (!file || !preview) return;
+
+        if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
+          preview.innerHTML = `<div style="color:#b91c1c;font-size:12px;">JPG, PNG বা WebP image দিন।</div>`;
+          imageInput.value = "";
+          return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+          preview.innerHTML = `<div style="color:#b91c1c;font-size:12px;">Image সর্বোচ্চ 5 MB হতে পারবে।</div>`;
+          imageInput.value = "";
+          return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = event => {
+          preview.innerHTML = `
+            <img src="${event.target.result}" alt="Preview"
+              style="width:100%;max-height:180px;object-fit:contain;border-radius:10px;border:1px solid #e2e8f0;">
+          `;
+        };
+
+        reader.readAsDataURL(file);
+
+      });
+
     };
 
 
     async function saveResult() {
 
-      const email =
-        document
-          .getElementById(
-            "resultStudentEmail"
-          )
-          .value
-          .trim()
-          .toLowerCase();
+      const email = document.getElementById("resultStudentEmail").value.trim().toLowerCase();
+      const exam = document.getElementById("resultExam").value.trim();
+      const course = document.getElementById("resultCourse").value.trim();
+      const marks = document.getElementById("resultMarks").value.trim();
+      const grade = document.getElementById("resultGrade").value.trim();
+      const gpa = document.getElementById("resultGpa").value.trim();
+      const notice = document.getElementById("resultNotice").value.trim();
+      const imageFile = document.getElementById("resultNoticeImage")?.files?.[0] || null;
+      const published = document.getElementById("resultPublished").checked;
 
-
-      const exam =
-        document
-          .getElementById(
-            "resultExam"
-          )
-          .value
-          .trim();
-
-
-      const course =
-        document
-          .getElementById(
-            "resultCourse"
-          )
-          .value
-          .trim();
-
-
-      const marks =
-        document
-          .getElementById(
-            "resultMarks"
-          )
-          .value
-          .trim();
-
-
-      const grade =
-        document
-          .getElementById(
-            "resultGrade"
-          )
-          .value
-          .trim();
-
-
-      const gpa =
-        document
-          .getElementById(
-            "resultGpa"
-          )
-          .value
-          .trim();
-
-
-      const published =
-        document
-          .getElementById(
-            "resultPublished"
-          )
-          .checked;
-
-
-      if (
-        !email ||
-        !exam ||
-        !course
-      ) {
-
-        showToast(
-          "Student Email, Exam এবং Course দিন।",
-          "warning"
-        );
-
+      if (!email || !exam || !course) {
+        showToast("Student Email, Exam এবং Course দিন।", "warning");
         return;
+      }
+
+      if (imageFile) {
+
+        if (!["image/jpeg","image/png","image/webp"].includes(imageFile.type)) {
+          showToast("Result picture হিসেবে JPG, PNG বা WebP দিন।", "error");
+          return;
+        }
+
+        if (imageFile.size > 5 * 1024 * 1024) {
+          showToast("Result picture সর্বোচ্চ 5 MB হতে পারবে।", "error");
+          return;
+        }
 
       }
 
+      const saveBtn = document.getElementById("modalSaveBtn");
 
       try {
 
-        /*
-          Admin searches users by email.
-          Then creates result using student's UID.
-        */
+        saveBtn.disabled = true;
+        saveBtn.textContent = imageFile ? "Uploading..." : "Saving...";
 
-        const userQuery =
-          query(
-            collection(
-              db,
-              "users"
-            ),
-            where(
-              "email",
-              "==",
-              email
-            )
-          );
+        const userQuery = query(
+          collection(db, "users"),
+          where("email", "==", email)
+        );
 
-
-        const userSnap =
-          await getDocs(
-            userQuery
-          );
-
+        const userSnap = await getDocs(userQuery);
 
         if (userSnap.empty) {
-
-          showToast(
-            "এই Email-এর কোনো registered student পাওয়া যায়নি।",
-            "error"
-          );
-
+          showToast("এই Email-এর কোনো registered student পাওয়া যায়নি।", "error");
           return;
+        }
+
+        const student = userSnap.docs[0].data();
+
+        let noticeImageUrl = "";
+        let noticeImagePublicId = "";
+
+        if (imageFile) {
+
+          const imageData = await uploadImageToCloudinary(imageFile);
+
+          noticeImageUrl = imageData.secure_url || "";
+          noticeImagePublicId = imageData.public_id || "";
 
         }
 
-
-        const student =
-          userSnap.docs[0].data();
-
-
         await addDoc(
-          collection(
-            db,
-            "results"
-          ),
+          collection(db, "results"),
           {
-
-            studentUid:
-              student.uid,
-
-            studentEmail:
-              email,
-
-            studentName:
-              student.name ||
-              "",
-
+            studentUid: student.uid,
+            studentEmail: email,
+            studentName: student.name || "",
             exam,
-
             course,
-
             marks,
-
             grade,
-
-            gpa:
-              gpa
-                ? Number(gpa)
-                : null,
-
+            gpa: gpa ? Number(gpa) : null,
+            notice,
+            noticeImageUrl,
+            noticeImagePublicId,
             published,
-
-            createdAt:
-              serverTimestamp(),
-
-            createdBy:
-              currentUser.uid
-
+            createdAt: serverTimestamp(),
+            createdBy: currentUser.uid
           }
         );
 
-
         showToast(
           published
-            ? "Result publish হয়েছে।"
-            : "Result save হয়েছে।",
+            ? "Result notice সহ publish হয়েছে।"
+            : "Result notice সহ save হয়েছে।",
           "success"
         );
 
-
         closeModal();
+
+        if (currentPage === "results") {
+          await loadResults();
+        }
+
+        await loadDashboard();
 
       } catch (error) {
 
         console.error(error);
 
-        showToast(
-          "Result save করতে সমস্যা হয়েছে।",
-          "error"
-        );
+        showToast("Result save করতে সমস্যা হয়েছে।", "error");
+
+      } finally {
+
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Save Result";
+        }
 
       }
 
     }
+
+
+    /* =========================
+       PROFILE PHOTO
+    ========================= */
+
+    async function uploadImageToCloudinary(file) {
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_PRESET);
+
+      const response = await fetch(
+        CLOUDINARY_URL,
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Cloudinary image upload failed");
+      }
+
+      const data = await response.json();
+
+      if (!data.secure_url) {
+        throw new Error("Image URL পাওয়া যায়নি");
+      }
+
+      return data;
+
+    }
+
+
+    window.uploadProfilePhoto = async function(input) {
+
+      if (!currentUser || !input?.files?.[0]) return;
+
+      const file = input.files[0];
+
+      if (!["image/jpeg","image/png","image/webp"].includes(file.type)) {
+        showToast("শুধুমাত্র JPG, PNG বা WebP image দিন।", "error");
+        input.value = "";
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        showToast("Profile picture সর্বোচ্চ 5 MB হতে পারবে।", "error");
+        input.value = "";
+        return;
+      }
+
+      try {
+
+        showToast("Profile picture upload হচ্ছে...", "info");
+
+        const data = await uploadImageToCloudinary(file);
+        const photoURL = data.secure_url;
+
+        await updateDoc(
+          doc(db, "users", currentUser.uid),
+          { photoURL }
+        );
+
+        try {
+          await updateProfile(currentUser, { photoURL });
+        } catch (e) {
+          console.warn("Auth photoURL update skipped:", e);
+        }
+
+        currentProfile.photoURL = photoURL;
+        updateUserUI();
+
+        showToast("Profile picture সফলভাবে update হয়েছে।", "success");
+
+      } catch (error) {
+
+        console.error(error);
+        showToast(
+          "Profile picture upload করতে সমস্যা হয়েছে। Cloudinary preset check করুন।",
+          "error"
+        );
+
+      } finally {
+
+        input.value = "";
+
+      }
+
+    };
+
+
+    window.removeProfilePhoto = async function() {
+
+      if (!currentUser) return;
+
+      if (!currentProfile?.photoURL) {
+        showToast("কোনো profile picture দেওয়া নেই।", "info");
+        return;
+      }
+
+      if (!confirm("Profile picture remove করতে চান?")) return;
+
+      try {
+
+        await updateDoc(
+          doc(db, "users", currentUser.uid),
+          { photoURL: "" }
+        );
+
+        try {
+          await updateProfile(currentUser, { photoURL: "" });
+        } catch (e) {
+          console.warn("Auth photoURL clear skipped:", e);
+        }
+
+        currentProfile.photoURL = "";
+        updateUserUI();
+
+        showToast("Profile picture remove হয়েছে।", "success");
+
+      } catch (error) {
+
+        console.error(error);
+        showToast("Profile picture remove করতে সমস্যা হয়েছে।", "error");
+
+      }
+
+    };
 
 
     /* =========================
@@ -6603,6 +6665,371 @@
       }
 
     }
+
+
+
+    /* =========================
+       SUPPORT
+    ========================= */
+
+    async function loadMySupport() {
+
+      const container = document.getElementById("mySupportList");
+
+      if (!container || !currentUser) return;
+
+      container.innerHTML = `<div class="empty">Loading...</div>`;
+
+      try {
+
+        const q = query(
+          collection(db, "supportTickets"),
+          where("userId", "==", currentUser.uid)
+        );
+
+        const snap = await getDocs(q);
+
+        const tickets = snap.docs.map(d => ({
+          id: d.id,
+          ...d.data()
+        }));
+
+        tickets.sort((a,b) =>
+          (b.createdAt?.toMillis?.() || 0) -
+          (a.createdAt?.toMillis?.() || 0)
+        );
+
+        if (!tickets.length) {
+
+          container.innerHTML = `
+            <div class="card">
+              <div class="empty">
+                <div class="empty-icon">🎧</div>
+                এখনো কোনো Support message পাঠানো হয়নি।
+              </div>
+            </div>`;
+
+          return;
+
+        }
+
+        container.innerHTML = tickets.map(t => `
+
+          <div class="support-ticket">
+
+            <div class="support-ticket-head">
+
+              <div>
+                <div class="support-ticket-title">
+                  ${escapeHtml(t.subject || "Support Request")}
+                </div>
+                <div class="support-ticket-meta">
+                  ${formatDateTime(t.createdAt)}
+                </div>
+              </div>
+
+              ${
+                t.status === "resolved"
+                  ? `<span class="badge badge-success">Resolved</span>`
+                  : t.status === "in_progress"
+                    ? `<span class="badge badge-info">In Progress</span>`
+                    : `<span class="badge badge-warning">Pending</span>`
+              }
+
+            </div>
+
+            <div class="support-message">
+              ${escapeHtml(t.message || "")}
+            </div>
+
+            ${
+              t.adminReply
+                ? `
+                  <div class="support-reply">
+                    <div class="support-reply-label">Admin Reply</div>
+                    ${escapeHtml(t.adminReply)}
+                  </div>
+                `
+                : `
+                  <div style="color:#94a3b8;font-size:12px;margin-top:9px;">
+                    Admin-এর reply এখনো আসেনি।
+                  </div>
+                `
+            }
+
+          </div>
+
+        `).join("");
+
+      } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+          <div class="card">
+            <div class="empty">
+              Support message load করতে সমস্যা হয়েছে।
+            </div>
+          </div>`;
+
+      }
+
+    }
+
+
+    window.openSupportModal = function() {
+
+      if (!currentUser) return;
+
+      const body = `
+
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <input id="supportSubject" class="form-input" placeholder="যেমন: Login সমস্যা / Result / Routine">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea id="supportMessage" class="form-textarea" style="min-height:150px;" placeholder="তোমার সমস্যাটি বিস্তারিত লিখো..."></textarea>
+        </div>
+
+      `;
+
+      openModal(
+        "New Support Message",
+        body,
+        saveSupportTicket,
+        "Send Message"
+      );
+
+    };
+
+
+    async function saveSupportTicket() {
+
+      const subject =
+        document.getElementById("supportSubject").value.trim();
+
+      const message =
+        document.getElementById("supportMessage").value.trim();
+
+      if (!subject || !message) {
+        showToast("Subject এবং Message দুটোই দিন।", "warning");
+        return;
+      }
+
+      const saveBtn = document.getElementById("modalSaveBtn");
+
+      try {
+
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Sending...";
+
+        await addDoc(
+          collection(db, "supportTickets"),
+          {
+            userId: currentUser.uid,
+            name: currentProfile?.name || currentUser.displayName || "",
+            email: currentProfile?.email || currentUser.email || "",
+            subject,
+            message,
+            status: "pending",
+            adminReply: "",
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
+          }
+        );
+
+        closeModal();
+
+        showToast(
+          "Support message Admin-এর কাছে পাঠানো হয়েছে।",
+          "success"
+        );
+
+        await loadMySupport();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Support message send করতে সমস্যা হয়েছে।",
+          "error"
+        );
+
+      } finally {
+
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.textContent = "Send Message";
+        }
+
+      }
+
+    }
+
+
+    window.loadAdminSupport = async function() {
+
+      if (currentProfile?.role !== "admin") {
+        showToast("Admin access প্রয়োজন।", "error");
+        return;
+      }
+
+      const section = document.getElementById("adminSupportSection");
+      const container = document.getElementById("adminSupportList");
+
+      section.classList.remove("hidden");
+      container.innerHTML = `<div class="empty">Loading...</div>`;
+
+      try {
+
+        const snap = await getDocs(
+          collection(db, "supportTickets")
+        );
+
+        const tickets = snap.docs.map(d => ({
+          id: d.id,
+          ...d.data()
+        }));
+
+        tickets.sort((a,b) =>
+          (b.createdAt?.toMillis?.() || 0) -
+          (a.createdAt?.toMillis?.() || 0)
+        );
+
+        if (!tickets.length) {
+
+          container.innerHTML = `
+            <div class="empty">
+              <div class="empty-icon">🎧</div>
+              কোনো Support message নেই।
+            </div>`;
+
+          return;
+
+        }
+
+        container.innerHTML = tickets.map(t => `
+
+          <div class="support-ticket">
+
+            <div class="support-ticket-head">
+
+              <div>
+                <div class="support-ticket-title">
+                  ${escapeHtml(t.subject || "Support Request")}
+                </div>
+
+                <div class="support-ticket-meta">
+                  ${escapeHtml(t.name || "Student")}
+                  • ${escapeHtml(t.email || "")}
+                  • ${formatDateTime(t.createdAt)}
+                </div>
+              </div>
+
+              <span class="badge ${
+                t.status === "resolved"
+                  ? "badge-success"
+                  : t.status === "in_progress"
+                    ? "badge-info"
+                    : "badge-warning"
+              }">
+                ${
+                  t.status === "resolved"
+                    ? "Resolved"
+                    : t.status === "in_progress"
+                      ? "In Progress"
+                      : "Pending"
+                }
+              </span>
+
+            </div>
+
+            <div class="support-message">
+              ${escapeHtml(t.message || "")}
+            </div>
+
+            <div class="form-group" style="margin-top:12px;margin-bottom:8px;">
+              <label class="form-label">Admin Reply</label>
+              <textarea
+                id="reply-${t.id}"
+                class="form-textarea"
+                style="min-height:90px;"
+                placeholder="Student-কে reply লিখুন..."
+              >${escapeHtml(t.adminReply || "")}</textarea>
+            </div>
+
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+
+              <select id="status-${t.id}" class="status-select">
+                <option value="pending" ${t.status === "pending" ? "selected" : ""}>Pending</option>
+                <option value="in_progress" ${t.status === "in_progress" ? "selected" : ""}>In Progress</option>
+                <option value="resolved" ${t.status === "resolved" ? "selected" : ""}>Resolved</option>
+              </select>
+
+              <button class="primary-btn" onclick="replySupport('${t.id}')">
+                Save Reply & Status
+              </button>
+
+            </div>
+
+          </div>
+
+        `).join("");
+
+      } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+          <div class="empty">
+            Support messages load করতে সমস্যা হয়েছে।
+          </div>`;
+
+      }
+
+    };
+
+
+    window.replySupport = async function(id) {
+
+      if (currentProfile?.role !== "admin") return;
+
+      const reply =
+        document.getElementById(`reply-${id}`)?.value.trim() || "";
+
+      const status =
+        document.getElementById(`status-${id}`)?.value || "pending";
+
+      try {
+
+        await updateDoc(
+          doc(db, "supportTickets", id),
+          {
+            adminReply: reply,
+            status,
+            updatedAt: serverTimestamp()
+          }
+        );
+
+        showToast("Support reply update হয়েছে।", "success");
+
+        await loadAdminSupport();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Support reply update করতে সমস্যা হয়েছে।",
+          "error"
+        );
+
+      }
+
+    };
 
 
     /* =========================
