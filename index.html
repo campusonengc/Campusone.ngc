@@ -1,0 +1,7106 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CampusOne — Student Portal</title>
+  <meta name="description" content="CampusOne Student Management Portal" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --secondary: #7c3aed;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --info: #0284c7;
+
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #697386;
+      --border: #e6e9f0;
+
+      --sidebar: #111827;
+      --sidebar-hover: #1f2937;
+      --sidebar-text: #d1d5db;
+
+      --shadow: 0 10px 35px rgba(15, 23, 42, .08);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Hind Siliguri", "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =========================
+       LOADER
+    ========================= */
+
+    #pageLoader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(255,255,255,.96);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .loader-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 28px;
+      font-weight: 800;
+      box-shadow: 0 12px 30px rgba(79,70,229,.28);
+    }
+
+    .spinner {
+      width: 34px;
+      height: 34px;
+      border: 4px solid #e5e7eb;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================
+       AUTH
+    ========================= */
+
+    #authScreen {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(99,102,241,.22), transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(124,58,237,.20), transparent 30%),
+        linear-gradient(135deg, #eef2ff, #f8fafc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 25px;
+    }
+
+    .auth-wrapper {
+      width: min(1080px, 100%);
+      min-height: 650px;
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 30px;
+      box-shadow: 0 30px 80px rgba(15,23,42,.13);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+    }
+
+    .auth-hero {
+      padding: 55px;
+      background: linear-gradient(145deg, #312e81, #4f46e5 50%, #7c3aed);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .auth-hero::before,
+    .auth-hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+    }
+
+    .auth-hero::before {
+      width: 330px;
+      height: 330px;
+      right: -130px;
+      top: -100px;
+    }
+
+    .auth-hero::after {
+      width: 260px;
+      height: 260px;
+      left: -120px;
+      bottom: -100px;
+    }
+
+    .brand-large {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 35px;
+    }
+
+    .brand-icon {
+      width: 55px;
+      height: 55px;
+      border-radius: 17px;
+      background: rgba(255,255,255,.18);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .brand-name {
+      font-family: Inter, sans-serif;
+      font-size: 27px;
+      font-weight: 800;
+    }
+
+    .auth-hero h1 {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(34px, 4vw, 50px);
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+
+    .auth-hero p {
+      position: relative;
+      z-index: 1;
+      font-size: 17px;
+      line-height: 1.8;
+      color: rgba(255,255,255,.82);
+      max-width: 470px;
+    }
+
+    .feature-list {
+      position: relative;
+      z-index: 1;
+      margin-top: 35px;
+      display: grid;
+      gap: 13px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255,255,255,.92);
+    }
+
+    .feature-check {
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.16);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-panel {
+      padding: 50px;
+      display: flex;
+      align-items: center;
+    }
+
+    .auth-form {
+      width: 100%;
+    }
+
+    .auth-form h2 {
+      font-size: 31px;
+      margin-bottom: 7px;
+    }
+
+    .auth-subtitle {
+      color: var(--muted);
+      margin-bottom: 30px;
+    }
+
+    .auth-tabs {
+      display: flex;
+      gap: 5px;
+      padding: 5px;
+      background: #f1f5f9;
+      border-radius: 13px;
+      margin-bottom: 25px;
+    }
+
+    .auth-tab {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 11px;
+      border-radius: 9px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .auth-tab.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: 0 3px 10px rgba(15,23,42,.07);
+    }
+
+    .form-group {
+      margin-bottom: 17px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 7px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap span {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 12px 14px;
+      outline: none;
+      transition: .2s;
+    }
+
+    .input-wrap .form-input {
+      padding-left: 43px;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(79,70,229,.09);
+    }
+
+    .form-textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .primary-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      font-weight: 700;
+      transition: .2s;
+      box-shadow: 0 8px 20px rgba(79,70,229,.2);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 25px rgba(79,70,229,.27);
+    }
+
+    .primary-btn.full {
+      width: 100%;
+      padding: 14px;
+    }
+
+    .secondary-btn {
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 10px 15px;
+      background: white;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .danger-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 13px;
+      background: #fee2e2;
+      color: #b91c1c;
+      font-weight: 600;
+    }
+
+    .small-btn {
+      padding: 7px 11px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: white;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .auth-message {
+      margin-top: 15px;
+      padding: 11px 13px;
+      border-radius: 10px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .auth-message.error {
+      display: block;
+      color: #b91c1c;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+    }
+
+    .auth-message.success {
+      display: block;
+      color: #166534;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+    }
+
+    /* =========================
+       APP LAYOUT
+    ========================= */
+
+    #app {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 270px;
+      background: var(--sidebar);
+      color: var(--sidebar-text);
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      transition: .25s ease;
+    }
+
+    .sidebar-brand {
+      height: 76px;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+
+    .sidebar-brand .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      font-size: 19px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+
+    .sidebar-brand span:last-child {
+      font-family: Inter, sans-serif;
+      color: white;
+      font-weight: 800;
+      font-size: 20px;
+    }
+
+    .nav-area {
+      flex: 1;
+      padding: 18px 13px;
+      overflow-y: auto;
+    }
+
+    .nav-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.3px;
+      color: #6b7280;
+      padding: 10px 12px 8px;
+      font-family: Inter, sans-serif;
+      font-weight: 700;
+    }
+
+    .nav-item {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 13px;
+      border-radius: 10px;
+      margin-bottom: 4px;
+      text-align: left;
+      font-weight: 500;
+      transition: .2s;
+    }
+
+    .nav-item:hover {
+      background: var(--sidebar-hover);
+      color: white;
+    }
+
+    .nav-item.active {
+      color: white;
+      background: linear-gradient(90deg, rgba(79,70,229,.35), rgba(124,58,237,.18));
+      box-shadow: inset 3px 0 0 #818cf8;
+    }
+
+    .nav-icon {
+      width: 21px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    .sidebar-bottom {
+      border-top: 1px solid rgba(255,255,255,.06);
+      padding: 14px;
+    }
+
+    .user-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      margin-bottom: 7px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #818cf8, #a78bfa);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .user-mini-info {
+      min-width: 0;
+    }
+
+    .user-mini-name {
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-mini-role {
+      color: #9ca3af;
+      font-size: 12px;
+    }
+
+    .logout-btn {
+      width: 100%;
+      border: none;
+      background: #1f2937;
+      color: #d1d5db;
+      border-radius: 10px;
+      padding: 10px;
+      font-weight: 600;
+    }
+
+    .logout-btn:hover {
+      background: #374151;
+      color: white;
+    }
+
+    .main {
+      flex: 1;
+      margin-left: 270px;
+      min-width: 0;
+    }
+
+    .topbar {
+      height: 76px;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .mobile-menu {
+      display: none;
+      border: none;
+      background: #f1f5f9;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      font-size: 20px;
+    }
+
+    .page-title {
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .page-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .top-user {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .top-user .avatar {
+      width: 38px;
+      height: 38px;
+      font-size: 13px;
+    }
+
+    .content {
+      padding: 30px;
+      max-width: 1600px;
+      margin: auto;
+    }
+
+    /* =========================
+       PAGE
+    ========================= */
+
+    .page {
+      display: none;
+      animation: fadeIn .25s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .welcome-card {
+      padding: 30px;
+      border-radius: 22px;
+      color: white;
+      background:
+        radial-gradient(circle at 90% 20%, rgba(255,255,255,.17), transparent 25%),
+        linear-gradient(120deg, #4338ca, #6366f1 55%, #7c3aed);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+
+    .welcome-card::after {
+      content: "✦";
+      position: absolute;
+      font-size: 180px;
+      right: 25px;
+      bottom: -70px;
+      opacity: .08;
+    }
+
+    .welcome-card h2 {
+      font-size: 30px;
+      margin-bottom: 5px;
+    }
+
+    .welcome-card p {
+      opacity: .85;
+      font-size: 15px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 17px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 4px 18px rgba(15,23,42,.035);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #eef2ff;
+      color: var(--primary);
+      font-size: 22px;
+    }
+
+    .stat-number {
+      font-family: Inter, sans-serif;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 18px rgba(15,23,42,.035);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .quick-btn {
+      border: 1px solid var(--border);
+      background: #fafbff;
+      border-radius: 13px;
+      padding: 17px 14px;
+      text-align: left;
+      transition: .2s;
+    }
+
+    .quick-btn:hover {
+      border-color: #c7d2fe;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .quick-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .quick-title {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .quick-desc {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .notice-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .notice-item {
+      padding: 14px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border-left: 3px solid var(--primary);
+    }
+
+    .notice-item h4 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .notice-item p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .notice-date {
+      color: #94a3b8;
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+    }
+
+    .empty-icon {
+      font-size: 38px;
+      margin-bottom: 10px;
+      opacity: .6;
+    }
+
+    /* =========================
+       PAGE HEADER
+    ========================= */
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .section-heading h2 {
+      font-size: 25px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    /* =========================
+       MATERIALS
+    ========================= */
+
+    .material-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .material-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      overflow: hidden;
+      transition: .2s;
+    }
+
+    .material-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .material-cover {
+      height: 120px;
+      background: linear-gradient(135deg, #eef2ff, #ede9fe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+    }
+
+    .material-body {
+      padding: 17px;
+    }
+
+    .material-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .material-meta {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 13px;
+    }
+
+    .material-actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .material-actions a,
+    .material-actions button {
+      flex: 1;
+      text-align: center;
+      padding: 9px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .open-btn {
+      background: #eef2ff;
+      color: var(--primary);
+      border: none;
+    }
+
+    /* =========================
+       TABLE
+    ========================= */
+
+    .table-card {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    th,
+    td {
+      padding: 13px 15px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      color: #64748b;
+      background: #f8fafc;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    td {
+      color: #334155;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 30px;
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .badge-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-info {
+      background: #e0f2fe;
+      color: #075985;
+    }
+
+    .badge-purple {
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+
+    /* =========================
+       ROUTINE
+    ========================= */
+
+    .routine-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(150px,1fr));
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+
+    .day-column {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      min-width: 150px;
+      overflow: hidden;
+    }
+
+    .day-header {
+      background: #f8fafc;
+      padding: 13px;
+      text-align: center;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .class-item {
+      margin: 9px;
+      padding: 11px;
+      border-radius: 10px;
+      background: #f8faff;
+      border-left: 3px solid var(--primary);
+    }
+
+    .class-time {
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .class-name {
+      font-weight: 700;
+      font-size: 13px;
+      margin: 3px 0;
+    }
+
+    .class-room {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* =========================
+       EVENTS
+    ========================= */
+
+    .event-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 18px;
+    }
+
+    .event-card {
+      padding: 20px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+    }
+
+    .event-date-box {
+      width: 55px;
+      height: 60px;
+      border-radius: 13px;
+      background: #eef2ff;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    .event-day {
+      font-family: Inter, sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .event-month {
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .event-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .event-info {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    /* =========================
+       RESULTS
+    ========================= */
+
+    .result-summary {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .result-box {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .result-box strong {
+      display: block;
+      font-family: Inter, sans-serif;
+      font-size: 26px;
+      margin-bottom: 4px;
+    }
+
+    .result-box span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* =========================
+       PROFILE
+    ========================= */
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 20px;
+    }
+
+    .profile-card {
+      text-align: center;
+      padding: 30px;
+    }
+
+    .profile-avatar {
+      width: 95px;
+      height: 95px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 35px;
+      font-weight: 800;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .profile-email {
+      color: var(--muted);
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    .profile-details {
+      display: grid;
+      gap: 0;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .detail-value {
+      font-weight: 600;
+      text-align: right;
+      word-break: break-word;
+    }
+
+    /* =========================
+       ADMIN
+    ========================= */
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 18px;
+    }
+
+    .admin-action {
+      padding: 22px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: .2s;
+      cursor: pointer;
+    }
+
+    .admin-action:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: #c7d2fe;
+    }
+
+    .admin-action-icon {
+      font-size: 27px;
+      margin-bottom: 9px;
+    }
+
+    .admin-action h3 {
+      font-size: 16px;
+      margin-bottom: 3px;
+    }
+
+    .admin-action p {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,.55);
+      backdrop-filter: blur(5px);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(580px,100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.2);
+      animation: modalIn .2s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(.98);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .modal-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 35px;
+      height: 35px;
+      border: none;
+      background: #f1f5f9;
+      border-radius: 9px;
+      font-size: 19px;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .modal-footer {
+      padding: 15px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    #toastContainer {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 99999;
+      display: grid;
+      gap: 10px;
+      width: min(380px, calc(100% - 40px));
+    }
+
+    .toast {
+      background: white;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: 12px;
+      padding: 13px 15px;
+      box-shadow: 0 12px 30px rgba(15,23,42,.14);
+      animation: toastIn .25s ease;
+      font-size: 13px;
+    }
+
+    .toast.success {
+      border-left-color: var(--success);
+    }
+
+    .toast.error {
+      border-left-color: var(--danger);
+    }
+
+    .toast.warning {
+      border-left-color: var(--warning);
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* =========================
+       UPLOAD
+    ========================= */
+
+    .upload-box {
+      border: 2px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 25px;
+      text-align: center;
+      background: #f8fafc;
+      transition: .2s;
+    }
+
+    .upload-box:hover {
+      border-color: var(--primary);
+      background: #f8faff;
+    }
+
+    .upload-box input {
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .progress {
+      height: 7px;
+      background: #e2e8f0;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg,var(--primary),var(--secondary));
+      transition: width .2s;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1200px) {
+      .stat-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+
+      .material-grid,
+      .event-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+
+      .admin-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .auth-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .auth-hero {
+        display: none;
+      }
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+        box-shadow: 20px 0 50px rgba(0,0,0,.2);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .grid-2,
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .routine-grid {
+        grid-template-columns: repeat(7,150px);
+      }
+    }
+
+    @media (max-width: 650px) {
+      #authScreen {
+        padding: 12px;
+      }
+
+      .auth-panel {
+        padding: 30px 20px;
+      }
+
+      .auth-wrapper {
+        min-height: auto;
+        border-radius: 20px;
+      }
+
+      .topbar {
+        padding: 0 15px;
+      }
+
+      .top-user-info {
+        display: none;
+      }
+
+      .content {
+        padding: 18px 14px;
+      }
+
+      .welcome-card {
+        padding: 22px;
+      }
+
+      .welcome-card h2 {
+        font-size: 24px;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 14px;
+      }
+
+      .stat-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .stat-number {
+        font-size: 20px;
+      }
+
+      .quick-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .material-grid,
+      .event-grid,
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .section-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       LOADER
+  ========================= -->
+
+  <div id="pageLoader">
+    <div class="loader-logo">C</div>
+    <div class="spinner"></div>
+    <div style="color:#64748b;font-size:13px;">CampusOne চালু হচ্ছে...</div>
+  </div>
+
+
+  <!-- =========================
+       AUTH SCREEN
+  ========================= -->
+
+  <section id="authScreen" class="hidden">
+
+    <div class="auth-wrapper">
+
+      <div class="auth-hero">
+
+        <div class="brand-large">
+          <div class="brand-icon">C</div>
+          <div class="brand-name">CampusOne</div>
+        </div>
+
+        <h1>
+          তোমার Campus,<br>
+          এক জায়গায়।
+        </h1>
+
+        <p>
+          Notice, study materials, routine, events এবং result —
+          সবকিছু এখন একটি সুন্দর ও সহজ Student Portal-এ।
+        </p>
+
+        <div class="feature-list">
+
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <span>সকল গুরুত্বপূর্ণ Notice এক জায়গায়</span>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <span>PDF Study Materials সহজে Access</span>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <span>Class Routine ও Campus Events</span>
+          </div>
+
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <span>নিজের Published Result নিরাপদে দেখা</span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="auth-panel">
+
+        <div class="auth-form">
+
+          <div class="auth-tabs">
+
+            <button
+              class="auth-tab active"
+              id="loginTab"
+              onclick="showLogin()"
+            >
+              Login
+            </button>
+
+            <button
+              class="auth-tab"
+              id="registerTab"
+              onclick="showRegister()"
+            >
+              Register
+            </button>
+
+          </div>
+
+
+          <!-- LOGIN -->
+
+          <div id="loginForm">
+
+            <h2>স্বাগতম 👋</h2>
+
+            <p class="auth-subtitle">
+              তোমার CampusOne account-এ Login করো।
+            </p>
+
+            <div class="form-group">
+
+              <label class="form-label">Email</label>
+
+              <div class="input-wrap">
+
+                <span>✉</span>
+
+                <input
+                  id="loginEmail"
+                  class="form-input"
+                  type="email"
+                  placeholder="তোমার email"
+                  autocomplete="email"
+                />
+
+              </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label class="form-label">Password</label>
+
+              <div class="input-wrap">
+
+                <span>🔒</span>
+
+                <input
+                  id="loginPassword"
+                  class="form-input"
+                  type="password"
+                  placeholder="Password"
+                  autocomplete="current-password"
+                />
+
+              </div>
+
+            </div>
+
+
+            <button
+              id="loginBtn"
+              class="primary-btn full"
+              onclick="loginUser()"
+            >
+              Login করুন
+            </button>
+
+            <div id="loginMessage" class="auth-message"></div>
+
+          </div>
+
+
+          <!-- REGISTER -->
+
+          <div id="registerForm" class="hidden">
+
+            <h2>Account তৈরি করুন</h2>
+
+            <p class="auth-subtitle">
+              Student Portal ব্যবহার করতে Register করুন।
+            </p>
+
+
+            <div class="form-group">
+
+              <label class="form-label">পূর্ণ নাম</label>
+
+              <div class="input-wrap">
+
+                <span>👤</span>
+
+                <input
+                  id="registerName"
+                  class="form-input"
+                  type="text"
+                  placeholder="তোমার নাম"
+                  autocomplete="name"
+                />
+
+              </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label class="form-label">Email</label>
+
+              <div class="input-wrap">
+
+                <span>✉</span>
+
+                <input
+                  id="registerEmail"
+                  class="form-input"
+                  type="email"
+                  placeholder="example@gmail.com"
+                  autocomplete="email"
+                />
+
+              </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label class="form-label">Password</label>
+
+              <div class="input-wrap">
+
+                <span>🔒</span>
+
+                <input
+                  id="registerPassword"
+                  class="form-input"
+                  type="password"
+                  placeholder="কমপক্ষে ৬ অক্ষর"
+                  autocomplete="new-password"
+                />
+
+              </div>
+
+            </div>
+
+
+            <button
+              id="registerBtn"
+              class="primary-btn full"
+              onclick="registerUser()"
+            >
+              Register করুন
+            </button>
+
+            <div id="registerMessage" class="auth-message"></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       APP
+  ========================= -->
+
+  <div id="app" class="hidden">
+
+    <!-- SIDEBAR -->
+
+    <aside id="sidebar" class="sidebar">
+
+      <div class="sidebar-brand">
+
+        <div class="brand-icon">C</div>
+
+        <span>CampusOne</span>
+
+      </div>
+
+
+      <div class="nav-area">
+
+        <div class="nav-title">Main</div>
+
+        <button
+          class="nav-item active"
+          data-page="dashboard"
+          onclick="showPage('dashboard', this)"
+        >
+          <span class="nav-icon">⌂</span>
+          <span>Dashboard</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          data-page="notices"
+          onclick="showPage('notices', this)"
+        >
+          <span class="nav-icon">🔔</span>
+          <span>Notices</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          data-page="materials"
+          onclick="showPage('materials', this)"
+        >
+          <span class="nav-icon">📚</span>
+          <span>Study Materials</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          data-page="routine"
+          onclick="showPage('routine', this)"
+        >
+          <span class="nav-icon">🗓</span>
+          <span>Class Routine</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          data-page="events"
+          onclick="showPage('events', this)"
+        >
+          <span class="nav-icon">🎉</span>
+          <span>Events</span>
+        </button>
+
+
+        <button
+          class="nav-item"
+          data-page="results"
+          onclick="showPage('results', this)"
+        >
+          <span class="nav-icon">📊</span>
+          <span>My Results</span>
+        </button>
+
+
+        <div class="nav-title">Account</div>
+
+
+        <button
+          class="nav-item"
+          data-page="profile"
+          onclick="showPage('profile', this)"
+        >
+          <span class="nav-icon">👤</span>
+          <span>My Profile</span>
+        </button>
+
+
+        <div id="adminNav">
+
+          <div class="nav-title">Administration</div>
+
+          <button
+            class="nav-item"
+            data-page="admin"
+            onclick="showPage('admin', this)"
+          >
+            <span class="nav-icon">⚙</span>
+            <span>Admin Panel</span>
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="sidebar-bottom">
+
+        <div class="user-mini">
+
+          <div id="sideAvatar" class="avatar">U</div>
+
+          <div class="user-mini-info">
+
+            <div id="sideUserName" class="user-mini-name">
+              User
+            </div>
+
+            <div id="sideUserRole" class="user-mini-role">
+              Student
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <button
+          class="logout-btn"
+          onclick="logout()"
+        >
+          ↪ Logout
+        </button>
+
+      </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+      <header class="topbar">
+
+        <div class="topbar-left">
+
+          <button
+            class="mobile-menu"
+            onclick="toggleSidebar()"
+          >
+            ☰
+          </button>
+
+          <div>
+
+            <div id="pageTitle" class="page-title">
+              Dashboard
+            </div>
+
+            <div class="page-subtitle">
+              CampusOne Student Portal
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="topbar-right">
+
+          <div class="top-user">
+
+            <div class="top-user-info">
+
+              <div
+                id="topUserName"
+                style="font-weight:700;font-size:13px;"
+              >
+                User
+              </div>
+
+              <div
+                id="topUserEmail"
+                style="color:#94a3b8;font-size:11px;"
+              >
+                -
+              </div>
+
+            </div>
+
+            <div id="topAvatar" class="avatar">
+              U
+            </div>
+
+          </div>
+
+        </div>
+
+      </header>
+
+
+      <div class="content">
+
+
+        <!-- =========================
+             DASHBOARD
+        ========================= -->
+
+        <section id="page-dashboard" class="page active">
+
+          <div class="welcome-card">
+
+            <h2 id="welcomeName">
+              স্বাগতম! 👋
+            </h2>
+
+            <p>
+              আজকের CampusOne overview এখানে দেখতে পারবে।
+            </p>
+
+          </div>
+
+
+          <div class="stat-grid">
+
+            <div class="stat-card">
+
+              <div class="stat-icon">🔔</div>
+
+              <div>
+                <div id="statNotices" class="stat-number">0</div>
+                <div class="stat-label">Notices</div>
+              </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+              <div class="stat-icon">📚</div>
+
+              <div>
+                <div id="statMaterials" class="stat-number">0</div>
+                <div class="stat-label">Materials</div>
+              </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+              <div class="stat-icon">🎉</div>
+
+              <div>
+                <div id="statEvents" class="stat-number">0</div>
+                <div class="stat-label">Upcoming Events</div>
+              </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+              <div class="stat-icon">📊</div>
+
+              <div>
+                <div id="statResults" class="stat-number">0</div>
+                <div class="stat-label">Published Results</div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="grid-2">
+
+            <div class="card">
+
+              <div class="card-header">
+
+                <div class="card-title">
+                  Recent Notices
+                </div>
+
+                <button
+                  class="small-btn"
+                  onclick="showPage('notices')"
+                >
+                  সব দেখুন
+                </button>
+
+              </div>
+
+              <div id="dashboardNotices" class="card-body">
+                <div class="empty">
+                  Loading...
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="card">
+
+              <div class="card-header">
+
+                <div class="card-title">
+                  Quick Access
+                </div>
+
+              </div>
+
+              <div class="card-body">
+
+                <div class="quick-grid">
+
+                  <button
+                    class="quick-btn"
+                    onclick="showPage('notices')"
+                  >
+                    <div class="quick-icon">🔔</div>
+                    <div class="quick-title">Notices</div>
+                    <div class="quick-desc">Latest updates</div>
+                  </button>
+
+
+                  <button
+                    class="quick-btn"
+                    onclick="showPage('materials')"
+                  >
+                    <div class="quick-icon">📚</div>
+                    <div class="quick-title">Materials</div>
+                    <div class="quick-desc">Study PDFs</div>
+                  </button>
+
+
+                  <button
+                    class="quick-btn"
+                    onclick="showPage('routine')"
+                  >
+                    <div class="quick-icon">🗓</div>
+                    <div class="quick-title">Routine</div>
+                    <div class="quick-desc">Class schedule</div>
+                  </button>
+
+
+                  <button
+                    class="quick-btn"
+                    onclick="showPage('results')"
+                  >
+                    <div class="quick-icon">📊</div>
+                    <div class="quick-title">Results</div>
+                    <div class="quick-desc">Academic results</div>
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             NOTICES
+        ========================= -->
+
+        <section id="page-notices" class="page">
+
+          <div class="section-header">
+
+            <div class="section-heading">
+
+              <h2>Notices</h2>
+
+              <p>
+                Campus-এর সর্বশেষ গুরুত্বপূর্ণ ঘোষণা।
+              </p>
+
+            </div>
+
+
+            <div
+              id="noticeAdminBtn"
+              class="toolbar"
+            >
+
+              <button
+                class="primary-btn"
+                onclick="openNoticeModal()"
+              >
+                + নতুন Notice
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="card">
+
+            <div
+              id="allNotices"
+              class="card-body"
+            >
+              <div class="empty">
+                Loading...
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             MATERIALS
+        ========================= -->
+
+        <section id="page-materials" class="page">
+
+          <div class="section-header">
+
+            <div class="section-heading">
+
+              <h2>Study Materials</h2>
+
+              <p>
+                প্রয়োজনীয় PDF ও study resources।
+              </p>
+
+            </div>
+
+
+            <div id="materialAdminBtn">
+
+              <button
+                class="primary-btn"
+                onclick="openMaterialModal()"
+              >
+                + Upload Material
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div id="materialsGrid" class="material-grid">
+
+            <div class="empty">
+              Loading...
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             ROUTINE
+        ========================= -->
+
+        <section id="page-routine" class="page">
+
+          <div class="section-header">
+
+            <div class="section-heading">
+
+              <h2>Class Routine</h2>
+
+              <p>
+                সপ্তাহের class schedule।
+              </p>
+
+            </div>
+
+
+            <div id="routineAdminBtn">
+
+              <button
+                class="primary-btn"
+                onclick="openRoutineModal()"
+              >
+                + Add Class
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div id="routineGrid" class="routine-grid">
+
+            <div class="empty">
+              Loading...
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             EVENTS
+        ========================= -->
+
+        <section id="page-events" class="page">
+
+          <div class="section-header">
+
+            <div class="section-heading">
+
+              <h2>Campus Events</h2>
+
+              <p>
+                Upcoming events এবং activities।
+              </p>
+
+            </div>
+
+
+            <div id="eventAdminBtn">
+
+              <button
+                class="primary-btn"
+                onclick="openEventModal()"
+              >
+                + নতুন Event
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div id="eventsGrid" class="event-grid">
+
+            <div class="empty">
+              Loading...
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             RESULTS
+        ========================= -->
+
+        <section id="page-results" class="page">
+
+          <div class="section-header">
+
+            <div class="section-heading">
+
+              <h2>My Results</h2>
+
+              <p>
+                শুধুমাত্র published result এখানে দেখা যাবে।
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="result-summary">
+
+            <div class="result-box">
+
+              <strong id="resultCount">0</strong>
+
+              <span>Published Results</span>
+
+            </div>
+
+
+            <div class="result-box">
+
+              <strong id="resultAverage">—</strong>
+
+              <span>Average GPA</span>
+
+            </div>
+
+
+            <div class="result-box">
+
+              <strong id="resultLatest">—</strong>
+
+              <span>Latest Result</span>
+
+            </div>
+
+          </div>
+
+
+          <div class="card table-card">
+
+            <table>
+
+              <thead>
+
+                <tr>
+                  <th>Exam / Semester</th>
+                  <th>Course</th>
+                  <th>Marks</th>
+                  <th>Grade</th>
+                  <th>GPA</th>
+                  <th>Status</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="resultsTable">
+
+                <tr>
+                  <td colspan="6">
+                    <div class="empty">
+                      Loading...
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             PROFILE
+        ========================= -->
+
+        <section id="page-profile" class="page">
+
+          <div class="section-header">
+
+            <div class="section-heading">
+
+              <h2>My Profile</h2>
+
+              <p>
+                তোমার account information।
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="profile-grid">
+
+            <div class="card profile-card">
+
+              <div id="profileAvatar" class="profile-avatar">
+                U
+              </div>
+
+              <div
+                id="profileName"
+                class="profile-name"
+              >
+                User
+              </div>
+
+              <div
+                id="profileEmail"
+                class="profile-email"
+              >
+                -
+              </div>
+
+              <div style="margin-top:15px;">
+
+                <span
+                  id="profileRoleBadge"
+                  class="badge badge-info"
+                >
+                  Student
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div class="card">
+
+              <div class="card-header">
+
+                <div class="card-title">
+                  Account Details
+                </div>
+
+              </div>
+
+              <div class="card-body">
+
+                <div class="profile-details">
+
+                  <div class="detail-row">
+
+                    <span class="detail-label">
+                      Full Name
+                    </span>
+
+                    <span
+                      id="detailName"
+                      class="detail-value"
+                    >
+                      -
+                    </span>
+
+                  </div>
+
+
+                  <div class="detail-row">
+
+                    <span class="detail-label">
+                      Email
+                    </span>
+
+                    <span
+                      id="detailEmail"
+                      class="detail-value"
+                    >
+                      -
+                    </span>
+
+                  </div>
+
+
+                  <div class="detail-row">
+
+                    <span class="detail-label">
+                      Account Role
+                    </span>
+
+                    <span
+                      id="detailRole"
+                      class="detail-value"
+                    >
+                      Student
+                    </span>
+
+                  </div>
+
+
+                  <div class="detail-row">
+
+                    <span class="detail-label">
+                      User ID
+                    </span>
+
+                    <span
+                      id="detailUid"
+                      class="detail-value"
+                      style="font-size:11px;"
+                    >
+                      -
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <div style="margin-top:20px;">
+
+                  <button
+                    class="primary-btn"
+                    onclick="openProfileModal()"
+                  >
+                    Edit Profile
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- =========================
+             ADMIN
+        ========================= -->
+
+        <section id="page-admin" class="page">
+
+          <div class="section-header">
+
+            <div class="section-heading">
+
+              <h2>Admin Panel</h2>
+
+              <p>
+                CampusOne content management।
+              </p>
+
+            </div>
+
+            <span class="badge badge-purple">
+              Administrator
+            </span>
+
+          </div>
+
+
+          <div class="admin-grid">
+
+            <div
+              class="admin-action"
+              onclick="openNoticeModal()"
+            >
+
+              <div class="admin-action-icon">🔔</div>
+
+              <h3>Manage Notices</h3>
+
+              <p>
+                Notice তৈরি ও manage করুন।
+              </p>
+
+            </div>
+
+
+            <div
+              class="admin-action"
+              onclick="openMaterialModal()"
+            >
+
+              <div class="admin-action-icon">📚</div>
+
+              <h3>Upload Materials</h3>
+
+              <p>
+                PDF study materials upload করুন।
+              </p>
+
+            </div>
+
+
+            <div
+              class="admin-action"
+              onclick="openRoutineModal()"
+            >
+
+              <div class="admin-action-icon">🗓</div>
+
+              <h3>Manage Routine</h3>
+
+              <p>
+                Class schedule update করুন।
+              </p>
+
+            </div>
+
+
+            <div
+              class="admin-action"
+              onclick="openEventModal()"
+            >
+
+              <div class="admin-action-icon">🎉</div>
+
+              <h3>Manage Events</h3>
+
+              <p>
+                Campus event add করুন।
+              </p>
+
+            </div>
+
+
+            <div
+              class="admin-action"
+              onclick="openResultModal()"
+            >
+
+              <div class="admin-action-icon">📊</div>
+
+              <h3>Publish Results</h3>
+
+              <p>
+                Student result publish করুন।
+              </p>
+
+            </div>
+
+
+            <div
+              class="admin-action"
+              onclick="loadAdminUsers()"
+            >
+
+              <div class="admin-action-icon">👥</div>
+
+              <h3>Student Users</h3>
+
+              <p>
+                Registered students দেখুন।
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div
+            id="adminUsersSection"
+            class="card hidden"
+            style="margin-top:20px;"
+          >
+
+            <div class="card-header">
+
+              <div class="card-title">
+                Registered Users
+              </div>
+
+              <button
+                class="small-btn"
+                onclick="loadAdminUsers()"
+              >
+                Refresh
+              </button>
+
+            </div>
+
+
+            <div class="table-card">
+
+              <table>
+
+                <thead>
+
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Created</th>
+                  </tr>
+
+                </thead>
+
+                <tbody id="adminUsersTable"></tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- =========================
+       MODAL
+  ========================= -->
+
+  <div
+    id="modalBackdrop"
+    class="modal-backdrop"
+    onclick="backdropClose(event)"
+  >
+
+    <div class="modal">
+
+      <div class="modal-header">
+
+        <div
+          id="modalTitle"
+          class="modal-title"
+        >
+          Modal
+        </div>
+
+        <button
+          class="modal-close"
+          onclick="closeModal()"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div
+        id="modalBody"
+        class="modal-body"
+      >
+      </div>
+
+
+      <div
+        id="modalFooter"
+        class="modal-footer"
+      >
+
+        <button
+          class="secondary-btn"
+          onclick="closeModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          id="modalSaveBtn"
+          class="primary-btn"
+        >
+          Save
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div id="toastContainer"></div>
+
+
+  <!-- =========================
+       FIREBASE
+  ========================= -->
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+
+    import {
+      getAuth,
+      onAuthStateChanged,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      updateProfile,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+    import {
+      getFirestore,
+      collection,
+      doc,
+      getDoc,
+      setDoc,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      getDocs,
+      query,
+      where,
+      orderBy,
+      limit,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+    /* =========================
+       FIREBASE CONFIG
+    ========================= */
+
+    const firebaseConfig = {
+
+      apiKey:
+        "AIzaSyBMpUBtJf4C6tP2uv3BeC3OSLNLRV1amhg",
+
+      authDomain:
+        "campusone-a53a5.firebaseapp.com",
+
+      projectId:
+        "campusone-a53a5",
+
+      storageBucket:
+        "campusone-a53a5.firebasestorage.app",
+
+      messagingSenderId:
+        "157438818912",
+
+      appId:
+        "1:157438818912:web:9d1296b109299ac702a105",
+
+      measurementId:
+        "G-8N6VSYMS24"
+
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+
+    /* =========================
+       CLOUDINARY
+    ========================= */
+
+    const CLOUDINARY_URL =
+      "https://api.cloudinary.com/v1_1/u2phpy7u/auto/upload";
+
+    const CLOUDINARY_PRESET =
+      "campusone_materials";
+
+
+    /* =========================
+       GLOBAL
+    ========================= */
+
+    let currentUser = null;
+
+    let currentProfile = null;
+
+    let currentPage = "dashboard";
+
+    let noticesCache = [];
+
+    let materialsCache = [];
+
+    let routineCache = [];
+
+    let eventsCache = [];
+
+    let resultsCache = [];
+
+
+    const dayOrder = [
+      "Saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ];
+
+
+    const pageTitles = {
+
+      dashboard: "Dashboard",
+      notices: "Notices",
+      materials: "Study Materials",
+      routine: "Class Routine",
+      events: "Campus Events",
+      results: "My Results",
+      profile: "My Profile",
+      admin: "Admin Panel"
+
+    };
+
+
+    /* =========================
+       HELPERS
+    ========================= */
+
+    function escapeHtml(value) {
+
+      if (value === null || value === undefined) {
+        return "";
+      }
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    function getInitial(name) {
+
+      if (!name) return "U";
+
+      return name
+        .trim()
+        .charAt(0)
+        .toUpperCase();
+
+    }
+
+
+    function formatDate(timestamp) {
+
+      if (!timestamp) return "—";
+
+      try {
+
+        const date =
+          timestamp.toDate
+            ? timestamp.toDate()
+            : new Date(timestamp);
+
+        return date.toLocaleDateString(
+          "bn-BD",
+          {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+          }
+        );
+
+      } catch {
+
+        return "—";
+
+      }
+
+    }
+
+
+    function formatDateTime(timestamp) {
+
+      if (!timestamp) return "—";
+
+      try {
+
+        const date =
+          timestamp.toDate
+            ? timestamp.toDate()
+            : new Date(timestamp);
+
+        return date.toLocaleString(
+          "bn-BD",
+          {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+          }
+        );
+
+      } catch {
+
+        return "—";
+
+      }
+
+    }
+
+
+    function showToast(message, type = "info") {
+
+      const container =
+        document.getElementById("toastContainer");
+
+      const toast =
+        document.createElement("div");
+
+      toast.className =
+        `toast ${type}`;
+
+      toast.textContent = message;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(20px)";
+
+        setTimeout(() => toast.remove(), 250);
+
+      }, 3500);
+
+    }
+
+
+    function setMessage(id, message, type) {
+
+      const el =
+        document.getElementById(id);
+
+      if (!el) return;
+
+      el.textContent = message;
+
+      el.className =
+        `auth-message ${type}`;
+
+    }
+
+
+    function clearMessage(id) {
+
+      const el =
+        document.getElementById(id);
+
+      if (!el) return;
+
+      el.textContent = "";
+
+      el.className =
+        "auth-message";
+
+    }
+
+
+    function friendlyAuthError(error) {
+
+      const code = error?.code || "";
+
+      const messages = {
+
+        "auth/invalid-credential":
+          "Email অথবা Password সঠিক নয়।",
+
+        "auth/invalid-login-credentials":
+          "Email অথবা Password সঠিক নয়।",
+
+        "auth/user-not-found":
+          "এই Email দিয়ে কোনো account পাওয়া যায়নি।",
+
+        "auth/wrong-password":
+          "Password সঠিক নয়।",
+
+        "auth/email-already-in-use":
+          "এই Email দিয়ে আগে থেকেই account আছে।",
+
+        "auth/weak-password":
+          "Password কমপক্ষে ৬ অক্ষরের হতে হবে।",
+
+        "auth/invalid-email":
+          "সঠিক Email address দিন।",
+
+        "auth/too-many-requests":
+          "অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।",
+
+        "auth/network-request-failed":
+          "Internet connection check করুন।",
+
+        "auth/unauthorized-domain":
+          "এই domain Firebase Authentication-এ Authorized করা হয়নি।",
+
+        "auth/api-key-not-valid":
+          "Firebase API key valid নয়। Firebase Console থেকে Web App-এর config/API key check করুন।",
+
+        "auth/operation-not-allowed":
+          "Firebase Authentication-এ Email/Password Sign-in চালু নেই।"
+
+      };
+
+      return messages[code] ||
+        error?.message ||
+        "একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।";
+
+    }
+
+
+    /* =========================
+       AUTH TABS
+    ========================= */
+
+    window.showLogin = function() {
+
+      document
+        .getElementById("loginForm")
+        .classList.remove("hidden");
+
+      document
+        .getElementById("registerForm")
+        .classList.add("hidden");
+
+      document
+        .getElementById("loginTab")
+        .classList.add("active");
+
+      document
+        .getElementById("registerTab")
+        .classList.remove("active");
+
+      clearMessage("loginMessage");
+      clearMessage("registerMessage");
+
+    };
+
+
+    window.showRegister = function() {
+
+      document
+        .getElementById("loginForm")
+        .classList.add("hidden");
+
+      document
+        .getElementById("registerForm")
+        .classList.remove("hidden");
+
+      document
+        .getElementById("loginTab")
+        .classList.remove("active");
+
+      document
+        .getElementById("registerTab")
+        .classList.add("active");
+
+      clearMessage("loginMessage");
+      clearMessage("registerMessage");
+
+    };
+
+
+    /* =========================
+       REGISTER
+    ========================= */
+
+    window.registerUser = async function() {
+
+      const name =
+        document
+          .getElementById("registerName")
+          .value
+          .trim();
+
+      const email =
+        document
+          .getElementById("registerEmail")
+          .value
+          .trim();
+
+      const password =
+        document
+          .getElementById("registerPassword")
+          .value;
+
+
+      if (!name) {
+
+        setMessage(
+          "registerMessage",
+          "তোমার পূর্ণ নাম দিন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (!email) {
+
+        setMessage(
+          "registerMessage",
+          "Email দিন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (password.length < 6) {
+
+        setMessage(
+          "registerMessage",
+          "Password কমপক্ষে ৬ অক্ষরের হতে হবে।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const btn =
+        document.getElementById("registerBtn");
+
+      btn.disabled = true;
+
+      btn.textContent = "Account তৈরি হচ্ছে...";
+
+
+      try {
+
+        const credential =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        await updateProfile(
+          credential.user,
+          {
+            displayName: name
+          }
+        );
+
+
+        await setDoc(
+          doc(db, "users", credential.user.uid),
+          {
+            uid: credential.user.uid,
+            name: name,
+            email: email,
+            role: "student",
+            createdAt: serverTimestamp()
+          }
+        );
+
+
+        setMessage(
+          "registerMessage",
+          "Account সফলভাবে তৈরি হয়েছে।",
+          "success"
+        );
+
+
+        showToast(
+          "Account সফলভাবে তৈরি হয়েছে।",
+          "success"
+        );
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        setMessage(
+          "registerMessage",
+          friendlyAuthError(error),
+          "error"
+        );
+
+      } finally {
+
+        btn.disabled = false;
+
+        btn.textContent =
+          "Register করুন";
+
+      }
+
+    };
+
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    window.loginUser = async function() {
+
+      const email =
+        document
+          .getElementById("loginEmail")
+          .value
+          .trim();
+
+      const password =
+        document
+          .getElementById("loginPassword")
+          .value;
+
+
+      if (!email || !password) {
+
+        setMessage(
+          "loginMessage",
+          "Email এবং Password দুটোই দিন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const btn =
+        document.getElementById("loginBtn");
+
+      btn.disabled = true;
+
+      btn.textContent = "Login হচ্ছে...";
+
+
+      try {
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+        showToast(
+          "Login সফল হয়েছে।",
+          "success"
+        );
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        setMessage(
+          "loginMessage",
+          friendlyAuthError(error),
+          "error"
+        );
+
+      } finally {
+
+        btn.disabled = false;
+
+        btn.textContent =
+          "Login করুন";
+
+      }
+
+    };
+
+
+    /* =========================
+       LOGOUT
+    ========================= */
+
+    window.logout = async function() {
+
+      try {
+
+        await signOut(auth);
+
+        showToast(
+          "Logout হয়েছে।",
+          "success"
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Logout করতে সমস্যা হয়েছে।",
+          "error"
+        );
+
+      }
+
+    };
+
+
+    /* =========================
+       PROFILE
+    ========================= */
+
+    async function loadUserProfile(user) {
+
+      const ref =
+        doc(db, "users", user.uid);
+
+      const snap =
+        await getDoc(ref);
+
+
+      if (snap.exists()) {
+
+        currentProfile = snap.data();
+
+      } else {
+
+        currentProfile = {
+
+          uid: user.uid,
+
+          name:
+            user.displayName ||
+            user.email?.split("@")[0] ||
+            "Student",
+
+          email:
+            user.email || "",
+
+          role: "student",
+
+          createdAt: serverTimestamp()
+
+        };
+
+
+        await setDoc(
+          ref,
+          currentProfile
+        );
+
+      }
+
+
+      updateUserUI();
+
+    }
+
+
+    function updateUserUI() {
+
+      if (!currentUser) return;
+
+
+      const name =
+        currentProfile?.name ||
+        currentUser.displayName ||
+        currentUser.email?.split("@")[0] ||
+        "User";
+
+
+      const email =
+        currentProfile?.email ||
+        currentUser.email ||
+        "";
+
+
+      const role =
+        currentProfile?.role ||
+        "student";
+
+
+      const initial =
+        getInitial(name);
+
+
+      document
+        .getElementById("welcomeName")
+        .textContent =
+        `স্বাগতম, ${name}! 👋`;
+
+
+      document
+        .getElementById("sideUserName")
+        .textContent = name;
+
+
+      document
+        .getElementById("sideUserRole")
+        .textContent =
+        role === "admin"
+          ? "Administrator"
+          : "Student";
+
+
+      document
+        .getElementById("topUserName")
+        .textContent = name;
+
+
+      document
+        .getElementById("topUserEmail")
+        .textContent = email;
+
+
+      document
+        .getElementById("sideAvatar")
+        .textContent = initial;
+
+
+      document
+        .getElementById("topAvatar")
+        .textContent = initial;
+
+
+      document
+        .getElementById("profileAvatar")
+        .textContent = initial;
+
+
+      document
+        .getElementById("profileName")
+        .textContent = name;
+
+
+      document
+        .getElementById("profileEmail")
+        .textContent = email;
+
+
+      document
+        .getElementById("detailName")
+        .textContent = name;
+
+
+      document
+        .getElementById("detailEmail")
+        .textContent = email;
+
+
+      document
+        .getElementById("detailRole")
+        .textContent =
+        role === "admin"
+          ? "Administrator"
+          : "Student";
+
+
+      document
+        .getElementById("detailUid")
+        .textContent =
+        currentUser.uid;
+
+
+      document
+        .getElementById("profileRoleBadge")
+        .textContent =
+        role === "admin"
+          ? "Administrator"
+          : "Student";
+
+
+      const isAdmin =
+        role === "admin";
+
+
+      document
+        .getElementById("adminNav")
+        .classList.toggle(
+          "hidden",
+          !isAdmin
+        );
+
+
+      document
+        .getElementById("noticeAdminBtn")
+        .classList.toggle(
+          "hidden",
+          !isAdmin
+        );
+
+
+      document
+        .getElementById("materialAdminBtn")
+        .classList.toggle(
+          "hidden",
+          !isAdmin
+        );
+
+
+      document
+        .getElementById("routineAdminBtn")
+        .classList.toggle(
+          "hidden",
+          !isAdmin
+        );
+
+
+      document
+        .getElementById("eventAdminBtn")
+        .classList.toggle(
+          "hidden",
+          !isAdmin
+        );
+
+    }
+
+
+    /* =========================
+       NAVIGATION
+    ========================= */
+
+    window.showPage = function(page, navElement = null) {
+
+      if (
+        page === "admin" &&
+        currentProfile?.role !== "admin"
+      ) {
+
+        showToast(
+          "Admin access প্রয়োজন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      document
+        .querySelectorAll(".page")
+        .forEach(el => {
+
+          el.classList.remove("active");
+
+        });
+
+
+      const target =
+        document.getElementById(
+          `page-${page}`
+        );
+
+
+      if (!target) return;
+
+
+      target.classList.add("active");
+
+
+      currentPage = page;
+
+
+      document
+        .getElementById("pageTitle")
+        .textContent =
+        pageTitles[page] ||
+        "CampusOne";
+
+
+      document
+        .querySelectorAll(".nav-item")
+        .forEach(item => {
+
+          item.classList.toggle(
+            "active",
+            item.dataset.page === page
+          );
+
+        });
+
+
+      if (navElement) {
+
+        navElement.classList.add("active");
+
+      }
+
+
+      document
+        .getElementById("sidebar")
+        .classList.remove("open");
+
+
+      if (page === "dashboard") {
+
+        loadDashboard();
+
+      }
+
+      if (page === "notices") {
+
+        loadNotices();
+
+      }
+
+      if (page === "materials") {
+
+        loadMaterials();
+
+      }
+
+      if (page === "routine") {
+
+        loadRoutine();
+
+      }
+
+      if (page === "events") {
+
+        loadEvents();
+
+      }
+
+      if (page === "results") {
+
+        loadResults();
+
+      }
+
+    };
+
+
+    window.toggleSidebar = function() {
+
+      document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+    };
+
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    function openModal(
+      title,
+      body,
+      saveHandler,
+      saveText = "Save"
+    ) {
+
+      document
+        .getElementById("modalTitle")
+        .textContent = title;
+
+
+      document
+        .getElementById("modalBody")
+        .innerHTML = body;
+
+
+      document
+        .getElementById("modalSaveBtn")
+        .textContent = saveText;
+
+
+      document
+        .getElementById("modalSaveBtn")
+        .onclick = saveHandler;
+
+
+      document
+        .getElementById("modalBackdrop")
+        .classList.add("show");
+
+    }
+
+
+    window.closeModal = function() {
+
+      document
+        .getElementById("modalBackdrop")
+        .classList.remove("show");
+
+      document
+        .getElementById("modalBody")
+        .innerHTML = "";
+
+    };
+
+
+    window.backdropClose = function(event) {
+
+      if (
+        event.target.id ===
+        "modalBackdrop"
+      ) {
+
+        closeModal();
+
+      }
+
+    };
+
+
+    /* =========================
+       NOTICES
+    ========================= */
+
+    async function loadNotices() {
+
+      const container =
+        document.getElementById("allNotices");
+
+
+      container.innerHTML =
+        `<div class="empty">Loading...</div>`;
+
+
+      try {
+
+        let snap;
+
+        try {
+
+          snap = await getDocs(
+            query(
+              collection(db, "notices"),
+              orderBy(
+                "createdAt",
+                "desc"
+              )
+            )
+          );
+
+        } catch {
+
+          snap = await getDocs(
+            collection(db, "notices")
+          );
+
+        }
+
+
+        noticesCache =
+          snap.docs.map(
+            d => ({
+              id: d.id,
+              ...d.data()
+            })
+          );
+
+
+        noticesCache.sort(
+          (a,b) => {
+
+            const da =
+              a.createdAt?.toMillis?.() || 0;
+
+            const dbb =
+              b.createdAt?.toMillis?.() || 0;
+
+            return dbb - da;
+
+          }
+        );
+
+
+        renderNotices();
+
+      } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML =
+          `<div class="empty">
+             Notice load করতে সমস্যা হয়েছে।
+           </div>`;
+
+      }
+
+    }
+
+
+    function renderNotices() {
+
+      const container =
+        document.getElementById("allNotices");
+
+
+      if (!noticesCache.length) {
+
+        container.innerHTML =
+          `<div class="empty">
+             <div class="empty-icon">🔔</div>
+             এখনো কোনো Notice নেই।
+           </div>`;
+
+        renderDashboardNotices();
+
+        return;
+
+      }
+
+
+      const isAdmin =
+        currentProfile?.role === "admin";
+
+
+      container.innerHTML =
+        `<div class="notice-list">
+          ${
+            noticesCache.map(n => `
+
+              <div
+                class="notice-item"
+                style="position:relative;"
+              >
+
+                <h4>
+                  ${escapeHtml(n.title || "Untitled")}
+                </h4>
+
+                <p>
+                  ${escapeHtml(n.description || n.content || "")}
+                </p>
+
+                <div class="notice-date">
+                  ${formatDateTime(n.createdAt)}
+                </div>
+
+                ${
+                  isAdmin
+                    ? `
+                      <div
+                        style="
+                          position:absolute;
+                          right:12px;
+                          top:12px;
+                          display:flex;
+                          gap:5px;
+                        "
+                      >
+
+                        <button
+                          class="small-btn"
+                          onclick="editNotice('${n.id}')"
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          class="danger-btn"
+                          onclick="deleteNotice('${n.id}')"
+                        >
+                          Delete
+                        </button>
+
+                      </div>
+                    `
+                    : ""
+                }
+
+              </div>
+
+            `).join("")
+          }
+        </div>`;
+
+
+      renderDashboardNotices();
+
+    }
+
+
+    function renderDashboardNotices() {
+
+      const container =
+        document.getElementById(
+          "dashboardNotices"
+        );
+
+
+      if (!noticesCache.length) {
+
+        container.innerHTML =
+          `<div class="empty">
+             কোনো Notice নেই।
+           </div>`;
+
+        return;
+
+      }
+
+
+      container.innerHTML =
+        `<div class="notice-list">
+          ${
+            noticesCache
+              .slice(0,4)
+              .map(n => `
+
+                <div class="notice-item">
+
+                  <h4>
+                    ${escapeHtml(n.title || "Untitled")}
+                  </h4>
+
+                  <p>
+                    ${escapeHtml(
+                      n.description ||
+                      n.content ||
+                      ""
+                    )}
+                  </p>
+
+                  <div class="notice-date">
+                    ${formatDate(n.createdAt)}
+                  </div>
+
+                </div>
+
+              `)
+              .join("")
+          }
+        </div>`;
+
+    }
+
+
+    window.openNoticeModal = function(existing = null) {
+
+      if (currentProfile?.role !== "admin") {
+
+        showToast(
+          "শুধুমাত্র Admin Notice manage করতে পারবেন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const body = `
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Notice Title
+          </label>
+
+          <input
+            id="modalNoticeTitle"
+            class="form-input"
+            placeholder="Notice-এর title"
+            value="${escapeHtml(existing?.title || "")}"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Description
+          </label>
+
+          <textarea
+            id="modalNoticeDescription"
+            class="form-textarea"
+            placeholder="Notice-এর বিস্তারিত লিখুন..."
+          >${escapeHtml(
+            existing?.description ||
+            existing?.content ||
+            ""
+          )}</textarea>
+
+        </div>
+
+      `;
+
+
+      openModal(
+        existing
+          ? "Edit Notice"
+          : "নতুন Notice",
+        body,
+        async () => {
+
+          const title =
+            document
+              .getElementById(
+                "modalNoticeTitle"
+              )
+              .value
+              .trim();
+
+
+          const description =
+            document
+              .getElementById(
+                "modalNoticeDescription"
+              )
+              .value
+              .trim();
+
+
+          if (!title || !description) {
+
+            showToast(
+              "Title এবং Description দিন।",
+              "warning"
+            );
+
+            return;
+
+          }
+
+
+          try {
+
+            if (existing) {
+
+              await updateDoc(
+                doc(
+                  db,
+                  "notices",
+                  existing.id
+                ),
+                {
+                  title,
+                  description,
+                  updatedAt:
+                    serverTimestamp()
+                }
+              );
+
+
+              showToast(
+                "Notice update হয়েছে।",
+                "success"
+              );
+
+            } else {
+
+              await addDoc(
+                collection(
+                  db,
+                  "notices"
+                ),
+                {
+                  title,
+                  description,
+                  createdAt:
+                    serverTimestamp()
+                }
+              );
+
+
+              showToast(
+                "নতুন Notice তৈরি হয়েছে।",
+                "success"
+              );
+
+            }
+
+
+            closeModal();
+
+            await loadNotices();
+
+            await loadDashboard();
+
+          } catch (error) {
+
+            console.error(error);
+
+            showToast(
+              "Notice save করতে সমস্যা হয়েছে।",
+              "error"
+            );
+
+          }
+
+        },
+        existing ? "Update" : "Publish"
+      );
+
+    };
+
+
+    window.editNotice = function(id) {
+
+      const notice =
+        noticesCache.find(
+          n => n.id === id
+        );
+
+      if (notice) {
+
+        openNoticeModal(notice);
+
+      }
+
+    };
+
+
+    window.deleteNotice = async function(id) {
+
+      if (
+        currentProfile?.role !== "admin"
+      ) return;
+
+
+      if (
+        !confirm(
+          "এই Notice delete করতে চান?"
+        )
+      ) return;
+
+
+      try {
+
+        await deleteDoc(
+          doc(db, "notices", id)
+        );
+
+
+        showToast(
+          "Notice delete হয়েছে।",
+          "success"
+        );
+
+
+        await loadNotices();
+
+        await loadDashboard();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Notice delete করতে সমস্যা হয়েছে।",
+          "error"
+        );
+
+      }
+
+    };
+
+
+    /* =========================
+       MATERIALS
+    ========================= */
+
+    async function loadMaterials() {
+
+      const grid =
+        document.getElementById(
+          "materialsGrid"
+        );
+
+
+      grid.innerHTML =
+        `<div class="empty">Loading...</div>`;
+
+
+      try {
+
+        let snap;
+
+        try {
+
+          snap = await getDocs(
+            query(
+              collection(
+                db,
+                "materials"
+              ),
+              orderBy(
+                "createdAt",
+                "desc"
+              )
+            )
+          );
+
+        } catch {
+
+          snap = await getDocs(
+            collection(
+              db,
+              "materials"
+            )
+          );
+
+        }
+
+
+        materialsCache =
+          snap.docs.map(
+            d => ({
+              id: d.id,
+              ...d.data()
+            })
+          );
+
+
+        materialsCache.sort(
+          (a,b) => {
+
+            const da =
+              a.createdAt?.toMillis?.() || 0;
+
+            const dbb =
+              b.createdAt?.toMillis?.() || 0;
+
+            return dbb - da;
+
+          }
+        );
+
+
+        renderMaterials();
+
+      } catch (error) {
+
+        console.error(error);
+
+        grid.innerHTML =
+          `<div class="empty">
+             Materials load করতে সমস্যা হয়েছে।
+           </div>`;
+
+      }
+
+    }
+
+
+    function renderMaterials() {
+
+      const grid =
+        document.getElementById(
+          "materialsGrid"
+        );
+
+
+      if (!materialsCache.length) {
+
+        grid.innerHTML =
+          `<div class="empty">
+             <div class="empty-icon">📚</div>
+             এখনো কোনো Study Material নেই।
+           </div>`;
+
+        return;
+
+      }
+
+
+      const isAdmin =
+        currentProfile?.role === "admin";
+
+
+      grid.innerHTML =
+        materialsCache.map(m => `
+
+          <div class="material-card">
+
+            <div class="material-cover">
+              📄
+            </div>
+
+            <div class="material-body">
+
+              <div class="material-title">
+                ${escapeHtml(
+                  m.title ||
+                  m.name ||
+                  "Study Material"
+                )}
+              </div>
+
+              <div class="material-meta">
+
+                ${
+                  escapeHtml(
+                    m.subject ||
+                    "General"
+                  )
+                }
+
+                <br>
+
+                Uploaded:
+                ${formatDate(m.createdAt)}
+
+              </div>
+
+
+              <div class="material-actions">
+
+                ${
+                  m.url
+                    ? `
+                      <a
+                        class="open-btn"
+                        href="${escapeHtml(m.url)}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Open PDF
+                      </a>
+                    `
+                    : ""
+                }
+
+
+                ${
+                  isAdmin
+                    ? `
+                      <button
+                        class="danger-btn"
+                        onclick="deleteMaterial('${m.id}')"
+                      >
+                        Delete
+                      </button>
+                    `
+                    : ""
+                }
+
+              </div>
+
+            </div>
+
+          </div>
+
+        `).join("");
+
+    }
+
+
+    window.openMaterialModal = function() {
+
+      if (currentProfile?.role !== "admin") {
+
+        showToast(
+          "শুধুমাত্র Admin Material upload করতে পারবেন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const body = `
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Material Title
+          </label>
+
+          <input
+            id="materialTitle"
+            class="form-input"
+            placeholder="যেমন: ICT Chapter 1"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Subject
+          </label>
+
+          <input
+            id="materialSubject"
+            class="form-input"
+            placeholder="যেমন: ICT"
+          >
+
+        </div>
+
+
+        <div class="upload-box">
+
+          <div style="font-size:34px;">
+            📄
+          </div>
+
+          <div style="font-weight:700;">
+            PDF Upload করুন
+          </div>
+
+          <div
+            style="
+              color:#64748b;
+              font-size:12px;
+              margin-top:4px;
+            "
+          >
+            Maximum file size: 15 MB
+          </div>
+
+          <input
+            id="materialFile"
+            type="file"
+            accept="application/pdf,.pdf"
+          >
+
+          <div
+            id="uploadProgress"
+            class="progress"
+          >
+            <div
+              id="uploadProgressBar"
+              class="progress-bar"
+            ></div>
+          </div>
+
+        </div>
+
+      `;
+
+
+      openModal(
+        "Upload Study Material",
+        body,
+        uploadMaterial,
+        "Upload"
+      );
+
+    };
+
+
+    async function uploadMaterial() {
+
+      const title =
+        document
+          .getElementById(
+            "materialTitle"
+          )
+          .value
+          .trim();
+
+
+      const subject =
+        document
+          .getElementById(
+            "materialSubject"
+          )
+          .value
+          .trim();
+
+
+      const file =
+        document
+          .getElementById(
+            "materialFile"
+          )
+          .files[0];
+
+
+      if (!title) {
+
+        showToast(
+          "Material title দিন।",
+          "warning"
+        );
+
+        return;
+
+      }
+
+
+      if (!file) {
+
+        showToast(
+          "একটি PDF file select করুন।",
+          "warning"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        file.type !== "application/pdf" &&
+        !file.name.toLowerCase().endsWith(".pdf")
+      ) {
+
+        showToast(
+          "শুধুমাত্র PDF file upload করা যাবে।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      if (
+        file.size >
+        15 * 1024 * 1024
+      ) {
+
+        showToast(
+          "PDF size 15 MB-এর বেশি হতে পারবে না।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const progress =
+        document.getElementById(
+          "uploadProgress"
+        );
+
+
+      const bar =
+        document.getElementById(
+          "uploadProgressBar"
+        );
+
+
+      progress.style.display =
+        "block";
+
+
+      bar.style.width =
+        "10%";
+
+
+      const saveBtn =
+        document.getElementById(
+          "modalSaveBtn"
+        );
+
+
+      saveBtn.disabled = true;
+
+      saveBtn.textContent =
+        "Uploading...";
+
+
+      try {
+
+        const formData =
+          new FormData();
+
+        formData.append(
+          "file",
+          file
+        );
+
+        formData.append(
+          "upload_preset",
+          CLOUDINARY_PRESET
+        );
+
+
+        bar.style.width =
+          "30%";
+
+
+        const response =
+          await fetch(
+            CLOUDINARY_URL,
+            {
+              method: "POST",
+              body: formData
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Cloudinary upload failed"
+          );
+
+        }
+
+
+        bar.style.width =
+          "70%";
+
+
+        const data =
+          await response.json();
+
+
+        if (!data.secure_url) {
+
+          throw new Error(
+            "Cloudinary URL পাওয়া যায়নি"
+          );
+
+        }
+
+
+        await addDoc(
+          collection(
+            db,
+            "materials"
+          ),
+          {
+
+            title,
+
+            subject:
+              subject ||
+              "General",
+
+            url:
+              data.secure_url,
+
+            publicId:
+              data.public_id ||
+              "",
+
+            resourceType:
+              data.resource_type ||
+              "raw",
+
+            format:
+              data.format ||
+              "pdf",
+
+            bytes:
+              data.bytes ||
+              file.size,
+
+            createdAt:
+              serverTimestamp(),
+
+            uploadedBy:
+              currentUser.uid
+
+          }
+        );
+
+
+        bar.style.width =
+          "100%";
+
+
+        showToast(
+          "PDF সফলভাবে upload হয়েছে।",
+          "success"
+        );
+
+
+        closeModal();
+
+        await loadMaterials();
+
+        await loadDashboard();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "PDF upload করতে সমস্যা হয়েছে। Cloudinary preset/config check করুন।",
+          "error"
+        );
+
+        saveBtn.disabled = false;
+
+        saveBtn.textContent =
+          "Upload";
+
+      }
+
+    }
+
+
+    window.deleteMaterial = async function(id) {
+
+      if (
+        currentProfile?.role !== "admin"
+      ) return;
+
+
+      if (
+        !confirm(
+          "এই Material-এর Firestore record delete করতে চান?"
+        )
+      ) return;
+
+
+      try {
+
+        await deleteDoc(
+          doc(
+            db,
+            "materials",
+            id
+          )
+        );
+
+
+        showToast(
+          "Material record delete হয়েছে।",
+          "success"
+        );
+
+
+        await loadMaterials();
+
+        await loadDashboard();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Material delete করতে সমস্যা হয়েছে।",
+          "error"
+        );
+
+      }
+
+    };
+
+
+    /* =========================
+       ROUTINE
+    ========================= */
+
+    async function loadRoutine() {
+
+      const grid =
+        document.getElementById(
+          "routineGrid"
+        );
+
+
+      grid.innerHTML =
+        `<div class="empty">Loading...</div>`;
+
+
+      try {
+
+        const snap =
+          await getDocs(
+            collection(
+              db,
+              "routine"
+            )
+          );
+
+
+        routineCache =
+          snap.docs.map(
+            d => ({
+              id: d.id,
+              ...d.data()
+            })
+          );
+
+
+        routineCache.sort(
+          (a,b) => {
+
+            const da =
+              dayOrder.indexOf(
+                a.day
+              );
+
+            const dbb =
+              dayOrder.indexOf(
+                b.day
+              );
+
+            if (da !== dbb) {
+              return da - dbb;
+            }
+
+            return String(
+              a.time || ""
+            ).localeCompare(
+              String(
+                b.time || ""
+              )
+            );
+
+          }
+        );
+
+
+        renderRoutine();
+
+      } catch (error) {
+
+        console.error(error);
+
+        grid.innerHTML =
+          `<div class="empty">
+             Routine load করতে সমস্যা হয়েছে।
+           </div>`;
+
+      }
+
+    }
+
+
+    function renderRoutine() {
+
+      const grid =
+        document.getElementById(
+          "routineGrid"
+        );
+
+
+      const isAdmin =
+        currentProfile?.role === "admin";
+
+
+      grid.innerHTML =
+        dayOrder.map(day => {
+
+          const classes =
+            routineCache.filter(
+              r => r.day === day
+            );
+
+
+          return `
+
+            <div class="day-column">
+
+              <div class="day-header">
+                ${day}
+              </div>
+
+              ${
+                classes.length
+                  ? classes.map(c => `
+
+                      <div
+                        class="class-item"
+                        style="position:relative;"
+                      >
+
+                        <div class="class-time">
+                          ${escapeHtml(c.time || "")}
+                        </div>
+
+                        <div class="class-name">
+                          ${escapeHtml(
+                            c.subject ||
+                            c.name ||
+                            "Class"
+                          )}
+                        </div>
+
+                        <div class="class-room">
+                          ${escapeHtml(
+                            c.room ||
+                            c.teacher ||
+                            ""
+                          )}
+                        </div>
+
+                        ${
+                          isAdmin
+                            ? `
+                              <button
+                                class="danger-btn"
+                                style="
+                                  margin-top:7px;
+                                  width:100%;
+                                  padding:5px;
+                                  font-size:10px;
+                                "
+                                onclick="deleteRoutine('${c.id}')"
+                              >
+                                Delete
+                              </button>
+                            `
+                            : ""
+                        }
+
+                      </div>
+
+                    `).join("")
+                  : `
+                    <div
+                      style="
+                        padding:25px 8px;
+                        text-align:center;
+                        color:#94a3b8;
+                        font-size:11px;
+                      "
+                    >
+                      No class
+                    </div>
+                  `
+              }
+
+            </div>
+
+          `;
+
+        }).join("");
+
+    }
+
+
+    window.openRoutineModal = function() {
+
+      if (
+        currentProfile?.role !== "admin"
+      ) {
+
+        showToast(
+          "শুধুমাত্র Admin Routine manage করতে পারবেন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const body = `
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Day
+          </label>
+
+          <select
+            id="routineDay"
+            class="form-select"
+          >
+
+            ${
+              dayOrder.map(
+                day =>
+                  `<option value="${day}">
+                    ${day}
+                  </option>`
+              ).join("")
+            }
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Time
+          </label>
+
+          <input
+            id="routineTime"
+            class="form-input"
+            placeholder="10:00 AM - 11:00 AM"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Subject / Class
+          </label>
+
+          <input
+            id="routineSubject"
+            class="form-input"
+            placeholder="Mathematics"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Room / Teacher
+          </label>
+
+          <input
+            id="routineRoom"
+            class="form-input"
+            placeholder="Room 201 / Mr. Rahman"
+          >
+
+        </div>
+
+      `;
+
+
+      openModal(
+        "Add Class Routine",
+        body,
+        async () => {
+
+          const day =
+            document
+              .getElementById(
+                "routineDay"
+              )
+              .value;
+
+
+          const time =
+            document
+              .getElementById(
+                "routineTime"
+              )
+              .value
+              .trim();
+
+
+          const subject =
+            document
+              .getElementById(
+                "routineSubject"
+              )
+              .value
+              .trim();
+
+
+          const room =
+            document
+              .getElementById(
+                "routineRoom"
+              )
+              .value
+              .trim();
+
+
+          if (!time || !subject) {
+
+            showToast(
+              "Time এবং Subject দিন।",
+              "warning"
+            );
+
+            return;
+
+          }
+
+
+          try {
+
+            await addDoc(
+              collection(
+                db,
+                "routine"
+              ),
+              {
+
+                day,
+
+                time,
+
+                subject,
+
+                room,
+
+                createdAt:
+                  serverTimestamp(),
+
+                createdBy:
+                  currentUser.uid
+
+              }
+            );
+
+
+            showToast(
+              "Routine class add হয়েছে।",
+              "success"
+            );
+
+
+            closeModal();
+
+            await loadRoutine();
+
+          } catch (error) {
+
+            console.error(error);
+
+            showToast(
+              "Routine save করতে সমস্যা হয়েছে।",
+              "error"
+            );
+
+          }
+
+        },
+        "Add Class"
+      );
+
+    };
+
+
+    window.deleteRoutine = async function(id) {
+
+      if (
+        currentProfile?.role !== "admin"
+      ) return;
+
+
+      if (
+        !confirm(
+          "এই class routine delete করতে চান?"
+        )
+      ) return;
+
+
+      try {
+
+        await deleteDoc(
+          doc(
+            db,
+            "routine",
+            id
+          )
+        );
+
+
+        showToast(
+          "Routine delete হয়েছে।",
+          "success"
+        );
+
+
+        await loadRoutine();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Routine delete করতে সমস্যা হয়েছে।",
+          "error"
+        );
+
+      }
+
+    };
+
+
+    /* =========================
+       EVENTS
+    ========================= */
+
+    async function loadEvents() {
+
+      const grid =
+        document.getElementById(
+          "eventsGrid"
+        );
+
+
+      grid.innerHTML =
+        `<div class="empty">Loading...</div>`;
+
+
+      try {
+
+        let snap;
+
+        try {
+
+          snap = await getDocs(
+            query(
+              collection(
+                db,
+                "events"
+              ),
+              orderBy(
+                "date",
+                "asc"
+              )
+            )
+          );
+
+        } catch {
+
+          snap = await getDocs(
+            collection(
+              db,
+              "events"
+            )
+          );
+
+        }
+
+
+        eventsCache =
+          snap.docs.map(
+            d => ({
+              id: d.id,
+              ...d.data()
+            })
+          );
+
+
+        eventsCache.sort(
+          (a,b) =>
+            String(
+              a.date || ""
+            ).localeCompare(
+              String(
+                b.date || ""
+              )
+            )
+        );
+
+
+        renderEvents();
+
+      } catch (error) {
+
+        console.error(error);
+
+        grid.innerHTML =
+          `<div class="empty">
+             Events load করতে সমস্যা হয়েছে।
+           </div>`;
+
+      }
+
+    }
+
+
+    function renderEvents() {
+
+      const grid =
+        document.getElementById(
+          "eventsGrid"
+        );
+
+
+      if (!eventsCache.length) {
+
+        grid.innerHTML =
+          `<div class="empty">
+             <div class="empty-icon">🎉</div>
+             এখনো কোনো Event নেই।
+           </div>`;
+
+        return;
+
+      }
+
+
+      const isAdmin =
+        currentProfile?.role === "admin";
+
+
+      grid.innerHTML =
+        eventsCache.map(e => {
+
+          const date =
+            e.date
+              ? new Date(
+                  `${e.date}T00:00:00`
+                )
+              : null;
+
+
+          const day =
+            date
+              ? date.getDate()
+              : "—";
+
+
+          const month =
+            date
+              ? date.toLocaleDateString(
+                  "en-US",
+                  {
+                    month: "short"
+                  }
+                )
+              : "";
+
+
+          return `
+
+            <div class="event-card">
+
+              <div class="event-date-box">
+
+                <div class="event-day">
+                  ${day}
+                </div>
+
+                <div class="event-month">
+                  ${month}
+                </div>
+
+              </div>
+
+
+              <div class="event-title">
+                ${escapeHtml(
+                  e.title ||
+                  "Campus Event"
+                )}
+              </div>
+
+
+              <div class="event-info">
+
+                📅 ${escapeHtml(
+                  e.date || "TBA"
+                )}
+
+                <br>
+
+                ${
+                  e.time
+                    ? `🕐 ${escapeHtml(e.time)}<br>`
+                    : ""
+                }
+
+                ${
+                  e.location
+                    ? `📍 ${escapeHtml(e.location)}<br>`
+                    : ""
+                }
+
+                ${
+                  e.description
+                    ? `<br>${escapeHtml(e.description)}`
+                    : ""
+                }
+
+              </div>
+
+
+              ${
+                isAdmin
+                  ? `
+                    <button
+                      class="danger-btn"
+                      style="
+                        margin-top:15px;
+                        width:100%;
+                      "
+                      onclick="deleteEvent('${e.id}')"
+                    >
+                      Delete
+                    </button>
+                  `
+                  : ""
+              }
+
+            </div>
+
+          `;
+
+        }).join("");
+
+    }
+
+
+    window.openEventModal = function() {
+
+      if (
+        currentProfile?.role !== "admin"
+      ) {
+
+        showToast(
+          "শুধুমাত্র Admin Event manage করতে পারবেন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const body = `
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Event Title
+          </label>
+
+          <input
+            id="eventTitle"
+            class="form-input"
+            placeholder="Annual Cultural Program"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Date
+          </label>
+
+          <input
+            id="eventDate"
+            class="form-input"
+            type="date"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Time
+          </label>
+
+          <input
+            id="eventTime"
+            class="form-input"
+            placeholder="10:00 AM"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Location
+          </label>
+
+          <input
+            id="eventLocation"
+            class="form-input"
+            placeholder="College Auditorium"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Description
+          </label>
+
+          <textarea
+            id="eventDescription"
+            class="form-textarea"
+            placeholder="Event সম্পর্কে বিস্তারিত..."
+          ></textarea>
+
+        </div>
+
+      `;
+
+
+      openModal(
+        "নতুন Campus Event",
+        body,
+        async () => {
+
+          const title =
+            document
+              .getElementById(
+                "eventTitle"
+              )
+              .value
+              .trim();
+
+
+          const date =
+            document
+              .getElementById(
+                "eventDate"
+              )
+              .value;
+
+
+          const time =
+            document
+              .getElementById(
+                "eventTime"
+              )
+              .value
+              .trim();
+
+
+          const location =
+            document
+              .getElementById(
+                "eventLocation"
+              )
+              .value
+              .trim();
+
+
+          const description =
+            document
+              .getElementById(
+                "eventDescription"
+              )
+              .value
+              .trim();
+
+
+          if (!title || !date) {
+
+            showToast(
+              "Title এবং Date দিন।",
+              "warning"
+            );
+
+            return;
+
+          }
+
+
+          try {
+
+            await addDoc(
+              collection(
+                db,
+                "events"
+              ),
+              {
+
+                title,
+
+                date,
+
+                time,
+
+                location,
+
+                description,
+
+                createdAt:
+                  serverTimestamp(),
+
+                createdBy:
+                  currentUser.uid
+
+              }
+            );
+
+
+            showToast(
+              "Event তৈরি হয়েছে।",
+              "success"
+            );
+
+
+            closeModal();
+
+            await loadEvents();
+
+            await loadDashboard();
+
+          } catch (error) {
+
+            console.error(error);
+
+            showToast(
+              "Event save করতে সমস্যা হয়েছে।",
+              "error"
+            );
+
+          }
+
+        },
+        "Create Event"
+      );
+
+    };
+
+
+    window.deleteEvent = async function(id) {
+
+      if (
+        currentProfile?.role !== "admin"
+      ) return;
+
+
+      if (
+        !confirm(
+          "এই Event delete করতে চান?"
+        )
+      ) return;
+
+
+      try {
+
+        await deleteDoc(
+          doc(
+            db,
+            "events",
+            id
+          )
+        );
+
+
+        showToast(
+          "Event delete হয়েছে।",
+          "success"
+        );
+
+
+        await loadEvents();
+
+        await loadDashboard();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Event delete করতে সমস্যা হয়েছে।",
+          "error"
+        );
+
+      }
+
+    };
+
+
+    /* =========================
+       RESULTS
+    ========================= */
+
+    async function loadResults() {
+
+      const tbody =
+        document.getElementById(
+          "resultsTable"
+        );
+
+
+      tbody.innerHTML =
+        `<tr>
+          <td colspan="6">
+            <div class="empty">
+              Loading...
+            </div>
+          </td>
+        </tr>`;
+
+
+      try {
+
+        /*
+          IMPORTANT:
+
+          Student query MUST include
+          published == true because
+          Firestore Security Rules are
+          not filters.
+        */
+
+        if (
+          currentProfile?.role === "admin"
+        ) {
+
+          const snap =
+            await getDocs(
+              collection(
+                db,
+                "results"
+              )
+            );
+
+
+          resultsCache =
+            snap.docs.map(
+              d => ({
+                id: d.id,
+                ...d.data()
+              })
+            );
+
+        } else {
+
+          const q =
+            query(
+              collection(
+                db,
+                "results"
+              ),
+              where(
+                "studentUid",
+                "==",
+                currentUser.uid
+              ),
+              where(
+                "published",
+                "==",
+                true
+              )
+            );
+
+
+          const snap =
+            await getDocs(q);
+
+
+          resultsCache =
+            snap.docs.map(
+              d => ({
+                id: d.id,
+                ...d.data()
+              })
+            );
+
+        }
+
+
+        resultsCache.sort(
+          (a,b) => {
+
+            const da =
+              a.createdAt?.toMillis?.() || 0;
+
+            const dbb =
+              b.createdAt?.toMillis?.() || 0;
+
+            return dbb - da;
+
+          }
+        );
+
+
+        renderResults();
+
+      } catch (error) {
+
+        console.error(error);
+
+        tbody.innerHTML =
+          `<tr>
+            <td colspan="6">
+              <div class="empty">
+                Result load করতে সমস্যা হয়েছে।
+              </div>
+            </td>
+          </tr>`;
+
+      }
+
+    }
+
+
+    function renderResults() {
+
+      const tbody =
+        document.getElementById(
+          "resultsTable"
+        );
+
+
+      const visibleResults =
+        currentProfile?.role === "admin"
+          ? resultsCache
+          : resultsCache.filter(
+              r =>
+                r.published === true &&
+                r.studentUid ===
+                  currentUser.uid
+            );
+
+
+      document
+        .getElementById(
+          "resultCount"
+        )
+        .textContent =
+        visibleResults.length;
+
+
+      if (!visibleResults.length) {
+
+        tbody.innerHTML =
+          `<tr>
+            <td colspan="6">
+              <div class="empty">
+                <div class="empty-icon">📊</div>
+                এখনো কোনো Published Result নেই।
+              </div>
+            </td>
+          </tr>`;
+
+
+        document
+          .getElementById(
+            "resultAverage"
+          )
+          .textContent = "—";
+
+
+        document
+          .getElementById(
+            "resultLatest"
+          )
+          .textContent = "—";
+
+
+        return;
+
+      }
+
+
+      const gpas =
+        visibleResults
+          .map(
+            r => Number(
+              r.gpa
+            )
+          )
+          .filter(
+            n => !isNaN(n)
+          );
+
+
+      const average =
+        gpas.length
+          ? (
+              gpas.reduce(
+                (a,b) => a + b,
+                0
+              ) /
+              gpas.length
+            ).toFixed(2)
+          : "—";
+
+
+      document
+        .getElementById(
+          "resultAverage"
+        )
+        .textContent =
+        average;
+
+
+      document
+        .getElementById(
+          "resultLatest"
+        )
+        .textContent =
+        visibleResults[0]?.exam ||
+        visibleResults[0]?.semester ||
+        "—";
+
+
+      tbody.innerHTML =
+        visibleResults.map(r => `
+
+          <tr>
+
+            <td>
+              ${escapeHtml(
+                r.exam ||
+                r.semester ||
+                "—"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                r.course ||
+                r.subject ||
+                "—"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                r.marks ??
+                "—"
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                r.grade ||
+                "—"
+              )}
+            </td>
+
+            <td>
+              <strong>
+                ${escapeHtml(
+                  r.gpa ??
+                  "—"
+                )}
+              </strong>
+            </td>
+
+            <td>
+
+              ${
+                r.published
+                  ? `
+                    <span class="badge badge-success">
+                      Published
+                    </span>
+                  `
+                  : `
+                    <span class="badge badge-warning">
+                      Unpublished
+                    </span>
+                  `
+              }
+
+            </td>
+
+          </tr>
+
+        `).join("");
+
+    }
+
+
+    /* =========================
+       RESULT MODAL
+    ========================= */
+
+    window.openResultModal = function() {
+
+      if (
+        currentProfile?.role !== "admin"
+      ) {
+
+        showToast(
+          "শুধুমাত্র Admin result manage করতে পারবেন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const body = `
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Student Email
+          </label>
+
+          <input
+            id="resultStudentEmail"
+            class="form-input"
+            type="email"
+            placeholder="student@gmail.com"
+          >
+
+          <div
+            style="
+              color:#64748b;
+              font-size:11px;
+              margin-top:5px;
+            "
+          >
+            Registered student's exact email দিন।
+          </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Exam / Semester
+          </label>
+
+          <input
+            id="resultExam"
+            class="form-input"
+            placeholder="1st Semester"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Course / Subject
+          </label>
+
+          <input
+            id="resultCourse"
+            class="form-input"
+            placeholder="Mathematics"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Marks
+          </label>
+
+          <input
+            id="resultMarks"
+            class="form-input"
+            placeholder="85"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Grade
+          </label>
+
+          <input
+            id="resultGrade"
+            class="form-input"
+            placeholder="A+"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label class="form-label">
+            GPA
+          </label>
+
+          <input
+            id="resultGpa"
+            class="form-input"
+            type="number"
+            step="0.01"
+            min="0"
+            max="5"
+            placeholder="5.00"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label
+            style="
+              display:flex;
+              align-items:center;
+              gap:9px;
+              cursor:pointer;
+            "
+          >
+
+            <input
+              id="resultPublished"
+              type="checkbox"
+            >
+
+            <span>
+              এখনই Publish করুন
+            </span>
+
+          </label>
+
+        </div>
+
+      `;
+
+
+      openModal(
+        "Publish Student Result",
+        body,
+        saveResult,
+        "Save Result"
+      );
+
+    };
+
+
+    async function saveResult() {
+
+      const email =
+        document
+          .getElementById(
+            "resultStudentEmail"
+          )
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const exam =
+        document
+          .getElementById(
+            "resultExam"
+          )
+          .value
+          .trim();
+
+
+      const course =
+        document
+          .getElementById(
+            "resultCourse"
+          )
+          .value
+          .trim();
+
+
+      const marks =
+        document
+          .getElementById(
+            "resultMarks"
+          )
+          .value
+          .trim();
+
+
+      const grade =
+        document
+          .getElementById(
+            "resultGrade"
+          )
+          .value
+          .trim();
+
+
+      const gpa =
+        document
+          .getElementById(
+            "resultGpa"
+          )
+          .value
+          .trim();
+
+
+      const published =
+        document
+          .getElementById(
+            "resultPublished"
+          )
+          .checked;
+
+
+      if (
+        !email ||
+        !exam ||
+        !course
+      ) {
+
+        showToast(
+          "Student Email, Exam এবং Course দিন।",
+          "warning"
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        /*
+          Admin searches users by email.
+          Then creates result using student's UID.
+        */
+
+        const userQuery =
+          query(
+            collection(
+              db,
+              "users"
+            ),
+            where(
+              "email",
+              "==",
+              email
+            )
+          );
+
+
+        const userSnap =
+          await getDocs(
+            userQuery
+          );
+
+
+        if (userSnap.empty) {
+
+          showToast(
+            "এই Email-এর কোনো registered student পাওয়া যায়নি।",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        const student =
+          userSnap.docs[0].data();
+
+
+        await addDoc(
+          collection(
+            db,
+            "results"
+          ),
+          {
+
+            studentUid:
+              student.uid,
+
+            studentEmail:
+              email,
+
+            studentName:
+              student.name ||
+              "",
+
+            exam,
+
+            course,
+
+            marks,
+
+            grade,
+
+            gpa:
+              gpa
+                ? Number(gpa)
+                : null,
+
+            published,
+
+            createdAt:
+              serverTimestamp(),
+
+            createdBy:
+              currentUser.uid
+
+          }
+        );
+
+
+        showToast(
+          published
+            ? "Result publish হয়েছে।"
+            : "Result save হয়েছে।",
+          "success"
+        );
+
+
+        closeModal();
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Result save করতে সমস্যা হয়েছে।",
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       PROFILE EDIT
+    ========================= */
+
+    window.openProfileModal = function() {
+
+      if (!currentUser) return;
+
+
+      const name =
+        currentProfile?.name ||
+        currentUser.displayName ||
+        "";
+
+
+      const body = `
+
+        <div class="form-group">
+
+          <label class="form-label">
+            Full Name
+          </label>
+
+          <input
+            id="editProfileName"
+            class="form-input"
+            value="${escapeHtml(name)}"
+          >
+
+        </div>
+
+
+        <div
+          style="
+            background:#f8fafc;
+            border-radius:10px;
+            padding:12px;
+            font-size:12px;
+            color:#64748b;
+          "
+        >
+          Email পরিবর্তন এখানে করা যাবে না।
+        </div>
+
+      `;
+
+
+      openModal(
+        "Edit Profile",
+        body,
+        saveProfile,
+        "Update"
+      );
+
+    };
+
+
+    async function saveProfile() {
+
+      const name =
+        document
+          .getElementById(
+            "editProfileName"
+          )
+          .value
+          .trim();
+
+
+      if (!name) {
+
+        showToast(
+          "Name দিন।",
+          "warning"
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        await updateProfile(
+          currentUser,
+          {
+            displayName: name
+          }
+        );
+
+
+        /*
+          Role is deliberately NOT touched.
+          Student cannot change own role.
+        */
+
+        await updateDoc(
+          doc(
+            db,
+            "users",
+            currentUser.uid
+          ),
+          {
+            name
+          }
+        );
+
+
+        currentProfile.name =
+          name;
+
+
+        updateUserUI();
+
+        closeModal();
+
+
+        showToast(
+          "Profile update হয়েছে।",
+          "success"
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+        showToast(
+          "Profile update করতে সমস্যা হয়েছে।",
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       ADMIN USERS
+    ========================= */
+
+    window.loadAdminUsers = async function() {
+
+      if (
+        currentProfile?.role !== "admin"
+      ) {
+
+        showToast(
+          "Admin access প্রয়োজন।",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const section =
+        document.getElementById(
+          "adminUsersSection"
+        );
+
+
+      const tbody =
+        document.getElementById(
+          "adminUsersTable"
+        );
+
+
+      section.classList.remove(
+        "hidden"
+      );
+
+
+      tbody.innerHTML =
+        `<tr>
+          <td colspan="4">
+            Loading...
+          </td>
+        </tr>`;
+
+
+      try {
+
+        const snap =
+          await getDocs(
+            collection(
+              db,
+              "users"
+            )
+          );
+
+
+        const users =
+          snap.docs.map(
+            d => d.data()
+          );
+
+
+        users.sort(
+          (a,b) =>
+            String(
+              a.name || ""
+            ).localeCompare(
+              String(
+                b.name || ""
+              )
+            )
+        );
+
+
+        if (!users.length) {
+
+          tbody.innerHTML =
+            `<tr>
+              <td colspan="4">
+                কোনো user পাওয়া যায়নি।
+              </td>
+            </tr>`;
+
+          return;
+
+        }
+
+
+        tbody.innerHTML =
+          users.map(u => `
+
+            <tr>
+
+              <td>
+                ${escapeHtml(
+                  u.name || "—"
+                )}
+              </td>
+
+              <td>
+                ${escapeHtml(
+                  u.email || "—"
+                )}
+              </td>
+
+              <td>
+
+                ${
+                  u.role === "admin"
+                    ? `
+                      <span class="badge badge-purple">
+                        Admin
+                      </span>
+                    `
+                    : `
+                      <span class="badge badge-info">
+                        Student
+                      </span>
+                    `
+                }
+
+              </td>
+
+              <td>
+                ${formatDate(
+                  u.createdAt
+                )}
+              </td>
+
+            </tr>
+
+          `).join("");
+
+      } catch (error) {
+
+        console.error(error);
+
+        tbody.innerHTML =
+          `<tr>
+            <td colspan="4">
+              Users load করতে সমস্যা হয়েছে।
+            </td>
+          </tr>`;
+
+      }
+
+    };
+
+
+    /* =========================
+       DASHBOARD
+    ========================= */
+
+    async function loadDashboard() {
+
+      try {
+
+        const [
+          noticesSnap,
+          materialsSnap,
+          eventsSnap
+        ] = await Promise.all([
+
+          getDocs(
+            collection(
+              db,
+              "notices"
+            )
+          ),
+
+          getDocs(
+            collection(
+              db,
+              "materials"
+            )
+          ),
+
+          getDocs(
+            collection(
+              db,
+              "events"
+            )
+          )
+
+        ]);
+
+
+        noticesCache =
+          noticesSnap.docs.map(
+            d => ({
+              id: d.id,
+              ...d.data()
+            })
+          );
+
+
+        materialsCache =
+          materialsSnap.docs.map(
+            d => ({
+              id: d.id,
+              ...d.data()
+            })
+          );
+
+
+        eventsCache =
+          eventsSnap.docs.map(
+            d => ({
+              id: d.id,
+              ...d.data()
+            })
+          );
+
+
+        noticesCache.sort(
+          (a,b) =>
+            (b.createdAt?.toMillis?.() || 0) -
+            (a.createdAt?.toMillis?.() || 0)
+        );
+
+
+        eventsCache.sort(
+          (a,b) =>
+            String(
+              a.date || ""
+            ).localeCompare(
+              String(
+                b.date || ""
+              )
+            )
+        );
+
+
+        let resultCount = 0;
+
+
+        try {
+
+          const resultQuery =
+            query(
+              collection(
+                db,
+                "results"
+              ),
+              where(
+                "studentUid",
+                "==",
+                currentUser.uid
+              ),
+              where(
+                "published",
+                "==",
+                true
+              )
+            );
+
+
+          const resultSnap =
+            await getDocs(
+              resultQuery
+            );
+
+
+          resultCount =
+            resultSnap.size;
+
+        } catch (error) {
+
+          console.warn(
+            "Result count error:",
+            error
+          );
+
+        }
+
+
+        document
+          .getElementById(
+            "statNotices"
+          )
+          .textContent =
+          noticesCache.length;
+
+
+        document
+          .getElementById(
+            "statMaterials"
+          )
+          .textContent =
+          materialsCache.length;
+
+
+        document
+          .getElementById(
+            "statEvents"
+          )
+          .textContent =
+          eventsCache.length;
+
+
+        document
+          .getElementById(
+            "statResults"
+          )
+          .textContent =
+          resultCount;
+
+
+        renderDashboardNotices();
+
+      } catch (error) {
+
+        console.error(
+          "Dashboard error:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       AUTH STATE
+    ========================= */
+
+    onAuthStateChanged(
+      auth,
+      async user => {
+
+        try {
+
+          if (user) {
+
+            currentUser =
+              user;
+
+
+            await loadUserProfile(
+              user
+            );
+
+
+            document
+              .getElementById(
+                "authScreen"
+              )
+              .classList.add(
+                "hidden"
+              );
+
+
+            document
+              .getElementById(
+                "app"
+              )
+              .classList.remove(
+                "hidden"
+              );
+
+
+            showPage(
+              "dashboard"
+            );
+
+
+            await Promise.allSettled([
+
+              loadNotices(),
+
+              loadMaterials(),
+
+              loadRoutine(),
+
+              loadEvents(),
+
+              loadDashboard()
+
+            ]);
+
+          } else {
+
+            currentUser = null;
+
+            currentProfile = null;
+
+
+            document
+              .getElementById(
+                "app"
+              )
+              .classList.add(
+                "hidden"
+              );
+
+
+            document
+              .getElementById(
+                "authScreen"
+              )
+              .classList.remove(
+                "hidden"
+              );
+
+
+            showLogin();
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            "Auth state error:",
+            error
+          );
+
+
+          document
+            .getElementById(
+              "app"
+            )
+            .classList.add(
+              "hidden"
+            );
+
+
+          document
+            .getElementById(
+              "authScreen"
+            )
+            .classList.remove(
+              "hidden"
+            );
+
+
+          showToast(
+            "Account information load করতে সমস্যা হয়েছে।",
+            "error"
+          );
+
+        } finally {
+
+          document
+            .getElementById(
+              "pageLoader"
+            )
+            .classList.add(
+              "hidden"
+            );
+
+        }
+
+      }
+    );
+
+
+    /* =========================
+       ENTER KEY LOGIN
+    ========================= */
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key === "Enter" &&
+          !document
+            .getElementById(
+              "loginForm"
+            )
+            .classList.contains(
+              "hidden"
+            )
+        ) {
+
+          const active =
+            document.activeElement;
+
+
+          if (
+            active?.id ===
+              "loginEmail" ||
+            active?.id ===
+              "loginPassword"
+          ) {
+
+            loginUser();
+
+          }
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
