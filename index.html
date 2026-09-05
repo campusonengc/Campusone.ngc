@@ -7,11 +7,11 @@
   <meta name="theme-color" content="#4f46e5" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="CampusOne" />
+  <meta name="apple-mobile-web-app-title" content="CampusOne NGC" />
   <link rel="manifest" href="manifest.json" />
-  <title>CampusOne — Student Portal</title>
+  <title>CampusOne NGC — Student Portal</title>
   <link rel="icon" type="image/png" href="logo.png">
-  <meta name="description" content="CampusOne Student Management Portal" />
+  <meta name="description" content="CampusOne NGC Student Management Portal" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1792,6 +1792,78 @@
     .status-select{min-width:130px;padding:7px 9px;border:1px solid var(--border);border-radius:8px;background:white;}
     .result-row-note{max-width:260px;white-space:pre-wrap;line-height:1.5;}
 
+    /* =========================
+       CAMPUSONE NGC AUTH POLISH
+    ========================= */
+    .ngc-logo {
+      width: 64px !important;
+      height: 64px !important;
+      border-radius: 19px !important;
+      background: linear-gradient(145deg, rgba(255,255,255,.24), rgba(255,255,255,.08)) !important;
+      border: 1px solid rgba(255,255,255,.34) !important;
+      box-shadow: 0 14px 35px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.22) !important;
+      font-family: Inter, sans-serif;
+      font-size: 20px !important;
+      letter-spacing: -.5px;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0,0,0,.18);
+    }
+
+    .brand-name {
+      letter-spacing: -.7px;
+    }
+
+    .auth-panel {
+      position: relative;
+    }
+
+    .auth-panel::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      right: -90px;
+      bottom: -90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,.10), transparent 68%);
+      pointer-events: none;
+    }
+
+    #loginForm, #registerForm {
+      position: relative;
+      z-index: 1;
+    }
+
+    #loginForm h2, #registerForm h2 {
+      font-weight: 800;
+      color: #172033;
+    }
+
+    #loginForm .form-group {
+      margin-bottom: 19px;
+    }
+
+    #loginForm .primary-btn {
+      margin-top: 5px;
+      box-shadow: 0 12px 25px rgba(79,70,229,.24);
+    }
+
+    #loginForm .primary-btn:hover, #registerForm .primary-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    #googleLoginBtn {
+      color: #1f2937 !important;
+      font-weight: 700 !important;
+    }
+
+    @media (max-width: 900px) {
+      .auth-wrapper {
+        max-width: 560px;
+        box-shadow: 0 25px 70px rgba(15,23,42,.14);
+      }
+    }
+
   </style>
 </head>
 
@@ -1802,9 +1874,9 @@
   ========================= -->
 
   <div id="pageLoader">
-    <div class="loader-logo">C</div>
+    <div class="loader-logo">NGC</div>
     <div class="spinner"></div>
-    <div style="color:#64748b;font-size:13px;">CampusOne চালু হচ্ছে...</div>
+    <div style="color:#64748b;font-size:13px;">CampusOne NGC চালু হচ্ছে...</div>
   </div>
 
 
@@ -1819,10 +1891,7 @@
       <div class="auth-hero">
 
         <div class="brand-large">
-  <div class="loader-logo">
-    <img src="logo.png" alt="CampusOne Logo">
-  </div>
-
+  <div class="brand-icon ngc-logo">NGC</div>
   <div class="brand-name">CampusOne NGC</div>
 </div>
         <h1>
@@ -1894,7 +1963,7 @@
             <h2>স্বাগতম 👋</h2>
 
             <p class="auth-subtitle">
-              তোমার CampusOne account-এ Login করো।
+              তোমার CampusOne NGC account-এ Login করো।
             </p>
 
             <div class="form-group">
@@ -2275,7 +2344,7 @@
             </div>
 
             <div class="page-subtitle">
-              CampusOne! Niamatpur Govt. College Student Portal
+              CampusOne NGC! Niamatpur Govt. College Student Portal
             </div>
 
           </div>
@@ -2332,7 +2401,7 @@
             </h2>
 
             <p>
-              আজকের CampusOne overview এখানে দেখতে পারবে।
+              আজকের CampusOne NGC overview এখানে দেখতে পারবে।
             </p>
 
           </div>
@@ -2956,7 +3025,7 @@
               <h2>Admin Panel</h2>
 
               <p>
-                CampusOne content management।
+                CampusOne NGC content management।
               </p>
 
             </div>
@@ -4280,7 +4349,7 @@
         .getElementById("pageTitle")
         .textContent =
         pageTitles[page] ||
-        "CampusOne";
+        "CampusOne NGC";
 
 
       document
