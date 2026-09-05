@@ -424,6 +424,222 @@
       border: 1px solid #bbf7d0;
     }
 
+
+    /* =========================
+       PREMIUM AUTH DESIGN
+    ========================= */
+
+    #authScreen {
+      position: relative;
+      overflow: auto;
+      background:
+        radial-gradient(circle at 8% 12%, rgba(99,102,241,.22), transparent 27%),
+        radial-gradient(circle at 92% 88%, rgba(124,58,237,.20), transparent 28%),
+        radial-gradient(circle at 50% 50%, rgba(14,165,233,.07), transparent 42%),
+        linear-gradient(135deg, #f8fafc 0%, #eef2ff 48%, #f5f3ff 100%);
+    }
+
+    #authScreen::before {
+      content: "";
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      border: 1px solid rgba(99,102,241,.10);
+      top: -170px;
+      right: -120px;
+      pointer-events: none;
+    }
+
+    .auth-wrapper {
+      width: min(1120px, 100%);
+      min-height: 680px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: 32px;
+      box-shadow: 0 35px 100px rgba(15,23,42,.16), 0 8px 30px rgba(79,70,229,.08);
+      backdrop-filter: blur(18px);
+    }
+
+    .auth-hero {
+      padding: 58px;
+      background: linear-gradient(145deg, #1e1b4b 0%, #3730a3 42%, #6366f1 72%, #7c3aed 100%);
+    }
+
+    .brand-icon {
+      width: 58px;
+      height: 58px;
+      border: 1px solid rgba(255,255,255,.22);
+      box-shadow: 0 12px 30px rgba(0,0,0,.16);
+    }
+
+    .auth-panel {
+      padding: 46px clamp(28px, 4vw, 58px);
+      background: rgba(255,255,255,.97);
+    }
+
+    .auth-form {
+      max-width: 470px;
+      margin: 0 auto;
+    }
+
+    .auth-tabs {
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      border-radius: 15px;
+      padding: 5px;
+      box-shadow: inset 0 1px 2px rgba(15,23,42,.04);
+    }
+
+    .auth-tab {
+      cursor: pointer;
+      transition: .25s ease;
+    }
+
+    .auth-tab.active {
+      background: linear-gradient(135deg, #ffffff, #eef2ff);
+      color: #4f46e5;
+      box-shadow: 0 5px 16px rgba(79,70,229,.10);
+    }
+
+    .auth-form h2 {
+      font-size: clamp(27px, 3vw, 33px);
+      letter-spacing: -.6px;
+    }
+
+    .auth-subtitle {
+      line-height: 1.65;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-label {
+      color: #334155;
+      letter-spacing: .1px;
+    }
+
+    .form-input,
+    .form-select {
+      min-height: 48px;
+      border: 1px solid #dbe3ee;
+      border-radius: 13px;
+      background: #fbfdff;
+      box-shadow: 0 2px 5px rgba(15,23,42,.025);
+    }
+
+    .form-input:hover,
+    .form-select:hover {
+      border-color: #c7d2fe;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      background: #fff;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 4px rgba(99,102,241,.10), 0 6px 18px rgba(79,70,229,.06);
+    }
+
+    .input-wrap span {
+      z-index: 2;
+      left: 15px;
+      font-size: 16px;
+    }
+
+    .input-wrap .form-select {
+      padding-left: 43px;
+      appearance: auto;
+    }
+
+    #loginForm .primary-btn,
+    #registerForm .primary-btn {
+      min-height: 50px;
+      border-radius: 13px;
+      font-size: 15px;
+      letter-spacing: .1px;
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 55%, #7c3aed 100%);
+    }
+
+    #googleLoginBtn {
+      border-radius: 13px !important;
+      min-height: 48px;
+      background: #fff;
+      border-color: #dbe3ee !important;
+      box-shadow: 0 5px 16px rgba(15,23,42,.05);
+      transition: .2s;
+    }
+
+    #googleLoginBtn:hover {
+      transform: translateY(-1px);
+      border-color: #c7d2fe !important;
+      box-shadow: 0 9px 22px rgba(15,23,42,.08);
+    }
+
+    #registerForm {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 14px;
+      align-items: start;
+    }
+
+    #registerForm > h2,
+    #registerForm > .auth-subtitle,
+    #registerForm > #registerBtn,
+    #registerForm > #registerMessage {
+      grid-column: 1 / -1;
+    }
+
+    #registerForm > h2 { margin-bottom: 7px; }
+    #registerForm > .auth-subtitle { margin-bottom: 22px; }
+
+    #registerForm .form-group {
+      margin-bottom: 13px;
+    }
+
+    #registerForm .form-group:nth-of-type(1),
+    #registerForm .form-group:nth-of-type(6),
+    #registerForm .form-group:nth-of-type(7) {
+      grid-column: 1 / -1;
+    }
+
+    #registerForm #registerBtn {
+      margin-top: 4px;
+    }
+
+    @media (max-width: 650px) {
+      #authScreen {
+        padding: 10px;
+        align-items: flex-start;
+      }
+
+      .auth-wrapper {
+        width: 100%;
+        margin: 8px 0;
+        border-radius: 22px;
+      }
+
+      .auth-panel {
+        padding: 28px 18px 30px;
+      }
+
+      #registerForm {
+        grid-template-columns: 1fr;
+      }
+
+      #registerForm > h2,
+      #registerForm > .auth-subtitle,
+      #registerForm > #registerBtn,
+      #registerForm > #registerMessage,
+      #registerForm .form-group {
+        grid-column: 1;
+      }
+
+      .auth-form h2 {
+        font-size: 27px;
+      }
+    }
+
     /* =========================
        APP LAYOUT
     ========================= */
@@ -1679,22 +1895,6 @@
             </p>
 
             <div class="form-group">
-              <label class="form-label">Roll</label>
-              <div class="input-wrap"><span>🎓</span><input id="registerRoll" class="form-input" type="text" placeholder="তোমার Roll" autocomplete="off" /></div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Academic Year</label>
-              <div class="input-wrap"><span>📚</span><select id="registerAcademicYear" class="form-input"><option value="">Academic Year নির্বাচন করুন</option><option value="HSC 1st Year">HSC 1st Year</option><option value="HSC 2nd Year">HSC 2nd Year</option></select></div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Group</label>
-              <div class="input-wrap"><span>🧪</span><select id="registerGroup" class="form-input"><option value="">Group নির্বাচন করুন</option><option value="Science">Science</option><option value="Humanities">Humanities</option><option value="Business Studies">Business Studies</option></select></div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Phone Number</label>
-              <div class="input-wrap"><span>📱</span><input id="registerPhone" class="form-input" type="tel" placeholder="01XXXXXXXXX" autocomplete="tel" /></div>
-            </div>
-            <div class="form-group">
               <label class="form-label">Email</label>
 
               <div class="input-wrap">
@@ -1783,6 +1983,51 @@
 
               </div>
 
+            </div>
+
+
+            <div class="form-group">
+              <label class="form-label">Roll</label>
+              <div class="input-wrap">
+                <span>🎓</span>
+                <input id="registerRoll" class="form-input" type="text" placeholder="তোমার Roll" autocomplete="off" />
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="form-label">Academic Year</label>
+              <div class="input-wrap">
+                <span>📚</span>
+                <select id="registerAcademicYear" class="form-select">
+                  <option value="">Academic Year নির্বাচন করুন</option>
+                  <option value="HSC 1st Year">HSC 1st Year</option>
+                  <option value="HSC 2nd Year">HSC 2nd Year</option>
+                </select>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="form-label">Group</label>
+              <div class="input-wrap">
+                <span>🧪</span>
+                <select id="registerGroup" class="form-select">
+                  <option value="">Group নির্বাচন করুন</option>
+                  <option value="Science">Science</option>
+                  <option value="Humanities">Humanities</option>
+                  <option value="Business Studies">Business Studies</option>
+                </select>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <div class="input-wrap">
+                <span>📱</span>
+                <input id="registerPhone" class="form-input" type="tel" placeholder="01XXXXXXXXX" autocomplete="tel" />
+              </div>
             </div>
 
 
@@ -4062,6 +4307,18 @@
       if (page === "dashboard") {
 
         loadDashboard();
+
+      }
+
+      if (page === "admin") {
+
+        if (isAdmin() || isModerator()) {
+          loadAdminStats();
+        }
+
+        if (canManage("users")) {
+          loadAdminUsers();
+        }
 
       }
 
@@ -7416,16 +7673,52 @@
 
     async function loadAdminStats() {
       if (!isAdmin()) return;
+
+      const totalEl = document.getElementById("adminTotalUsers");
+      const activeEl = document.getElementById("adminActiveUsers");
+      const viewsEl = document.getElementById("adminTodayViews");
+      const adminEl = document.getElementById("adminAdminCount");
+      const modEl = document.getElementById("adminModeratorCount");
+      if (!totalEl || !activeEl || !viewsEl || !adminEl || !modEl) return;
+
       try {
-        const [usersSnap,viewsSnap]=await Promise.all([getDocs(collection(db,"users")),getDoc(doc(db,"siteStats",getDhakaDateKey()))]);
-        let active=0,admins=0,moderators=0; const now=Date.now();
-        usersSnap.forEach(d=>{const u=d.data()||{}; const ts=u.lastActiveAt?.toMillis?.()||0; if(ts && now-ts<=600000) active++; if(u.role==="admin") admins++; if(u.role==="moderator") moderators++;});
-        document.getElementById("adminTotalUsers").textContent=usersSnap.size;
-        document.getElementById("adminActiveUsers").textContent=active;
-        document.getElementById("adminTodayViews").textContent=viewsSnap.exists()?Number(viewsSnap.data()?.views||0):0;
-        document.getElementById("adminAdminCount").textContent=admins;
-        document.getElementById("adminModeratorCount").textContent=moderators;
-      } catch(e) { console.error("Admin stats error:",e); }
+        const usersSnap = await getDocs(collection(db, "users"));
+        let active = 0;
+        let admins = 0;
+        let moderators = 0;
+        const now = Date.now();
+
+        usersSnap.forEach((d) => {
+          const u = d.data() || {};
+          const ts = u.lastActiveAt?.toMillis?.() || 0;
+          if (ts && now - ts <= 15 * 60 * 1000) active++;
+          if (u.role === "admin") admins++;
+          if (u.role === "moderator") moderators++;
+        });
+
+        totalEl.textContent = usersSnap.size;
+        activeEl.textContent = active;
+        adminEl.textContent = admins;
+        modEl.textContent = moderators;
+
+        try {
+          const viewsSnap = await getDoc(doc(db, "siteStats", getDhakaDateKey()));
+          viewsEl.textContent = viewsSnap.exists()
+            ? Number(viewsSnap.data()?.views || 0)
+            : 0;
+        } catch (viewError) {
+          console.error("Today's views load error:", viewError);
+          viewsEl.textContent = "0";
+        }
+      } catch (e) {
+        console.error("Admin stats error:", e);
+        totalEl.textContent = "0";
+        activeEl.textContent = "0";
+        adminEl.textContent = "0";
+        modEl.textContent = "0";
+        viewsEl.textContent = "0";
+        showToast("User statistics load করতে সমস্যা হয়েছে। Firestore Rules ও Admin role check করুন।", "error");
+      }
     }
 
     /* =========================
