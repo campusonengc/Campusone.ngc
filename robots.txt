@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://campusonengc.github.io/Campusone.ngc/sitemap.xml
