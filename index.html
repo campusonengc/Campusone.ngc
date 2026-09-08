@@ -1878,6 +1878,7 @@
 .maintenance-card{width:min(520px,100%);background:#fff;border:1px solid #e5e7eb;border-radius:28px;padding:42px 30px;text-align:center;box-shadow:0 30px 90px rgba(15,23,42,.14)}
 .maintenance-icon{font-size:56px;margin-bottom:12px}.maintenance-card h1{margin:0 0 10px;font-size:28px}.maintenance-card p{margin:0;color:#64748b;line-height:1.7}
 .notice-item.clickable{cursor:pointer;transition:transform .18s,box-shadow .18s}.notice-item.clickable:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(15,23,42,.08)}
+.notice-title-only{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:58px}.notice-title-only h4{margin:0;flex:1}.notice-title-only .notice-date{white-space:nowrap}
 .admin-users-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.user-blocked{opacity:.62}.result-admin-actions{display:flex;gap:6px;flex-wrap:wrap}
 
   </style>
@@ -3175,7 +3176,7 @@
             <div
               id="adminUsersAction"
               class="admin-action"
-              onclick="loadAdminUsers()"
+              onclick="openAdminUsersPanel()"
             >
 
               <div class="admin-action-icon">👥</div>
@@ -3183,26 +3184,30 @@
               <h3>Student Users</h3>
 
               <p>
-                Registered students দেখুন।
+                Registered students দেখুন ও manage করুন।
               </p>
 
             </div>
 
+            <div id="adminMaintenanceAction" class="admin-action" onclick="openMaintenanceModal()">
+              <div class="admin-action-icon">🛠️</div>
+              <h3>Maintenance Mode</h3>
+              <p>Click করে Website On / Off করুন।</p>
+            </div>
+
+            <div id="adminModeratorAccessAction" class="admin-action" onclick="openModeratorAccessPanel()">
+              <div class="admin-action-icon">🛡️</div>
+              <h3>Moderator Access</h3>
+              <p>Click করে Moderator-এর Block / Unlock control করুন।</p>
+            </div>
+
           </div>
-
-          <div id="adminMaintenanceAction" class="admin-action" onclick="openMaintenanceModal()">
-            <div class="admin-action-icon">🛠️</div>
-            <h3>Maintenance Mode</h3>
-            <p>Website সাময়িকভাবে On / Off করুন।</p>
-          </div>
-
-
 
           <div id="moderatorPermissionPanel" class="card hidden" style="margin-top:20px;">
             <div class="card-header">
               <div>
                 <div class="card-title">Moderator Access Control</div>
-                <div style="color:#64748b;font-size:12px;margin-top:3px;">প্রতিটি বিভাগে Block/Unlock toggle করুন। Unlock করলে Moderator manage করতে পারবে, Lock করলে পারবে না।</div>
+                <div style="color:#64748b;font-size:12px;margin-top:3px;">Firebase-এ saved permission অনুযায়ী প্রতিটি বিভাগে Block / Unlock status দেখাবে।</div>
               </div>
               <button class="primary-btn" type="button" onclick="saveModeratorPermissions()">Save Access</button>
             </div>
@@ -4159,20 +4164,15 @@
     }
 
     async function loadModeratorPermissions() {
-      if (isAdmin()) {
-        moderatorPermissions = {
-          notices: true, materials: true, routine: true, events: true,
-          results: true, support: true, users: true, staff: true
-        };
-        return;
-      }
-
-      moderatorPermissions = {
+      const defaults = {
         notices: false, materials: false, routine: false, events: false,
         results: false, support: false, users: false, staff: false
       };
 
-      if (!isModerator()) return;
+      // Always read the saved Firebase configuration. Admin-এর own
+      // permissions সবসময় true হলেও control panel-এ saved Moderator
+      // permissions-ই দেখাতে হবে।
+      moderatorPermissions = { ...defaults };
 
       try {
         const ref = doc(db, "settings", "moderatorAccess");
@@ -4323,7 +4323,9 @@
         if (el) el.classList.toggle("hidden", key === "maintenance" ? !isAdmin : !canManage(key));
       });
       const permPanel = document.getElementById("moderatorPermissionPanel");
-      if (permPanel) permPanel.classList.toggle("hidden", !isAdmin);
+      if (permPanel) permPanel.classList.add("hidden");
+      const modAccessAction = document.getElementById("adminModeratorAccessAction");
+      if (modAccessAction) modAccessAction.classList.toggle("hidden", !isAdmin);
 
 
 
@@ -4646,16 +4648,11 @@
           ${
             noticesCache.map(n => `
 
-              <div class="notice-item clickable" style="position:relative;" onclick="showNoticeDetails('${n.id}')">
+              <div class="notice-item clickable notice-title-only" style="position:relative;" onclick="showNoticeDetails('${n.id}')">
 
                 <h4>
                   ${escapeHtml(n.title || "Untitled")}
                 </h4>
-
-                <p>
-                  ${escapeHtml(n.description || n.content || "")}
-                </p>
-                ${n.imageUrl ? `<img src="${escapeHtml(n.imageUrl)}" alt="Notice" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-top:10px;">` : ""}
 
                 <div class="notice-date">
                   ${formatDateTime(n.createdAt)}
@@ -4739,19 +4736,11 @@
               .slice(0,4)
               .map(n => `
 
-                <div class="notice-item clickable" onclick="showNoticeDetails('${escapeHtml(n.id)}')">
+                <div class="notice-item clickable notice-title-only" onclick="showNoticeDetails('${escapeHtml(n.id)}')">
 
                   <h4>
                     ${escapeHtml(n.title || "Untitled")}
                   </h4>
-
-                  <p>
-                    ${escapeHtml(
-                      n.description ||
-                      n.content ||
-                      ""
-                    )}
-                  </p>
 
                   <div class="notice-date">
                     ${formatDate(n.createdAt)}
@@ -7727,6 +7716,24 @@
     };
 
 
+    window.openModeratorAccessPanel = async function() {
+      if (!isAdmin()) return;
+      const panel = document.getElementById("moderatorPermissionPanel");
+      if (!panel) return;
+      panel.classList.remove("hidden");
+      await loadModeratorPermissions();
+      renderModeratorPermissionPanel();
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    window.openAdminUsersPanel = async function() {
+      if (!canManage("users")) return;
+      const section = document.getElementById("adminUsersSection");
+      if (section) section.classList.remove("hidden");
+      await loadAdminUsers();
+      section?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
     function renderModeratorPermissionPanel() {
       const container = document.getElementById("moderatorPermissionList");
       if (!container) return;
@@ -7754,9 +7761,11 @@
       });
       try {
         await setDoc(doc(db, "settings", "moderatorAccess"), { ...next, updatedAt: serverTimestamp(), updatedBy: currentUser.uid }, { merge: true });
-        moderatorPermissions = next;
+        // Re-read the document after saving so the UI always reflects
+        // exactly what Firebase contains.
+        await loadModeratorPermissions();
         renderModeratorPermissionPanel();
-        showToast("Moderator access settings save হয়েছে।", "success");
+        showToast("Moderator access settings Firebase-এ save হয়েছে।", "success");
       } catch (error) {
         console.error(error);
         showToast("Moderator access settings save করতে সমস্যা হয়েছে।", "error");
