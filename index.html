@@ -1864,6 +1864,22 @@
       }
     }
 
+  
+
+/* =========================
+   CAMPUSONE NGC ADMIN / SPEED / MAINTENANCE
+========================= */
+.stat-grid .stat-card{min-height:88px}
+.access-toggle{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;border:1px solid #e8edf5;border-radius:14px;background:#fff;margin-bottom:10px}
+.access-status{font-size:11px;font-weight:800;padding:5px 9px;border-radius:999px}
+.access-status.unlocked{background:#dcfce7;color:#166534}.access-status.locked{background:#fee2e2;color:#991b1b}
+.toggle-switch{position:relative;width:48px;height:26px;display:inline-block}.toggle-switch input{opacity:0;width:0;height:0}.toggle-slider{position:absolute;inset:0;background:#cbd5e1;border-radius:999px;cursor:pointer;transition:.2s}.toggle-slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 2px 6px rgba(0,0,0,.18)}.toggle-switch input:checked+.toggle-slider{background:#4f46e5}.toggle-switch input:checked+.toggle-slider:before{transform:translateX(22px)}
+.maintenance-screen{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(135deg,#eef2ff,#f8fafc)}
+.maintenance-card{width:min(520px,100%);background:#fff;border:1px solid #e5e7eb;border-radius:28px;padding:42px 30px;text-align:center;box-shadow:0 30px 90px rgba(15,23,42,.14)}
+.maintenance-icon{font-size:56px;margin-bottom:12px}.maintenance-card h1{margin:0 0 10px;font-size:28px}.maintenance-card p{margin:0;color:#64748b;line-height:1.7}
+.notice-item.clickable{cursor:pointer;transition:transform .18s,box-shadow .18s}.notice-item.clickable:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(15,23,42,.08)}
+.admin-users-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.user-blocked{opacity:.62}.result-admin-actions{display:flex;gap:6px;flex-wrap:wrap}
+
   </style>
 </head>
 
@@ -1877,6 +1893,15 @@
     <div class="loader-logo">NGC</div>
     <div class="spinner"></div>
     <div style="color:#64748b;font-size:13px;">CampusOne NGC চালু হচ্ছে...</div>
+  </div>
+
+  <div id="maintenanceScreen" class="maintenance-screen hidden">
+    <div class="maintenance-card">
+      <div class="maintenance-icon">🛠️</div>
+      <h1>Website Maintenance চলছে</h1>
+      <p id="maintenanceMessage">CampusOne NGC বর্তমানে সাময়িকভাবে বন্ধ আছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।</p>
+      <div style="margin-top:20px;color:#94a3b8;font-size:12px;">Admin-এর জন্য access চালু থাকবে।</div>
+    </div>
   </div>
 
 
@@ -2062,7 +2087,7 @@
               <label class="form-label">Roll</label>
               <div class="input-wrap">
                 <span>🎓</span>
-                <input id="registerRoll" class="form-input" type="text" placeholder="তোমার Roll" autocomplete="off" />
+                <input id="registerRoll" class="form-input" type="number" inputmode="numeric" min="1" max="999999" step="1" placeholder="তোমার Roll" autocomplete="off" />
               </div>
             </div>
 
@@ -2098,7 +2123,7 @@
               <label class="form-label">Phone Number</label>
               <div class="input-wrap">
                 <span>📱</span>
-                <input id="registerPhone" class="form-input" type="tel" placeholder="01XXXXXXXXX" autocomplete="tel" />
+                <input id="registerPhone" class="form-input" type="tel" inputmode="numeric" minlength="11" maxlength="11" pattern="01[0-9]{9}" placeholder="01XXXXXXXXX" autocomplete="tel" />
               </div>
             </div>
 
@@ -2801,7 +2826,7 @@
                   <th>GPA</th>
                   <th>Status</th>
                   <th>Notice</th>
-                  <th>Picture</th>
+                  <th>Picture</th><th>Manage</th>
                 </tr>
 
               </thead>
@@ -3040,7 +3065,7 @@
           <div id="adminStatsGrid" class="stat-grid" style="margin:20px 0;">
             <div class="stat-card"><div class="stat-icon">👥</div><div><div id="adminTotalUsers" class="stat-number">0</div><div class="stat-label">Total Users</div></div></div>
             <div class="stat-card"><div class="stat-icon">🟢</div><div><div id="adminActiveUsers" class="stat-number">0</div><div class="stat-label">Active Users</div></div></div>
-            <div class="stat-card"><div class="stat-icon">👁️</div><div><div id="adminTodayViews" class="stat-number">0</div><div class="stat-label">Today's Views</div></div></div>
+            <div class="stat-card"><div class="stat-icon">👁️</div><div><div id="adminTotalViews" class="stat-number">0</div><div class="stat-label">Total Website Views</div><div id="adminTodayViews" style="font-size:11px;color:#94a3b8;margin-top:3px;">Today: 0</div></div></div>
             <div class="stat-card"><div class="stat-icon">👑</div><div><div id="adminAdminCount" class="stat-number">0</div><div class="stat-label">Admins</div></div></div>
             <div class="stat-card"><div class="stat-icon">🛡️</div><div><div id="adminModeratorCount" class="stat-number">0</div><div class="stat-label">Moderators</div></div></div>
           </div>
@@ -3165,6 +3190,11 @@
 
           </div>
 
+          <div id="adminMaintenanceAction" class="admin-action" onclick="openMaintenanceModal()">
+            <div class="admin-action-icon">🛠️</div>
+            <h3>Maintenance Mode</h3>
+            <p>Website সাময়িকভাবে On / Off করুন।</p>
+          </div>
 
 
 
@@ -3172,7 +3202,7 @@
             <div class="card-header">
               <div>
                 <div class="card-title">Moderator Access Control</div>
-                <div style="color:#64748b;font-size:12px;margin-top:3px;">Admin যেগুলো unlock করবেন, Moderator শুধু সেগুলোই করতে পারবে।</div>
+                <div style="color:#64748b;font-size:12px;margin-top:3px;">প্রতিটি বিভাগে Block/Unlock toggle করুন। Unlock করলে Moderator manage করতে পারবে, Lock করলে পারবে না।</div>
               </div>
               <button class="primary-btn" type="button" onclick="saveModeratorPermissions()">Save Access</button>
             </div>
@@ -3218,7 +3248,7 @@
                 <thead>
 
                   <tr>
-                    <th>Name</th><th>Roll</th><th>Academic Year</th><th>Group</th><th>Phone</th><th>Email</th><th>Role / Access</th><th>Created</th>
+                    <th>Name</th><th>Roll</th><th>Academic Year</th><th>Group</th><th>Phone</th><th>Email</th><th>Role / Access</th><th>Status</th><th>Created</th>
                   </tr>
 
                 </thead>
@@ -3442,13 +3472,11 @@
 
 
     const dayOrder = [
-      "Saturday",
       "Sunday",
       "Monday",
       "Tuesday",
       "Wednesday",
-      "Thursday",
-      "Friday"
+      "Thursday"
     ];
 
 
@@ -3800,7 +3828,7 @@
       }
 
 
-      if (!roll) { setMessage("registerMessage", "Roll দিন।", "error"); return; }
+      if (!/^\d+$/.test(roll) || Number(roll) < 1) { setMessage("registerMessage", "Roll অবশ্যই integer number হতে হবে।", "error"); return; }
       if (!academicYear) { setMessage("registerMessage", "Academic Year নির্বাচন করুন।", "error"); return; }
       if (!group) { setMessage("registerMessage", "Group নির্বাচন করুন।", "error"); return; }
       if (!/^01\d{9}$/.test(phone)) { setMessage("registerMessage", "সঠিক 11 digit Phone Number দিন।", "error"); return; }
@@ -4077,6 +4105,12 @@
 
         currentProfile = snap.data();
 
+        if (currentProfile.blocked === true) {
+          showToast("আপনার account বর্তমানে Blocked। Admin-এর সাথে যোগাযোগ করুন।", "error");
+          await signOut(auth);
+          throw new Error("ACCOUNT_BLOCKED");
+        }
+
       } else {
 
         currentProfile = {
@@ -4281,11 +4315,12 @@
         results: "adminResultAction",
         support: "adminSupportAction",
         users: "adminUsersAction",
-        staff: "adminStaffAction"
+        staff: "adminStaffAction",
+        maintenance: "adminMaintenanceAction"
       };
       Object.entries(permissionElements).forEach(([key, id]) => {
         const el = document.getElementById(id);
-        if (el) el.classList.toggle("hidden", !canManage(key));
+        if (el) el.classList.toggle("hidden", key === "maintenance" ? !isAdmin : !canManage(key));
       });
       const permPanel = document.getElementById("moderatorPermissionPanel");
       if (permPanel) permPanel.classList.toggle("hidden", !isAdmin);
@@ -4337,10 +4372,6 @@
 
 
       target.classList.add("active");
-
-      if (isModerator()) {
-        loadModeratorPermissions().then(() => updateUserUI());
-      }
 
       currentPage = page;
 
@@ -4615,10 +4646,7 @@
           ${
             noticesCache.map(n => `
 
-              <div
-                class="notice-item"
-                style="position:relative;"
-              >
+              <div class="notice-item clickable" style="position:relative;" onclick="showNoticeDetails('${n.id}')">
 
                 <h4>
                   ${escapeHtml(n.title || "Untitled")}
@@ -4627,6 +4655,7 @@
                 <p>
                   ${escapeHtml(n.description || n.content || "")}
                 </p>
+                ${n.imageUrl ? `<img src="${escapeHtml(n.imageUrl)}" alt="Notice" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-top:10px;">` : ""}
 
                 <div class="notice-date">
                   ${formatDateTime(n.createdAt)}
@@ -4647,14 +4676,14 @@
 
                         <button
                           class="small-btn"
-                          onclick="editNotice('${n.id}')"
+                          onclick="event.stopPropagation();editNotice('${n.id}')"
                         >
                           Edit
                         </button>
 
                         <button
                           class="danger-btn"
-                          onclick="deleteNotice('${n.id}')"
+                          onclick="event.stopPropagation();deleteNotice('${n.id}')"
                         >
                           Delete
                         </button>
@@ -4675,6 +4704,13 @@
 
     }
 
+
+    window.showNoticeDetails = function(id) {
+      const n = noticesCache.find(x => x.id === id);
+      if (!n) return;
+      const image = n.imageUrl ? `<img src="${escapeHtml(n.imageUrl)}" alt="Notice" style="width:100%;max-height:320px;object-fit:contain;border-radius:14px;border:1px solid #e2e8f0;margin-top:14px;">` : "";
+      openModal(escapeHtml(n.title || "Notice Details"), `<div style="color:#475569;line-height:1.8;white-space:pre-wrap;">${escapeHtml(n.description || n.content || "")}</div>${image}<div style="margin-top:12px;color:#94a3b8;font-size:12px;">${formatDateTime(n.createdAt)}</div>`, () => closeModal(), "Close");
+    };
 
     function renderDashboardNotices() {
 
@@ -4703,7 +4739,7 @@
               .slice(0,4)
               .map(n => `
 
-                <div class="notice-item">
+                <div class="notice-item clickable" onclick="showNoticeDetails('${escapeHtml(n.id)}')">
 
                   <h4>
                     ${escapeHtml(n.title || "Untitled")}
@@ -4766,6 +4802,16 @@
         <div class="form-group">
 
           <label class="form-label">
+            Notice Picture (optional)
+          </label>
+          <input id="modalNoticeImage" type="file" accept="image/jpeg,image/png,image/webp" class="form-input">
+          <div id="noticeImagePreview" style="margin-top:8px;"></div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label class="form-label">
             Description
           </label>
 
@@ -4807,6 +4853,7 @@
               )
               .value
               .trim();
+          const imageFile = document.getElementById("modalNoticeImage")?.files?.[0] || null;
 
 
           if (!title || !description) {
@@ -4822,6 +4869,13 @@
 
 
           try {
+            let imageUrl = existing?.imageUrl || "";
+            let imagePublicId = existing?.imagePublicId || "";
+            if (imageFile) {
+              if (!(["image/jpeg","image/png","image/webp"].includes(imageFile.type)) || imageFile.size > 5*1024*1024) { showToast("JPG, PNG বা WebP image সর্বোচ্চ 5 MB দিন।", "error"); return; }
+              const imageData = await uploadImageToCloudinary(imageFile);
+              imageUrl = imageData.secure_url || ""; imagePublicId = imageData.public_id || "";
+            }
 
             if (existing) {
 
@@ -4832,10 +4886,8 @@
                   existing.id
                 ),
                 {
-                  title,
-                  description,
-                  updatedAt:
-                    serverTimestamp()
+                  title, description, imageUrl, imagePublicId,
+                  updatedAt: serverTimestamp()
                 }
               );
 
@@ -4853,10 +4905,8 @@
                   "notices"
                 ),
                 {
-                  title,
-                  description,
-                  createdAt:
-                    serverTimestamp()
+                  title, description, imageUrl, imagePublicId,
+                  createdAt: serverTimestamp(), createdBy: currentUser.uid
                 }
               );
 
@@ -5563,13 +5613,8 @@
           );
 
 
-        routineCache =
-          snap.docs.map(
-            d => ({
-              id: d.id,
-              ...d.data()
-            })
-          );
+        routineCache = snap.docs.map(d => ({ id:d.id, ...d.data() }))
+          .filter(r => dayOrder.includes(r.day));
 
 
         routineCache.sort(
@@ -5661,6 +5706,8 @@
                         <div style="font-size:10px;color:#7c3aed;font-weight:800;margin-bottom:2px;">
                           ${escapeHtml(c.academicClass || "HSC 1st Year")}
                         </div>
+
+                        ${c.imageUrl ? `<img src="${escapeHtml(c.imageUrl)}" alt="Routine" style="width:100%;height:90px;object-fit:cover;border-radius:10px;margin:6px 0;">` : ""}
 
                         <div class="class-name">
                           ${escapeHtml(
@@ -5824,6 +5871,11 @@
 
         </div>
 
+        <div class="form-group">
+          <label class="form-label">Routine Picture (optional)</label>
+          <input id="routineImage" type="file" accept="image/jpeg,image/png,image/webp" class="form-input">
+        </div>
+
       `;
 
 
@@ -5865,13 +5917,8 @@
               .trim();
 
 
-          const room =
-            document
-              .getElementById(
-                "routineRoom"
-              )
-              .value
-              .trim();
+          const room = document.getElementById("routineRoom").value.trim();
+          const imageFile = document.getElementById("routineImage")?.files?.[0] || null;
 
 
           if (!time || !subject) {
@@ -5887,23 +5934,13 @@
 
 
           try {
-
-            await addDoc(
-              collection(
-                db,
-                "routine"
-              ),
-              {
-
-                day,
-
-                time,
-
-                academicClass,
-
-                subject,
-
-                room,
+            let imageUrl = "", imagePublicId = "";
+            if (imageFile) {
+              if (!["image/jpeg","image/png","image/webp"].includes(imageFile.type) || imageFile.size > 5*1024*1024) { showToast("Routine image JPG/PNG/WebP এবং সর্বোচ্চ 5 MB হতে হবে।", "error"); return; }
+              const imageData = await uploadImageToCloudinary(imageFile); imageUrl=imageData.secure_url||""; imagePublicId=imageData.public_id||"";
+            }
+            await addDoc(collection(db,"routine"), {
+                day, time, academicClass, subject, room, imageUrl, imagePublicId,
 
                 createdAt:
                   serverTimestamp(),
@@ -6129,6 +6166,7 @@
           return `
 
             <div class="event-card">
+              ${e.imageUrl ? `<img src="${escapeHtml(e.imageUrl)}" alt="Event" style="width:100%;height:170px;object-fit:cover;border-radius:14px;margin-bottom:12px;">` : ""}
 
               <div class="event-date-box">
 
@@ -6285,6 +6323,11 @@
 
 
         <div class="form-group">
+          <label class="form-label">Event Picture</label>
+          <input id="eventImage" type="file" accept="image/jpeg,image/png,image/webp" class="form-input">
+        </div>
+
+        <div class="form-group">
 
           <label class="form-label">
             Description
@@ -6341,13 +6384,8 @@
               .trim();
 
 
-          const description =
-            document
-              .getElementById(
-                "eventDescription"
-              )
-              .value
-              .trim();
+          const description = document.getElementById("eventDescription").value.trim();
+          const imageFile = document.getElementById("eventImage")?.files?.[0] || null;
 
 
           if (!title || !date) {
@@ -6363,23 +6401,13 @@
 
 
           try {
-
-            await addDoc(
-              collection(
-                db,
-                "events"
-              ),
-              {
-
-                title,
-
-                date,
-
-                time,
-
-                location,
-
-                description,
+            let imageUrl = "", imagePublicId = "";
+            if (imageFile) {
+              if (!["image/jpeg","image/png","image/webp"].includes(imageFile.type) || imageFile.size > 5*1024*1024) { showToast("Event image JPG/PNG/WebP এবং সর্বোচ্চ 5 MB হতে হবে।", "error"); return; }
+              const imageData = await uploadImageToCloudinary(imageFile); imageUrl=imageData.secure_url||""; imagePublicId=imageData.public_id||"";
+            }
+            await addDoc(collection(db,"events"), {
+                title, date, time, location, description, imageUrl, imagePublicId,
 
                 createdAt:
                   serverTimestamp(),
@@ -6479,7 +6507,7 @@
       const tbody = document.getElementById("resultsTable");
 
       tbody.innerHTML = `
-        <tr><td colspan="8"><div class="empty">Loading...</div></td></tr>`;
+        <tr><td colspan="9"><div class="empty">Loading...</div></td></tr>`;
 
       try {
 
@@ -6521,7 +6549,7 @@
         console.error(error);
 
         tbody.innerHTML = `
-          <tr><td colspan="8">
+          <tr><td colspan="9">
             <div class="empty">Result load করতে সমস্যা হয়েছে।</div>
           </td></tr>`;
 
@@ -6619,6 +6647,7 @@
                 : `<span style="color:#94a3b8;">—</span>`
             }
           </td>
+          <td>${(canManage("results") && r.id) ? `<button class="danger-btn" onclick="deleteResult('${escapeHtml(r.id)}')">Remove</button>` : ""}</td>
 
         </tr>
 
@@ -6626,6 +6655,13 @@
 
     }
 
+
+    window.deleteResult = async function(id) {
+      if (!canManage("results") || !id) return;
+      if (!confirm("এই Result permanently remove করতে চান?")) return;
+      try { await deleteDoc(doc(db,"results",id)); showToast("Result remove হয়েছে।","success"); await loadResults(); await loadDashboard(); }
+      catch(e){ console.error(e); showToast("Result remove করতে সমস্যা হয়েছে।","error"); }
+    };
 
     /* =========================
        RESULT MODAL
@@ -6686,7 +6722,7 @@
 
         <div class="upload-box">
           <div style="font-size:34px;">🖼️</div>
-          <div style="font-weight:700;">Result Notice Picture</div>
+          <div style="font-weight:700;">Result Picture</div>
           <div style="color:#64748b;font-size:12px;margin-top:4px;">
             JPG, PNG বা WebP • Maximum 5 MB
           </div>
@@ -7624,7 +7660,7 @@
 
           tbody.innerHTML =
             `<tr>
-              <td colspan="5">
+              <td colspan="9">
                 কোনো user পাওয়া যায়নি।
               </td>
             </tr>`;
@@ -7652,18 +7688,17 @@
               <td>${escapeHtml(u.email || "—")}</td>
 
               <td>
-                ${u.role === "admin" ? `
-                  <span class="badge badge-purple">Admin</span>
-                ` : isAdmin() ? `
+                ${u.role === "admin" ? `<span class="badge badge-purple">Admin</span>` : isAdmin() ? `
                   <select class="form-select" style="min-width:130px;" onchange="changeUserRole('${escapeHtml(u.uid || "")}', this.value)">
                     <option value="student" ${u.role === "student" ? "selected" : ""}>Student</option>
                     <option value="moderator" ${u.role === "moderator" ? "selected" : ""}>Moderator</option>
-                  </select>
-                ` : u.role === "moderator" ? `
-                  <span class="badge badge-info">Moderator</span>
-                ` : `
-                  <span class="badge badge-info">Student</span>
-                `} 
+                  </select>` : u.role === "moderator" ? `<span class="badge badge-info">Moderator</span>` : `<span class="badge badge-info">Student</span>`}
+              </td>
+              <td>
+                <div class="admin-users-actions">
+                  <span class="badge ${u.blocked ? "badge-danger" : "badge-success"}">${u.blocked ? "Blocked" : "Active"}</span>
+                  ${isAdmin() && u.role !== "admin" ? `<button class="${u.blocked ? "small-btn" : "danger-btn"}" onclick="toggleUserBlock('${escapeHtml(u.uid || "")}', ${u.blocked ? "false" : "true"})">${u.blocked ? "Unblock" : "Block"}</button>` : ""}
+                </div>
               </td>
 
               <td>
@@ -7682,7 +7717,7 @@
 
         tbody.innerHTML =
           `<tr>
-            <td colspan="5">
+            <td colspan="9">
               Users load করতে সমস্যা হয়েছে।
             </td>
           </tr>`;
@@ -7696,11 +7731,20 @@
       const container = document.getElementById("moderatorPermissionList");
       if (!container) return;
       container.innerHTML = Object.keys(moderatorPermissionLabels).map(key => `
-        <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eef2f7;cursor:pointer;">
-          <span><strong>${escapeHtml(moderatorPermissionLabels[key])}</strong><br><small style="color:#94a3b8;">${moderatorPermissions[key] ? "Unlocked" : "Locked"}</small></span>
-          <input id="modPerm-${key}" type="checkbox" ${moderatorPermissions[key] ? "checked" : ""} style="width:18px;height:18px;">
-        </label>`).join("");
+        <div class="access-toggle">
+          <div><strong>${escapeHtml(moderatorPermissionLabels[key])}</strong><br><span id="modStatus-${key}" class="access-status ${moderatorPermissions[key] ? "unlocked" : "locked"}">${moderatorPermissions[key] ? "UNLOCKED" : "LOCKED"}</span></div>
+          <label class="toggle-switch" title="${moderatorPermissions[key] ? "Lock" : "Unlock"}">
+            <input id="modPerm-${key}" type="checkbox" ${moderatorPermissions[key] ? "checked" : ""} onchange="updateModeratorToggleStatus('${key}')">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>`).join("");
     }
+
+    window.updateModeratorToggleStatus = function(key) {
+      const checked = !!document.getElementById(`modPerm-${key}`)?.checked;
+      const status = document.getElementById(`modStatus-${key}`);
+      if (status) { status.textContent = checked ? "UNLOCKED" : "LOCKED"; status.className = `access-status ${checked ? "unlocked" : "locked"}`; }
+    };
 
     window.saveModeratorPermissions = async function() {
       if (!isAdmin()) return;
@@ -7733,6 +7777,14 @@
       }
     };
 
+    window.toggleUserBlock = async function(uid, blocked) {
+      if (!isAdmin() || !uid) return;
+      if (uid === currentUser.uid) { showToast("নিজের account block করা যাবে না।","warning"); return; }
+      if (!confirm(blocked ? "এই user-কে Block করতে চান?" : "এই user-কে Unblock করতে চান?")) return;
+      try { await updateDoc(doc(db,"users",uid), {blocked: !!blocked, updatedAt: serverTimestamp()}); showToast(blocked ? "User block হয়েছে।" : "User unblock হয়েছে।","success"); await loadAdminUsers(); await loadAdminStats(); }
+      catch(e){ console.error(e); showToast("User status update করতে সমস্যা হয়েছে।","error"); }
+    };
+
     function getDhakaDateKey() {
       return new Intl.DateTimeFormat("en-CA", { timeZone:"Asia/Dhaka", year:"numeric", month:"2-digit", day:"2-digit" }).format(new Date());
     }
@@ -7740,7 +7792,11 @@
     async function updateActivityAndViews() {
       if (!currentUser) return;
       try { await updateDoc(doc(db,"users",currentUser.uid),{lastActiveAt:serverTimestamp()}); } catch(e){ console.warn("Activity update:",e); }
-      try { await setDoc(doc(db,"siteStats",getDhakaDateKey()),{views:increment(1),updatedAt:serverTimestamp()},{merge:true}); } catch(e){ console.warn("Views update:",e); }
+      try {
+        const statsRef = doc(db,"siteStats","global");
+        await setDoc(statsRef,{views:increment(1),updatedAt:serverTimestamp()},{merge:true});
+        await setDoc(doc(db,"siteStats",getDhakaDateKey()),{views:increment(1),updatedAt:serverTimestamp()},{merge:true});
+      } catch(e){ console.warn("Views update:",e); }
     }
 
     async function loadAdminStats() {
@@ -7749,18 +7805,21 @@
       const totalEl = document.getElementById("adminTotalUsers");
       const activeEl = document.getElementById("adminActiveUsers");
       const viewsEl = document.getElementById("adminTodayViews");
+      const totalViewsEl = document.getElementById("adminTotalViews");
       const adminEl = document.getElementById("adminAdminCount");
       const modEl = document.getElementById("adminModeratorCount");
-      if (!totalEl || !activeEl || !viewsEl || !adminEl || !modEl) return;
+      if (!totalEl || !activeEl || !viewsEl || !totalViewsEl || !adminEl || !modEl) return;
 
       try {
-        const usersSnap = await getDocs(collection(db, "users"));
-        let active = 0;
-        let admins = 0;
-        let moderators = 0;
-        const now = Date.now();
+        const [usersSnap, todaySnap, globalSnap] = await Promise.all([
+          getDocs(collection(db, "users")),
+          getDoc(doc(db, "siteStats", getDhakaDateKey())),
+          getDoc(doc(db, "siteStats", "global"))
+        ]);
 
-        usersSnap.forEach((d) => {
+        let active = 0, admins = 0, moderators = 0;
+        const now = Date.now();
+        usersSnap.forEach(d => {
           const u = d.data() || {};
           const ts = u.lastActiveAt?.toMillis?.() || 0;
           if (ts && now - ts <= 15 * 60 * 1000) active++;
@@ -7773,23 +7832,32 @@
         adminEl.textContent = admins;
         modEl.textContent = moderators;
 
-        try {
-          const viewsSnap = await getDoc(doc(db, "siteStats", getDhakaDateKey()));
-          viewsEl.textContent = viewsSnap.exists()
-            ? Number(viewsSnap.data()?.views || 0)
-            : 0;
-        } catch (viewError) {
-          console.error("Today's views load error:", viewError);
-          viewsEl.textContent = "0";
+        const today = todaySnap.exists() ? Number(todaySnap.data()?.views || 0) : 0;
+        let total = globalSnap.exists() ? Number(globalSnap.data()?.views || 0) : 0;
+
+        // If the global counter is missing/zero, sum the existing daily counters.
+        if (!globalSnap.exists() || total < 1) {
+          try {
+            const statsSnap = await getDocs(collection(db, "siteStats"));
+            total = 0;
+            statsSnap.forEach(d => {
+              if (d.id !== "global") total += Number(d.data()?.views || 0);
+            });
+          } catch (sumError) {
+            console.warn("Daily views sum failed:", sumError);
+          }
         }
+
+        viewsEl.textContent = `Today: ${today}`;
+        totalViewsEl.textContent = total;
       } catch (e) {
         console.error("Admin stats error:", e);
         totalEl.textContent = "0";
         activeEl.textContent = "0";
         adminEl.textContent = "0";
         modEl.textContent = "0";
-        viewsEl.textContent = "0";
-        showToast("User statistics load করতে সমস্যা হয়েছে। Firestore Rules ও Admin role check করুন।", "error");
+        viewsEl.textContent = "Today: 0";
+        totalViewsEl.textContent = "0";
       }
     }
 
@@ -7950,6 +8018,37 @@
     }
 
 
+    async function loadMaintenanceMode() {
+      try {
+        const snap = await getDoc(doc(db,"settings","maintenance"));
+        const enabled = snap.exists() && snap.data()?.enabled === true;
+        const screen = document.getElementById("maintenanceScreen");
+        const msg = document.getElementById("maintenanceMessage");
+        if (msg && snap.exists() && snap.data()?.message) msg.textContent = snap.data().message;
+        if (screen) screen.classList.toggle("hidden", !enabled || isAdmin());
+        return enabled;
+      } catch(e){ console.warn("Maintenance load:",e); return false; }
+    }
+
+    window.openMaintenanceModal = async function() {
+      if (!isAdmin()) return;
+      let enabled=false, message="CampusOne NGC বর্তমানে সাময়িকভাবে বন্ধ আছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।";
+      try { const snap=await getDoc(doc(db,"settings","maintenance")); if(snap.exists()){enabled=snap.data()?.enabled===true; message=snap.data()?.message||message;} } catch(e){}
+      const body=`<div class="form-group"><label class="form-label">Status</label><label class="toggle-switch"><input id="maintenanceEnabled" type="checkbox" ${enabled?"checked":""}><span class="toggle-slider"></span></label><div id="maintenanceStatusText" style="margin-top:8px;font-size:12px;font-weight:800;color:${enabled?"#b91c1c":"#166534"};">${enabled?"WEBSITE OFF / MAINTENANCE":"WEBSITE ON"}</div></div><div class="form-group"><label class="form-label">Maintenance Message</label><textarea id="maintenanceText" class="form-textarea">${escapeHtml(message)}</textarea></div>`;
+      openModal("Maintenance Mode",body,async()=>{
+        const on=!!document.getElementById("maintenanceEnabled")?.checked; const text=document.getElementById("maintenanceText")?.value.trim()||message;
+        try { await setDoc(doc(db,"settings","maintenance"),{enabled:on,message:text,updatedAt:serverTimestamp(),updatedBy:currentUser.uid},{merge:true}); document.getElementById("maintenanceScreen")?.classList.toggle("hidden",!on); showToast(on?"Website Maintenance Mode-এ OFF হয়েছে।":"Website আবার ON হয়েছে।","success"); closeModal(); } catch(e){console.error(e);showToast("Maintenance setting save হয়নি।","error");}
+      },"Save Setting");
+    };
+
+    // Registration field guards: keep numeric fields strictly numeric and phone exactly 11 digits.
+    document.getElementById("registerRoll")?.addEventListener("input", function(){
+      this.value = this.value.replace(/\D/g, "").slice(0, 6);
+    });
+    document.getElementById("registerPhone")?.addEventListener("input", function(){
+      this.value = this.value.replace(/\D/g, "").slice(0, 11);
+    });
+
     /* =========================
        AUTH STATE
     ========================= */
@@ -7967,8 +8066,9 @@
 
 
             await loadUserProfile(user);
-            await updateActivityAndViews();
-            if (isAdmin()) await loadAdminStats();
+            await loadMaintenanceMode();
+            updateActivityAndViews();
+            if (isAdmin()) loadAdminStats();
 
 
             document
@@ -7989,24 +8089,8 @@
               );
 
 
-            showPage(
-              "dashboard"
-            );
-
-
-            await Promise.allSettled([
-
-              loadNotices(),
-
-              loadMaterials(),
-
-              loadRoutine(),
-
-              loadEvents(),
-              loadStaff(),
-              loadDashboard()
-
-            ]);
+            showPage("dashboard");
+            // Dashboard is loaded once by showPage(); do not duplicate the Firestore reads.
 
           } else {
 
