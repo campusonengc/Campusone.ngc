@@ -1878,8 +1878,44 @@
 .maintenance-card{width:min(520px,100%);background:#fff;border:1px solid #e5e7eb;border-radius:28px;padding:42px 30px;text-align:center;box-shadow:0 30px 90px rgba(15,23,42,.14)}
 .maintenance-icon{font-size:56px;margin-bottom:12px}.maintenance-card h1{margin:0 0 10px;font-size:28px}.maintenance-card p{margin:0;color:#64748b;line-height:1.7}
 .notice-item.clickable{cursor:pointer;transition:transform .18s,box-shadow .18s}.notice-item.clickable:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(15,23,42,.08)}
-.notice-title-only{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:58px}.notice-title-only h4{margin:0;flex:1}.notice-title-only .notice-date{white-space:nowrap}
 .admin-users-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.user-blocked{opacity:.62}.result-admin-actions{display:flex;gap:6px;flex-wrap:wrap}
+
+
+/* FINAL AUTH REPAIR — keep the original CampusOne NGC login design stable */
+#authScreen .ngc-logo img{width:100%;height:100%;object-fit:contain;border-radius:inherit;display:block}
+.loader-logo img{width:100%;height:100%;object-fit:contain;border-radius:inherit;display:block}
+.sidebar-brand .brand-icon img{width:100%;height:100%;object-fit:contain;border-radius:inherit;display:block}
+#authScreen{min-height:100vh!important;width:100%;padding:24px!important;display:flex;align-items:center;justify-content:center;overflow:auto!important}
+#authScreen .auth-wrapper{width:min(1080px,100%)!important;min-height:0!important;height:auto!important;display:grid!important;grid-template-columns:minmax(0,1.02fr) minmax(390px,.98fr)!important;border-radius:28px!important;overflow:hidden!important;background:#fff!important;box-shadow:0 28px 80px rgba(15,23,42,.14)!important}
+#authScreen .auth-hero{min-width:0;padding:52px!important;display:flex!important;justify-content:center!important}
+#authScreen .auth-panel{min-width:0;padding:42px 46px!important;display:flex!important;align-items:center!important;background:#fff!important}
+#authScreen .auth-form{width:100%!important;max-width:440px!important;margin:0 auto!important}
+#authScreen .brand-large{display:flex!important;align-items:center!important;gap:14px!important;margin-bottom:32px!important}
+#authScreen .ngc-logo{width:60px!important;height:60px!important;min-width:60px!important;display:flex!important;align-items:center!important;justify-content:center!important;border-radius:17px!important}
+#authScreen .brand-name{font-size:26px!important;white-space:nowrap!important}
+#authScreen .auth-tabs{display:flex!important;width:100%!important;margin-bottom:24px!important}
+#authScreen .auth-tab{flex:1!important}
+#authScreen #loginForm,#authScreen #registerForm{width:100%!important;min-width:0!important}
+#authScreen #registerForm{display:block!important}
+#authScreen #registerForm .form-group{width:100%!important;margin-bottom:14px!important}
+#authScreen #registerForm .primary-btn{width:100%!important;margin-top:4px!important}
+#authScreen .form-input,#authScreen .form-select{width:100%!important;min-width:0!important;height:48px!important}
+#authScreen .input-wrap{width:100%!important}
+#authScreen .auth-subtitle{margin-bottom:24px!important}
+#authScreen .primary-btn.full{width:100%!important}
+@media(max-width:900px){
+ #authScreen{padding:14px!important;align-items:center!important}
+ #authScreen .auth-wrapper{grid-template-columns:1fr!important;max-width:560px!important}
+ #authScreen .auth-hero{display:none!important}
+ #authScreen .auth-panel{padding:34px 28px!important}
+}
+@media(max-width:520px){
+ #authScreen{padding:8px!important}
+ #authScreen .auth-wrapper{border-radius:20px!important}
+ #authScreen .auth-panel{padding:25px 18px 28px!important}
+ #authScreen .auth-form{max-width:none!important}
+ #authScreen .brand-name{font-size:22px!important}
+}
 
   </style>
 </head>
@@ -1891,7 +1927,7 @@
   ========================= -->
 
   <div id="pageLoader">
-    <div class="loader-logo">NGC</div>
+    <div class="loader-logo"><img src="logo.png" alt="NGC logo"></div>
     <div class="spinner"></div>
     <div style="color:#64748b;font-size:13px;">CampusOne NGC চালু হচ্ছে...</div>
   </div>
@@ -1917,7 +1953,7 @@
       <div class="auth-hero">
 
         <div class="brand-large">
-  <div class="brand-icon ngc-logo">NGC</div>
+  <div class="brand-icon ngc-logo"><img src="logo.png" alt="NGC logo"></div>
   <div class="brand-name">CampusOne NGC</div>
 </div>
         <h1>
@@ -2204,7 +2240,7 @@
 
       <div class="sidebar-brand">
 
-        <div class="brand-icon">NGC</div>
+        <div class="brand-icon"><img src="logo.png" alt="NGC logo"></div>
 
         <span>CampusOne NGC</span>
 
@@ -3176,7 +3212,7 @@
             <div
               id="adminUsersAction"
               class="admin-action"
-              onclick="openAdminUsersPanel()"
+              onclick="loadAdminUsers()"
             >
 
               <div class="admin-action-icon">👥</div>
@@ -3184,30 +3220,26 @@
               <h3>Student Users</h3>
 
               <p>
-                Registered students দেখুন ও manage করুন।
+                Registered students দেখুন।
               </p>
 
             </div>
 
-            <div id="adminMaintenanceAction" class="admin-action" onclick="openMaintenanceModal()">
-              <div class="admin-action-icon">🛠️</div>
-              <h3>Maintenance Mode</h3>
-              <p>Click করে Website On / Off করুন।</p>
-            </div>
-
-            <div id="adminModeratorAccessAction" class="admin-action" onclick="openModeratorAccessPanel()">
-              <div class="admin-action-icon">🛡️</div>
-              <h3>Moderator Access</h3>
-              <p>Click করে Moderator-এর Block / Unlock control করুন।</p>
-            </div>
-
           </div>
+
+          <div id="adminMaintenanceAction" class="admin-action" onclick="openMaintenanceModal()">
+            <div class="admin-action-icon">🛠️</div>
+            <h3>Maintenance Mode</h3>
+            <p>Website সাময়িকভাবে On / Off করুন।</p>
+          </div>
+
+
 
           <div id="moderatorPermissionPanel" class="card hidden" style="margin-top:20px;">
             <div class="card-header">
               <div>
                 <div class="card-title">Moderator Access Control</div>
-                <div style="color:#64748b;font-size:12px;margin-top:3px;">Firebase-এ saved permission অনুযায়ী প্রতিটি বিভাগে Block / Unlock status দেখাবে।</div>
+                <div style="color:#64748b;font-size:12px;margin-top:3px;">প্রতিটি বিভাগে Block/Unlock toggle করুন। Unlock করলে Moderator manage করতে পারবে, Lock করলে পারবে না।</div>
               </div>
               <button class="primary-btn" type="button" onclick="saveModeratorPermissions()">Save Access</button>
             </div>
@@ -4164,15 +4196,20 @@
     }
 
     async function loadModeratorPermissions() {
-      const defaults = {
+      if (isAdmin()) {
+        moderatorPermissions = {
+          notices: true, materials: true, routine: true, events: true,
+          results: true, support: true, users: true, staff: true
+        };
+        return;
+      }
+
+      moderatorPermissions = {
         notices: false, materials: false, routine: false, events: false,
         results: false, support: false, users: false, staff: false
       };
 
-      // Always read the saved Firebase configuration. Admin-এর own
-      // permissions সবসময় true হলেও control panel-এ saved Moderator
-      // permissions-ই দেখাতে হবে।
-      moderatorPermissions = { ...defaults };
+      if (!isModerator()) return;
 
       try {
         const ref = doc(db, "settings", "moderatorAccess");
@@ -4323,9 +4360,7 @@
         if (el) el.classList.toggle("hidden", key === "maintenance" ? !isAdmin : !canManage(key));
       });
       const permPanel = document.getElementById("moderatorPermissionPanel");
-      if (permPanel) permPanel.classList.add("hidden");
-      const modAccessAction = document.getElementById("adminModeratorAccessAction");
-      if (modAccessAction) modAccessAction.classList.toggle("hidden", !isAdmin);
+      if (permPanel) permPanel.classList.toggle("hidden", !isAdmin);
 
 
 
@@ -4648,11 +4683,16 @@
           ${
             noticesCache.map(n => `
 
-              <div class="notice-item clickable notice-title-only" style="position:relative;" onclick="showNoticeDetails('${n.id}')">
+              <div class="notice-item clickable" style="position:relative;" onclick="showNoticeDetails('${n.id}')">
 
                 <h4>
                   ${escapeHtml(n.title || "Untitled")}
                 </h4>
+
+                <p>
+                  ${escapeHtml(n.description || n.content || "")}
+                </p>
+                ${n.imageUrl ? `<img src="${escapeHtml(n.imageUrl)}" alt="Notice" style="width:100%;max-height:180px;object-fit:cover;border-radius:12px;margin-top:10px;">` : ""}
 
                 <div class="notice-date">
                   ${formatDateTime(n.createdAt)}
@@ -4736,11 +4776,19 @@
               .slice(0,4)
               .map(n => `
 
-                <div class="notice-item clickable notice-title-only" onclick="showNoticeDetails('${escapeHtml(n.id)}')">
+                <div class="notice-item clickable" onclick="showNoticeDetails('${escapeHtml(n.id)}')">
 
                   <h4>
                     ${escapeHtml(n.title || "Untitled")}
                   </h4>
+
+                  <p>
+                    ${escapeHtml(
+                      n.description ||
+                      n.content ||
+                      ""
+                    )}
+                  </p>
 
                   <div class="notice-date">
                     ${formatDate(n.createdAt)}
@@ -7716,24 +7764,6 @@
     };
 
 
-    window.openModeratorAccessPanel = async function() {
-      if (!isAdmin()) return;
-      const panel = document.getElementById("moderatorPermissionPanel");
-      if (!panel) return;
-      panel.classList.remove("hidden");
-      await loadModeratorPermissions();
-      renderModeratorPermissionPanel();
-      panel.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-
-    window.openAdminUsersPanel = async function() {
-      if (!canManage("users")) return;
-      const section = document.getElementById("adminUsersSection");
-      if (section) section.classList.remove("hidden");
-      await loadAdminUsers();
-      section?.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-
     function renderModeratorPermissionPanel() {
       const container = document.getElementById("moderatorPermissionList");
       if (!container) return;
@@ -7761,11 +7791,9 @@
       });
       try {
         await setDoc(doc(db, "settings", "moderatorAccess"), { ...next, updatedAt: serverTimestamp(), updatedBy: currentUser.uid }, { merge: true });
-        // Re-read the document after saving so the UI always reflects
-        // exactly what Firebase contains.
-        await loadModeratorPermissions();
+        moderatorPermissions = next;
         renderModeratorPermissionPanel();
-        showToast("Moderator access settings Firebase-এ save হয়েছে।", "success");
+        showToast("Moderator access settings save হয়েছে।", "success");
       } catch (error) {
         console.error(error);
         showToast("Moderator access settings save করতে সমস্যা হয়েছে।", "error");
