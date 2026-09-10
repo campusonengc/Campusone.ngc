@@ -1,0 +1,113 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function hasUserDoc() {
+      return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return hasUserDoc() && userDoc().data.role == "admin";
+    }
+
+    function isModerator() {
+      return hasUserDoc() && userDoc().data.role == "moderator";
+    }
+
+    function moderatorAccessExists() {
+      return exists(/databases/$(database)/documents/settings/moderatorAccess);
+    }
+
+    function modCan(permission) {
+      return isModerator() && moderatorAccessExists()
+        && get(/databases/$(database)/documents/settings/moderatorAccess).data[permission] == true;
+    }
+
+    function canManage(permission) {
+      return isAdmin() || modCan(permission);
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin() || modCan("users"));
+      allow create: if signedIn() && request.auth.uid == uid && request.resource.data.role == "student";
+      allow update: if isAdmin() || modCan("users") || (
+        signedIn() && request.auth.uid == uid
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["name", "photoURL", "lastActiveAt", "online", "updatedAt"])
+      );
+      allow delete: if isAdmin() || modCan("users");
+    }
+
+    match /users/{uid}/fcmTokens/{tokenId} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create, update, delete: if signedIn() && request.auth.uid == uid;
+    }
+
+    match /settings/{id} {
+      allow read: if signedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /notices/{id} {
+      allow read: if signedIn();
+      allow create, update, delete: if canManage("notices");
+    }
+    match /materials/{id} {
+      allow read: if signedIn();
+      allow create, update, delete: if canManage("materials");
+    }
+    match /routine/{id} {
+      allow read: if signedIn();
+      allow create, update, delete: if canManage("routine");
+    }
+    match /events/{id} {
+      allow read: if signedIn();
+      allow create, update, delete: if canManage("events");
+    }
+    match /results/{id} {
+      allow read: if signedIn();
+      allow create, update, delete: if canManage("results");
+    }
+    match /staff/{id} {
+      allow read: if signedIn();
+      allow create, update, delete: if canManage("staff");
+    }
+
+    match /notificationJobs/{id} {
+      allow read: if isAdmin() || modCan("notifications");
+      allow create: if isAdmin() || modCan("notifications");
+      allow update, delete: if isAdmin();
+    }
+
+    match /userNotifications/{uid}/items/{id} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["read", "readAt"]);
+      allow create, delete: if isAdmin();
+    }
+
+    match /siteStats/{id} {
+      allow read: if isAdmin();
+      allow create: if signedIn() && request.resource.data.views == 1;
+      allow update: if signedIn() && request.resource.data.views == resource.data.views + 1;
+    }
+
+    match /supportTickets/{id} {
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if signedIn() && (resource.data.userId == request.auth.uid || canManage("support"));
+      allow update, delete: if signedIn() && (canManage("support") || (resource.data.userId == request.auth.uid && request.resource.data.userId == resource.data.userId));
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
