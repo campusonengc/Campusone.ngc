@@ -1966,29 +1966,6 @@
     @media(max-width:650px){.global-search-wrap{display:none}.notification-panel{right:12px;top:64px}.install-app-btn{display:none!important}}
     .staff-admin-delete{margin-top:12px;}
 
-    .site-logo-box{display:flex;align-items:center;justify-content:center;overflow:hidden;}
-    .site-logo-img{width:100%;height:100%;object-fit:contain;display:block;}
-    .sidebar .site-logo-box{width:42px;height:42px;border-radius:12px;background:#fff;padding:4px;}
-    .auth-hero .site-logo-box{width:56px;height:56px;border-radius:16px;background:#fff;padding:5px;}
-    #pageLoader .site-logo-box{width:64px;height:64px;border-radius:18px;background:#fff;padding:6px;box-shadow:0 15px 40px rgba(15,23,42,.12);margin-bottom:12px;}
-    .settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
-    .settings-preview{display:flex;gap:12px;align-items:center;margin-top:16px;padding:15px;border:1px solid #e5e7eb;border-radius:16px;background:linear-gradient(135deg,rgba(79,70,229,.07),rgba(124,58,237,.04));}
-    .preview-icon{width:44px;height:44px;border-radius:14px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:21px;box-shadow:0 8px 20px rgba(79,70,229,.2);}
-    .settings-preview p{margin-top:3px;color:#64748b;font-size:12px;}
-    .logo-upload-row{display:flex;align-items:center;gap:16px;padding:14px;border:1px dashed #cbd5e1;border-radius:16px;background:#f8fafc;}
-    .site-logo-preview{width:82px;height:82px;border-radius:18px;background:#fff;border:1px solid #e2e8f0;padding:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 8px 25px rgba(15,23,42,.08);flex:none;}
-    .site-logo-preview img{width:100%;height:100%;object-fit:contain;}
-    .site-links-mini{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;}
-    .site-links-mini a{font-size:11px;color:#94a3b8;text-decoration:none;padding:5px 7px;border:1px solid rgba(255,255,255,.08);border-radius:8px;}
-    body.dark-mode{--bg:#0b1120;--card:#111827;--text:#e5e7eb;--muted:#94a3b8;--border:#243044;--sidebar:#070b14;--sidebar-hover:#111827;--sidebar-text:#cbd5e1;}
-    body.dark-mode .card,body.dark-mode .stat-card,body.dark-mode .auth-card,body.dark-mode .notification-panel,body.dark-mode .global-search,body.dark-mode .global-search-results,body.dark-mode .modal,body.dark-mode .logo-upload-row,body.dark-mode .site-logo-preview{background:#111827;color:#e5e7eb;border-color:#243044;}
-    body.dark-mode .form-input,body.dark-mode .form-textarea,body.dark-mode .form-select{background:#0b1120;color:#e5e7eb;border-color:#334155;}
-    body.dark-mode .notification-item:hover,body.dark-mode .search-result:hover{background:#172033;}
-    body.dark-mode .notification-item.unread{background:rgba(79,70,229,.16);}
-    body.dark-mode .settings-preview{border-color:#334155;background:rgba(79,70,229,.10);}
-    body.dark-mode .maintenance-card{background:#111827;color:#e5e7eb;border-color:#243044;}
-    @media(max-width:700px){.settings-grid{grid-template-columns:1fr}.settings-grid>*{grid-column:1/-1!important}.logo-upload-row{align-items:flex-start;flex-direction:column;}}
-
   </style>
 </head>
 
@@ -1999,7 +1976,7 @@
   ========================= -->
 
   <div id="pageLoader">
-    <div class="loader-logo site-logo-box"><img class="site-logo-img" src="logo.png" alt="CampusOne NGC"></div>
+    <div class="loader-logo">NGC</div>
     <div class="spinner"></div>
     <div style="color:#64748b;font-size:13px;">CampusOne NGC চালু হচ্ছে...</div>
   </div>
@@ -2025,7 +2002,7 @@
       <div class="auth-hero">
 
         <div class="brand-large">
-  <div class="brand-icon ngc-logo site-logo-box"><img class="site-logo-img" src="logo.png" alt="CampusOne NGC"></div>
+  <div class="brand-icon ngc-logo">NGC</div>
   <div class="brand-name">CampusOne NGC</div>
 </div>
         <h1>
@@ -2322,9 +2299,9 @@
 
       <div class="sidebar-brand">
 
-        <div class="brand-icon site-logo-box"><img class="site-logo-img" src="logo.png" alt="CampusOne NGC"></div>
+        <div class="brand-icon">NGC</div>
 
-        <span id="sidebarSiteName">CampusOne NGC</span>
+        <span>CampusOne NGC</span>
 
       </div>
 
@@ -2434,7 +2411,6 @@
 
 
       <div class="sidebar-bottom">
-        <div class="site-links-mini" id="siteLinksMini"></div>
 
         <div class="user-mini">
 
@@ -2951,7 +2927,6 @@
                 <button class="danger-btn" type="button" onclick="removeProfilePhoto()">Remove</button>
               </div>
               <div class="photo-note">JPG, PNG বা WebP • No fixed size limit</div>
-              <button class="secondary-btn" type="button" style="margin-top:10px" onclick="enablePushNotifications()">🔔 Enable Push Notifications</button>
 
               <div
                 id="profileName"
@@ -3233,24 +3208,6 @@
 
             </div>
 
-            <div id="adminNotificationAction" class="admin-action" onclick="openAdminFeature('notifications')">
-              <div class="admin-action-icon">🔔</div>
-              <h3>Notification Center</h3>
-              <p>Realtime, push ও custom notification পাঠান এবং manage করুন।</p>
-            </div>
-
-            <div id="adminWebsiteLinksAction" class="admin-action" onclick="openWebsiteLinksPanel()">
-              <div class="admin-action-icon">🌐</div>
-              <h3>Website URL</h3>
-              <p>Facebook, YouTube ও College Website link পরিবর্তন করুন।</p>
-            </div>
-
-            <div id="adminAppearanceAction" class="admin-action" onclick="openAppearancePanel()">
-              <div class="admin-action-icon">🎨</div>
-              <h3>Appearance</h3>
-              <p>Light/Dark, Primary Color ও Logo change করুন।</p>
-            </div>
-
             <div id="adminMaintenanceAction" class="admin-action" onclick="openMaintenanceModal()">
               <div class="admin-action-icon">🛠️</div>
               <h3>Maintenance Mode</h3>
@@ -3263,51 +3220,6 @@
               <p>Click করে Moderator-এর Block / Unlock control করুন।</p>
             </div>
 
-          </div>
-
-          <div id="adminNotificationSection" class="card hidden" style="margin-top:20px;">
-            <div class="card-header">
-              <div><div class="card-title">🔔 Notification Center</div><div style="color:#64748b;font-size:12px;margin-top:3px;">Realtime in-app + browser push notification এখান থেকে পাঠানো যাবে।</div></div>
-              <button class="small-btn" type="button" onclick="closeAdminSettingsSections()">Close</button>
-            </div>
-            <div class="card-body">
-              <div class="settings-grid">
-                <div class="form-group"><label class="form-label">Notification Title</label><input id="adminNotificationTitle" class="form-input" placeholder="যেমন: Exam Routine Published"></div>
-                <div class="form-group"><label class="form-label">Type</label><select id="adminNotificationType" class="form-select"><option value="general">General</option><option value="notice">Notice</option><option value="material">Study Material</option><option value="event">Event</option><option value="result">Result</option><option value="support">Support</option></select></div>
-                <div class="form-group" style="grid-column:1/-1"><label class="form-label">Message</label><textarea id="adminNotificationBody" class="form-textarea" rows="4" placeholder="Notification message..."></textarea></div>
-                <div class="form-group"><label class="form-label">Audience</label><select id="adminNotificationTarget" class="form-select" onchange="toggleNotificationTargetFields()"><option value="all">Everyone</option><option value="students">Students</option><option value="moderators">Moderators</option><option value="admins">Admins</option><option value="filter">Academic Year / Group</option><option value="user">Specific User</option></select></div>
-                <div id="notificationYearWrap" class="form-group hidden"><label class="form-label">Academic Year</label><select id="adminNotificationYear" class="form-select"><option value="">All Years</option><option>HSC 1st Year</option><option>HSC 2nd Year</option></select></div>
-                <div id="notificationGroupWrap" class="form-group hidden"><label class="form-label">Group</label><select id="adminNotificationGroup" class="form-select"><option value="">All Groups</option><option>Science</option><option>Humanities</option><option>Business Studies</option></select></div>
-                <div id="notificationUserWrap" class="form-group hidden" style="grid-column:1/-1"><label class="form-label">Target User UID</label><input id="adminNotificationUserId" class="form-input" placeholder="Firebase User UID"></div>
-                <div class="form-group" style="grid-column:1/-1"><label class="form-label">Open URL / Page (optional)</label><input id="adminNotificationUrl" class="form-input" placeholder="https://... অথবা notices"></div>
-                <div class="form-group"><label class="form-label">Priority</label><select id="adminNotificationPriority" class="form-select"><option value="normal">Normal</option><option value="high">High</option></select></div>
-                <div class="form-group"><label class="form-label">Browser Push</label><label class="toggle-switch"><input id="adminNotificationPush" type="checkbox" checked><span class="toggle-slider"></span></label></div>
-              </div>
-              <div class="settings-preview" id="notificationPreview"><div class="preview-icon">🔔</div><div><strong>Notification Preview</strong><p>Title ও message লিখলে preview এখানে দেখা যাবে।</p></div></div>
-              <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="primary-btn" type="button" onclick="sendAdminNotification()">🚀 Send Notification</button></div>
-            </div>
-          </div>
-
-          <div id="adminWebsiteLinksSection" class="card hidden" style="margin-top:20px;">
-            <div class="card-header"><div><div class="card-title">🌐 Website URL</div><div style="color:#64748b;font-size:12px;margin-top:3px;">Portal-এর external links এক জায়গা থেকে control করুন।</div></div><button class="small-btn" onclick="closeAdminSettingsSections()">Close</button></div>
-            <div class="card-body settings-grid">
-              <div class="form-group"><label class="form-label">Facebook</label><input id="siteFacebookUrl" class="form-input" type="url" placeholder="https://facebook.com/..."></div>
-              <div class="form-group"><label class="form-label">YouTube</label><input id="siteYoutubeUrl" class="form-input" type="url" placeholder="https://youtube.com/..."></div>
-              <div class="form-group" style="grid-column:1/-1"><label class="form-label">College Website</label><input id="siteCollegeUrl" class="form-input" type="url" placeholder="https://college.gov.bd/..."></div>
-              <div style="grid-column:1/-1;display:flex;justify-content:flex-end"><button class="primary-btn" onclick="saveWebsiteLinks()">Save Website URLs</button></div>
-            </div>
-          </div>
-
-          <div id="adminAppearanceSection" class="card hidden" style="margin-top:20px;">
-            <div class="card-header"><div><div class="card-title">🎨 Appearance</div><div style="color:#64748b;font-size:12px;margin-top:3px;">পুরো portal-এর theme, primary color ও logo এখান থেকে পরিবর্তন করুন।</div></div><button class="small-btn" onclick="closeAdminSettingsSections()">Close</button></div>
-            <div class="card-body">
-              <div class="settings-grid">
-                <div class="form-group"><label class="form-label">Theme</label><select id="siteThemeMode" class="form-select"><option value="light">Light Mode</option><option value="dark">Dark Mode</option></select></div>
-                <div class="form-group"><label class="form-label">Primary Color</label><div style="display:flex;gap:10px;align-items:center"><input id="sitePrimaryColor" type="color" value="#4f46e5" style="width:56px;height:42px;padding:3px;border:1px solid #e2e8f0;border-radius:10px"><input id="sitePrimaryHex" class="form-input" value="#4f46e5" placeholder="#4f46e5"></div></div>
-                <div class="form-group" style="grid-column:1/-1"><label class="form-label">Logo</label><div class="logo-upload-row"><div id="siteLogoPreview" class="site-logo-preview"><img src="logo.png" alt="Logo"></div><div><input id="siteLogoFile" type="file" accept="image/png,image/jpeg,image/webp" class="form-input"><div class="photo-note">এই logo sidebar, login, loader, favicon এবং portal-এর logo জায়গাগুলোতে ব্যবহার হবে।</div></div></div></div>
-                <div style="grid-column:1/-1;display:flex;justify-content:flex-end"><button class="primary-btn" onclick="saveAppearanceSettings()">Save Appearance</button></div>
-              </div>
-            </div>
           </div>
 
           <div id="moderatorPermissionPanel" class="card hidden" style="margin-top:20px;">
@@ -3352,14 +3264,6 @@
 
             </div>
 
-
-            <div id="adminOnlineUsersBox" style="margin:16px 0 0; padding:16px; border:1px solid var(--line); border-radius:16px; background:var(--card);">
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                <div><div style="font-weight:800;font-size:16px;">🟢 Online Users <span id="adminOnlineUsersCount" class="badge badge-success">0</span></div><div style="font-size:12px;color:#64748b;margin-top:4px;">Last activity within the last 2 minutes • realtime</div></div>
-                <button class="small-btn" type="button" onclick="loadAdminUsers()">Refresh</button>
-              </div>
-              <div id="adminOnlineUsersList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:14px;"><div class="empty">Loading online users...</div></div>
-            </div>
 
             <div class="table-card">
 
@@ -3496,15 +3400,8 @@
       orderBy,
       limit,
       serverTimestamp,
-      increment,
-      onSnapshot
+      increment
     } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-    import {
-      getMessaging,
-      getToken,
-      onMessage
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-messaging.js";
 
 
     /* =========================
@@ -3581,21 +3478,6 @@
     let staffCache = [];
     let searchCache = [];
     let searchDataLoaded = false;
-    let notificationUnsubscribe = null;
-    let onlineUsersUnsubscribe = null;
-    let activityHeartbeat = null;
-    let onlineUsersRefreshTimer = null;
-    let onlineUsersCache = [];
-    let siteSettings = {
-      siteName: "CampusOne NGC",
-      logoUrl: "logo.png",
-      primaryColor: "#4f46e5",
-      facebookUrl: "",
-      youtubeUrl: "",
-      collegeWebsiteUrl: "",
-      darkMode: false
-    };
-    let appMessaging = null;
     let deferredInstallPrompt = null;
     let notifications = [];
     let notificationUnread = 0;
@@ -4247,8 +4129,6 @@
 
       try {
 
-        await setPresence(false);
-        stopPresenceHeartbeat();
         await signOut(auth);
 
         showToast(
@@ -4320,7 +4200,7 @@
     async function loadModeratorPermissions() {
       const defaults = {
         notices: false, materials: false, routine: false, events: false,
-        results: false, support: false, users: false, staff: false, notifications: false
+        results: false, support: false, users: false, staff: false
       };
 
       // Always read the saved Firebase configuration. Admin-এর own
@@ -4470,7 +4350,6 @@
         support: "adminSupportAction",
         users: "adminUsersAction",
         staff: "adminStaffAction",
-        notifications: "adminNotificationAction",
         maintenance: "adminMaintenanceAction"
       };
       Object.entries(permissionElements).forEach(([key, id]) => {
@@ -4485,8 +4364,6 @@
       if (permPanel) permPanel.classList.add("hidden");
       const modAccessAction = document.getElementById("adminModeratorAccessAction");
       if (modAccessAction) modAccessAction.classList.toggle("hidden", !isAdmin);
-      document.getElementById("adminWebsiteLinksAction")?.classList.toggle("hidden", !isAdmin);
-      document.getElementById("adminAppearanceAction")?.classList.toggle("hidden", !isAdmin);
 
 
 
@@ -6755,7 +6632,6 @@ try {
     window.openAdminFeature=function(feature){
       if(feature==="users"){openAdminUsersPanel();return;}
       if(feature==="support"){loadAdminSupport();return;}
-      if(feature==="notifications"){if(!isAdmin()&&!moderatorPermissions.notifications){showToast("Notification access lock করা আছে।","error");return;}closeAdminSettingsSections();document.getElementById("adminNotificationSection")?.classList.remove("hidden");return;}
       if(feature==="notices"||feature==="materials"||feature==="routine"||feature==="events"||feature==="results"||feature==="staff"){
         if(!canManage(feature)){showToast("এই section-এর access lock করা আছে।","error");return;}
         showPage(feature);
@@ -7026,8 +6902,6 @@ try {
         </tr>`;
 
 
-      startOnlineUsersListener();
-
       try {
 
         const snap =
@@ -7098,7 +6972,6 @@ try {
               </td>
               <td>
                 <div class="admin-users-actions">
-                  ${u.online === true && (u.lastActiveAt?.toMillis?.() || 0) && Date.now() - u.lastActiveAt.toMillis() <= 2 * 60 * 1000 ? `<span class="badge badge-success">🟢 Online</span>` : `<span class="badge badge-info">⚪ Offline</span>`}
                   <span class="badge ${u.blocked ? "badge-danger" : "badge-success"}">${u.blocked ? "Blocked" : "Active"}</span>
                   ${isAdmin() && u.role !== "admin" ? `<button class="${u.blocked ? "small-btn" : "danger-btn"}" onclick="toggleUserBlock('${escapeHtml(u.uid || "")}', ${u.blocked ? "false" : "true"})">${u.blocked ? "Unblock" : "Block"}</button>` : ""}
                 </div>
@@ -7212,72 +7085,14 @@ try {
       return new Intl.DateTimeFormat("en-CA", { timeZone:"Asia/Dhaka", year:"numeric", month:"2-digit", day:"2-digit" }).format(new Date());
     }
 
-    async function setPresence(online) {
-      if (!currentUser) return;
-      try {
-        await updateDoc(doc(db,"users",currentUser.uid), {
-          online: !!online,
-          lastActiveAt: serverTimestamp(),
-          updatedAt: serverTimestamp()
-        });
-      } catch(e) { console.warn("Presence update:", e); }
-    }
-
     async function updateActivityAndViews() {
       if (!currentUser) return;
-      await setPresence(true);
+      try { await updateDoc(doc(db,"users",currentUser.uid),{lastActiveAt:serverTimestamp()}); } catch(e){ console.warn("Activity update:",e); }
       try {
         const statsRef = doc(db,"siteStats","global");
         await setDoc(statsRef,{views:increment(1),updatedAt:serverTimestamp()},{merge:true});
         await setDoc(doc(db,"siteStats",getDhakaDateKey()),{views:increment(1),updatedAt:serverTimestamp()},{merge:true});
       } catch(e){ console.warn("Views update:",e); }
-    }
-
-    function startPresenceHeartbeat() {
-      if (activityHeartbeat) clearInterval(activityHeartbeat);
-      setPresence(true);
-      activityHeartbeat = setInterval(() => {
-        if (currentUser && document.visibilityState === "visible") setPresence(true);
-      }, 30000);
-    }
-
-    function stopPresenceHeartbeat() {
-      if (activityHeartbeat) { clearInterval(activityHeartbeat); activityHeartbeat = null; }
-    }
-
-    function renderOnlineUsers(users) {
-      const countEl = document.getElementById("adminOnlineUsersCount");
-      const list = document.getElementById("adminOnlineUsersList");
-      if (!countEl || !list) return;
-      const now = Date.now();
-      const online = users.filter(u => u.online === true && (u.lastActiveAt?.toMillis?.() || 0) && now - u.lastActiveAt.toMillis() <= 2 * 60 * 1000)
-        .sort((a,b) => (b.lastActiveAt?.toMillis?.()||0) - (a.lastActiveAt?.toMillis?.()||0));
-      countEl.textContent = online.length;
-      list.innerHTML = online.length ? online.map(u => {
-        const initial = String(u.name || u.email || "U").trim().charAt(0).toUpperCase();
-        return `<div style="display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);border-radius:14px;background:var(--bg);">
-          <div style="width:38px;height:38px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-weight:800;flex:none;">${u.photoURL ? `<img src="${escapeHtml(u.photoURL)}" alt="" style="width:100%;height:100%;object-fit:cover;">` : escapeHtml(initial)}</div>
-          <div style="min-width:0;flex:1;"><div style="font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(u.name || "Unnamed user")}</div><div style="font-size:11px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(u.email || "")} • ${escapeHtml(u.role || "student")}</div></div>
-          <span title="Online" style="width:9px;height:9px;border-radius:50%;background:#16a34a;box-shadow:0 0 0 4px rgba(22,163,74,.12);flex:none;"></span>
-        </div>`;
-      }).join("") : '<div class="empty" style="grid-column:1/-1;">এই মুহূর্তে কোনো user online নেই।</div>';
-    }
-
-    function startOnlineUsersListener() {
-      if (onlineUsersUnsubscribe || !canManage("users")) return;
-      try {
-        onlineUsersUnsubscribe = onSnapshot(collection(db,"users"), snap => {
-          onlineUsersCache = snap.docs.map(d => ({uid:d.id, ...d.data()}));
-          renderOnlineUsers(onlineUsersCache);
-        }, err => console.warn("Online users listener:", err));
-      } catch(e) { console.warn("Online users listener:", e); }
-      if (!onlineUsersRefreshTimer) onlineUsersRefreshTimer = setInterval(() => renderOnlineUsers(onlineUsersCache), 30000);
-    }
-
-    function stopOnlineUsersListener() {
-      if (onlineUsersUnsubscribe) { onlineUsersUnsubscribe(); onlineUsersUnsubscribe = null; }
-      if (onlineUsersRefreshTimer) { clearInterval(onlineUsersRefreshTimer); onlineUsersRefreshTimer = null; }
-      onlineUsersCache = [];
     }
 
     async function loadAdminStats() {
@@ -7531,72 +7346,47 @@ try {
     });
 
     /* =========================
-       SITE SETTINGS / APPEARANCE
-    ========================= */
-    const DEFAULT_SITE_SETTINGS = {
-      siteName: "CampusOne NGC", logoUrl: "logo.png", primaryColor: "#4f46e5",
-      facebookUrl: "", youtubeUrl: "", collegeWebsiteUrl: "", darkMode: false
-    };
-
-    function applySiteSettings(){
-      const c = siteSettings.primaryColor || DEFAULT_SITE_SETTINGS.primaryColor;
-      document.documentElement.style.setProperty("--primary", c);
-      document.documentElement.style.setProperty("--primary-dark", shadeColor(c,-25));
-      document.documentElement.style.setProperty("--secondary", shadeColor(c,18));
-      document.body.classList.toggle("dark-mode", siteSettings.darkMode === true);
-      document.querySelectorAll(".site-logo-img").forEach(img=>{img.src=siteSettings.logoUrl||"logo.png";img.alt=siteSettings.siteName||"CampusOne NGC";});
-      document.querySelectorAll("#sidebarSiteName").forEach(el=>el.textContent=siteSettings.siteName||"CampusOne NGC");
-      const mini=document.getElementById("siteLinksMini");
-      if(mini){const links=[];if(siteSettings.facebookUrl)links.push(`<a href="${escapeHtml(siteSettings.facebookUrl)}" target="_blank" rel="noopener">Facebook</a>`);if(siteSettings.youtubeUrl)links.push(`<a href="${escapeHtml(siteSettings.youtubeUrl)}" target="_blank" rel="noopener">YouTube</a>`);if(siteSettings.collegeWebsiteUrl)links.push(`<a href="${escapeHtml(siteSettings.collegeWebsiteUrl)}" target="_blank" rel="noopener">College</a>`);mini.innerHTML=links.join("");}
-      const favicon=document.querySelector('link[rel="icon"]'); if(favicon)favicon.href=siteSettings.logoUrl||"logo.png";
-      const apple=document.querySelector('link[rel="apple-touch-icon"]'); if(apple)apple.href=siteSettings.logoUrl||"logo.png";
-      const metaTheme=document.querySelector('meta[name="theme-color"]'); if(metaTheme)metaTheme.content=c;
-    }
-    function shadeColor(hex, percent){try{let f=parseInt(String(hex).replace("#",""),16),t=percent<0?0:255,p=Math.abs(percent)/100,R=f>>16,G=f>>8&255,B=f&255;return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);}catch{return "#3730a3";}}
-    async function loadSiteSettings(){
-      try{const snap=await getDoc(doc(db,"settings","site"));if(snap.exists())siteSettings={...DEFAULT_SITE_SETTINGS,...snap.data()};else siteSettings={...DEFAULT_SITE_SETTINGS};}catch(e){console.warn("Site settings:",e);siteSettings={...DEFAULT_SITE_SETTINGS};}
-      applySiteSettings();
-    }
-    window.openWebsiteLinksPanel=function(){if(!isAdmin())return;closeAdminSettingsSections();document.getElementById("adminWebsiteLinksSection")?.classList.remove("hidden");document.getElementById("siteFacebookUrl").value=siteSettings.facebookUrl||"";document.getElementById("siteYoutubeUrl").value=siteSettings.youtubeUrl||"";document.getElementById("siteCollegeUrl").value=siteSettings.collegeWebsiteUrl||"";};
-    window.saveWebsiteLinks=async function(){if(!isAdmin())return;try{const facebookUrl=document.getElementById("siteFacebookUrl").value.trim(),youtubeUrl=document.getElementById("siteYoutubeUrl").value.trim(),collegeWebsiteUrl=document.getElementById("siteCollegeUrl").value.trim();await setDoc(doc(db,"settings","site"),{facebookUrl,youtubeUrl,collegeWebsiteUrl,updatedAt:serverTimestamp(),updatedBy:currentUser.uid},{merge:true});siteSettings={...siteSettings,facebookUrl,youtubeUrl,collegeWebsiteUrl};applySiteSettings();showToast("Website URLs save হয়েছে।","success");}catch(e){console.error(e);showToast("Website URL save হয়নি।","error");}};
-    window.openAppearancePanel=function(){if(!isAdmin())return;closeAdminSettingsSections();document.getElementById("adminAppearanceSection")?.classList.remove("hidden");document.getElementById("siteThemeMode").value=siteSettings.darkMode?"dark":"light";document.getElementById("sitePrimaryColor").value=siteSettings.primaryColor||"#4f46e5";document.getElementById("sitePrimaryHex").value=siteSettings.primaryColor||"#4f46e5";document.getElementById("siteLogoPreview").innerHTML=`<img src="${escapeHtml(siteSettings.logoUrl||"logo.png")}" alt="Logo">`;};
-    document.addEventListener("input",e=>{if(e.target.id==="sitePrimaryColor")document.getElementById("sitePrimaryHex").value=e.target.value;if(e.target.id==="sitePrimaryHex" && /^#[0-9a-fA-F]{6}$/.test(e.target.value))document.getElementById("sitePrimaryColor").value=e.target.value;});
-    document.addEventListener("change",e=>{if(e.target.id==="siteLogoFile"&&e.target.files?.[0]){const r=new FileReader();r.onload=()=>document.getElementById("siteLogoPreview").innerHTML=`<img src="${r.result}" alt="Logo">`;r.readAsDataURL(e.target.files[0]);}});
-    window.saveAppearanceSettings=async function(){if(!isAdmin())return;const theme=document.getElementById("siteThemeMode").value,color=document.getElementById("sitePrimaryHex").value.trim(),file=document.getElementById("siteLogoFile").files?.[0]||null;if(!/^#[0-9a-fA-F]{6}$/.test(color)){showToast("Primary Color valid hex code দিন।","error");return;}try{let logoUrl=siteSettings.logoUrl||"logo.png";if(file){showToast("Logo upload হচ্ছে...","info");logoUrl=(await uploadImageToCloudinary(file)).secure_url||logoUrl;}await setDoc(doc(db,"settings","site"),{primaryColor:color,darkMode:theme==="dark",logoUrl,updatedAt:serverTimestamp(),updatedBy:currentUser.uid},{merge:true});siteSettings={...siteSettings,primaryColor:color,darkMode:theme==="dark",logoUrl};applySiteSettings();showToast("Appearance save হয়েছে।","success");}catch(e){console.error(e);showToast("Appearance save হয়নি।","error");}};
-    window.closeAdminSettingsSections=function(){["adminNotificationSection","adminWebsiteLinksSection","adminAppearanceSection"].forEach(id=>document.getElementById(id)?.classList.add("hidden"));};
-
-    /* =========================
        NOTIFICATIONS
     ========================= */
-    async function startRealtimeNotifications(){
-      if(!currentUser)return;
-      if(notificationUnsubscribe)notificationUnsubscribe();
-      try{
-        const q=query(collection(db,"userNotifications",currentUser.uid,"items"),orderBy("createdAt","desc"),limit(50));
-        notificationUnsubscribe=onSnapshot(q,snap=>{
-          notifications=snap.docs.map(d=>({id:d.id,...d.data()}));
-          notificationUnread=notifications.filter(n=>n.read!==true).length;
-          renderNotifications();
-          const added=snap.docChanges().filter(c=>c.type==="added");
-          if(added.length && !snap.metadata.fromCache){
-            const newest=added.map(c=>({id:c.doc.id,...c.doc.data()})).filter(n=>n.createdAt).sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0))[0];
-            if(newest && !newest.read) showNotificationToast(newest);
-          }
-        },e=>console.warn("Realtime notifications:",e));
-      }catch(e){console.warn("Realtime notification setup:",e);}
-    }
-    function showNotificationToast(n){const c=document.getElementById("toastContainer");if(!c)return;const el=document.createElement("div");el.className="toast toast-success notification-live-toast";el.innerHTML=`<div style="font-size:20px">${escapeHtml(n.icon||"🔔")}</div><div><strong>${escapeHtml(n.title||"Notification")}</strong><div style="font-size:12px;margin-top:2px">${escapeHtml(n.body||"")}</div></div>`;c.appendChild(el);setTimeout(()=>el.remove(),5000);}
-    async function refreshNotifications(){if(!currentUser){return;}if(notificationUnsubscribe){return;}await startRealtimeNotifications();}
-    function notificationIcon(type){return {notice:"🔔",material:"📚",event:"🎉",result:"📊",support:"🎧",general:"✨"}[type]||"🔔";}
-    function renderNotifications(){const badge=document.getElementById("notificationBadge");if(badge){badge.textContent=notificationUnread>99?"99+":String(notificationUnread);badge.classList.toggle("hidden",notificationUnread===0);}const box=document.getElementById("notificationList");if(!box)return;box.innerHTML=notifications.length?notifications.slice(0,15).map(n=>`<div class="notification-item ${n.read?"":"unread"}" onclick="openUserNotification('${escapeHtml(n.id)}')"><div style="font-size:20px">${escapeHtml(n.icon||notificationIcon(n.type))}</div><div style="min-width:0"><div class="notification-item-title">${escapeHtml(n.title||"Notification")}</div><div style="font-size:12px;color:#64748b;margin-top:3px;line-height:1.45">${escapeHtml(n.body||"")}</div><div class="notification-item-meta">${formatDateTime(n.createdAt)}${n.read?"":" • New"}</div></div></div>`).join(""):'<div class="empty" style="padding:20px;">কোনো notification নেই।</div>';}
-    window.toggleNotifications=function(){const p=document.getElementById("notificationPanel");if(!p)return;p.classList.toggle("hidden");if(!p.classList.contains("hidden"))renderNotifications();};
-    window.markNotificationsRead=async function(){if(!currentUser)return;const unread=notifications.filter(n=>!n.read);try{await Promise.all(unread.map(n=>updateDoc(doc(db,"userNotifications",currentUser.uid,"items",n.id),{read:true,readAt:serverTimestamp()})));}catch(e){console.warn(e);showToast("Notification read status update হয়নি।","error");}};
-    window.openUserNotification=async function(id){if(!currentUser||!id)return;const n=notifications.find(x=>x.id===id);try{if(n&&!n.read)await updateDoc(doc(db,"userNotifications",currentUser.uid,"items",id),{read:true,readAt:serverTimestamp()});}catch(e){}document.getElementById("notificationPanel")?.classList.add("hidden");if(n?.url){if(/^https?:\\/\\//i.test(n.url))window.open(n.url,"_blank","noopener");else if(document.getElementById(`page-${n.url}`))showPage(n.url);else showPage("dashboard");}}
 
-    window.toggleNotificationTargetFields=function(){const t=document.getElementById("adminNotificationTarget").value;document.getElementById("notificationYearWrap")?.classList.toggle("hidden",t!=="filter");document.getElementById("notificationGroupWrap")?.classList.toggle("hidden",t!=="filter");document.getElementById("notificationUserWrap")?.classList.toggle("hidden",t!=="user");};
-    async function sendAdminNotification(){if(!isAdmin() && !moderatorPermissions.notifications){showToast("Notification access নেই।","error");return;}const title=document.getElementById("adminNotificationTitle").value.trim(),body=document.getElementById("adminNotificationBody").value.trim(),target=document.getElementById("adminNotificationTarget").value;if(!title||!body){showToast("Title ও Message দুটোই দিন।","warning");return;}const data={title,body,type:document.getElementById("adminNotificationType").value,target,academicYear:target==="filter"?document.getElementById("adminNotificationYear").value:"",group:target==="filter"?document.getElementById("adminNotificationGroup").value:"",targetUserId:target==="user"?document.getElementById("adminNotificationUserId").value.trim():"",url:document.getElementById("adminNotificationUrl").value.trim(),priority:document.getElementById("adminNotificationPriority").value,sendPush:document.getElementById("adminNotificationPush").checked,createdBy:currentUser.uid,createdByName:currentProfile?.name||currentUser.displayName||currentUser.email||"Admin",createdAt:serverTimestamp(),status:"queued"};try{await addDoc(collection(db,"notificationJobs"),data);showToast("Notification queue-তে পাঠানো হয়েছে। Realtime ও push delivery backend থেকে হবে।","success");document.getElementById("adminNotificationTitle").value="";document.getElementById("adminNotificationBody").value="";}catch(e){console.error(e);showToast("Notification send হয়নি।","error");}}
-    window.sendAdminNotification=sendAdminNotification;
-    ["adminNotificationTitle","adminNotificationBody","adminNotificationType"].forEach(id=>document.getElementById(id)?.addEventListener("input",()=>{const t=document.getElementById("adminNotificationTitle")?.value||"Notification Preview",b=document.getElementById("adminNotificationBody")?.value||"Title ও message লিখলে preview এখানে দেখা যাবে।";const box=document.getElementById("notificationPreview");if(box)box.innerHTML=`<div class="preview-icon">🔔</div><div><strong>${escapeHtml(t)}</strong><p>${escapeHtml(b)}</p></div>`;}));
+    function getSeenNotifications(){try{return JSON.parse(localStorage.getItem("campusone_seen_notifications")||"{}")||{};}catch{return {};}}
+    function saveSeenNotifications(v){try{localStorage.setItem("campusone_seen_notifications",JSON.stringify(v));}catch{}}
+
+    async function refreshNotifications(){
+      if(!currentUser)return;
+      try{
+        const sources=[
+          ["notices","Notice","🔔"],
+          ["materials","Study Material","📚"],
+          ["events","Event","🎉"],
+          ["results","Result","📊"]
+        ];
+        const rows=[];
+        for(const [col,label,icon] of sources){
+          const snap=await getDocs(collection(db,col));
+          snap.docs.forEach(d=>{const x=d.data()||{}; if(col==="results" && x.published!==true)return; rows.push({id:`${col}:${d.id}`,type:col,label,icon,title:x.title||label,createdAt:x.createdAt||null});});
+        }
+        rows.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
+        notifications=rows.slice(0,30);
+        const seen=getSeenNotifications();
+        // First visit: mark current items as seen, preventing a notification storm.
+        if(Object.keys(seen).length===0 && notifications.length){notifications.forEach(n=>seen[n.id]=true);saveSeenNotifications(seen);}
+        notificationUnread=notifications.filter(n=>!seen[n.id]).length;
+        renderNotifications();
+      }catch(e){console.warn("Notifications:",e);}
+    }
+
+    function renderNotifications(){
+      const badge=document.getElementById("notificationBadge");
+      if(badge){badge.textContent=notificationUnread>99?"99+":String(notificationUnread);badge.classList.toggle("hidden",notificationUnread===0);}
+      const box=document.getElementById("notificationList"); if(!box)return;
+      const seen=getSeenNotifications();
+      box.innerHTML=notifications.length?notifications.slice(0,12).map(n=>`<div class="notification-item ${seen[n.id]?"":"unread"}" onclick="openNotification('${escapeHtml(n.type)}','${escapeHtml(n.id.split(':')[1])}')"><div style="font-size:20px;">${n.icon}</div><div><div class="notification-item-title">${escapeHtml(n.title)}</div><div class="notification-item-meta">New ${escapeHtml(n.label)} • ${formatDateTime(n.createdAt)}</div></div></div>`).join(""):'<div class="empty" style="padding:20px;">কোনো notification নেই।</div>';
+    }
+
+    window.toggleNotifications=function(){const p=document.getElementById("notificationPanel");if(!p)return;p.classList.toggle("hidden");if(!p.classList.contains("hidden"))refreshNotifications();};
+    window.markNotificationsRead=function(){const seen=getSeenNotifications();notifications.forEach(n=>seen[n.id]=true);saveSeenNotifications(seen);notificationUnread=0;renderNotifications();};
+    window.openNotification=function(type,id){const map={notices:"notices",materials:"materials",events:"events",results:"results"};if(map[type])showPage(map[type]);document.getElementById("notificationPanel")?.classList.add("hidden");const seen=getSeenNotifications();seen[`${type}:${id}`]=true;saveSeenNotifications(seen);notificationUnread=Math.max(0,notificationUnread-1);renderNotifications();};
 
     /* =========================
        GLOBAL SEARCH
@@ -7626,30 +7416,12 @@ try {
     window.openSearchResult=function(type,id){const page={notices:"notices",materials:"materials",events:"events",routine:"routine",results:"results",staff:"staff"}[type];if(page)showPage(page);document.getElementById("globalSearchResults")?.classList.add("hidden");document.getElementById("globalSearchInput").value="";};
 
     /* =========================
-       WEB PUSH (FCM)
-    ========================= */
-    const FCM_VAPID_KEY = "BNE6hbW2q9pmllxBEpLoDsFAelibhzUcmsYJlY1NHMwagUkPOiNbWsY3aNuxm8ZkhSJ48_xcKDYZWgA2WerTXII";
-    async function initPushMessaging(){
-      try{if(!currentUser||!window.isSecureContext||!("Notification" in window)||!("serviceWorker" in navigator))return;if(FCM_VAPID_KEY.startsWith("PASTE_"))return;appMessaging=appMessaging||getMessaging(app);const reg=window.campusOneSwRegistration||await navigator.serviceWorker.ready;const token=await getToken(appMessaging,{vapidKey:FCM_VAPID_KEY,serviceWorkerRegistration:reg});if(token)await saveFcmToken(token);onMessage(appMessaging,payload=>{const n=payload.notification||{};showNotificationToast({title:n.title||payload.data?.title||"Notification",body:n.body||payload.data?.body||"",icon:n.icon||"🔔"});});}catch(e){console.warn("FCM init:",e);}}
-    async function saveFcmToken(token){const id=encodeURIComponent(token).slice(0,1200);await setDoc(doc(db,"users",currentUser.uid,"fcmTokens",id),{token,userId:currentUser.uid,platform:"web",enabled:true,updatedAt:serverTimestamp()},{merge:true});}
-    window.enablePushNotifications=async function(){if(!currentUser)return;if(FCM_VAPID_KEY.startsWith("PASTE_")){showToast("Firebase Console থেকে Web Push VAPID key বসাতে হবে।","warning");return;}try{const permission=await Notification.requestPermission();if(permission!=="granted"){showToast("Browser notification permission দেওয়া হয়নি।","warning");return;}await initPushMessaging();showToast("Push notification enabled হয়েছে।","success");}catch(e){console.error(e);showToast("Push notification enable হয়নি।","error");}};
-
-    document.addEventListener("visibilitychange", () => {
-      if (!currentUser) return;
-      if (document.visibilityState === "visible") setPresence(true);
-      else setPresence(false);
-    });
-    window.addEventListener("pagehide", () => {
-      if (currentUser) setPresence(false);
-    });
-
-    /* =========================
        PWA INSTALL
     ========================= */
     window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstallPrompt=e;document.getElementById("installAppBtn")?.classList.remove("hidden");});
     window.installApp=async function(){if(!deferredInstallPrompt)return;deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;document.getElementById("installAppBtn")?.classList.add("hidden");};
-    if("serviceWorker" in navigator){window.addEventListener("load",async()=>{try{window.campusOneSwRegistration=await navigator.serviceWorker.register("sw.js");}catch(e){console.warn("Service worker:",e);}});}
-
+    if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(e=>console.warn("Service worker:",e)));}
+    setInterval(()=>{if(currentUser) refreshNotifications();}, 60000);
 
     /* =========================
        AUTH STATE
@@ -7668,11 +7440,9 @@ try {
 
 
             await loadUserProfile(user);
-            await loadSiteSettings();
             await loadMaintenanceMode();
             updateActivityAndViews();
-            startPresenceHeartbeat();
-            if (isAdmin()) { loadAdminStats(); startOnlineUsersListener(); }
+            if (isAdmin()) loadAdminStats();
 
 
             document
@@ -7694,19 +7464,15 @@ try {
 
 
             showPage("dashboard");
-            startRealtimeNotifications();
-            initPushMessaging();
+            refreshNotifications();
             searchDataLoaded=false;
             // Dashboard is loaded once by showPage(); do not duplicate the Firestore reads.
 
           } else {
 
-            stopPresenceHeartbeat();
-            stopOnlineUsersListener();
             currentUser = null;
 
             currentProfile = null;
-            if(notificationUnsubscribe){notificationUnsubscribe();notificationUnsubscribe=null;}
 
 
             document
