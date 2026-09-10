@@ -1,10 +1,25 @@
 {
-  "name": "CampusOne — Student Portal",
-  "short_name": "CampusOne",
+  "name": "CampusOne NGC — Student Portal",
+  "short_name": "CampusOne NGC",
+  "description": "CampusOne NGC student portal for notices, study materials, routine, events, results, teachers and student support.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f5f7fb",
   "theme_color": "#4f46e5",
-  "description": "CampusOne Student Management Portal",
-  "lang": "bn"
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
