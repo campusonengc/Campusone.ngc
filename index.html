@@ -1945,6 +1945,27 @@
 .notice-title-only{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:58px}.notice-title-only h4{margin:0;flex:1}.notice-title-only .notice-date{white-space:nowrap}
 .admin-users-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.user-blocked{opacity:.62}.result-admin-actions{display:flex;gap:6px;flex-wrap:wrap}
 
+
+    .link-btn{border:0;background:none;color:var(--primary);font-size:12px;font-weight:700;cursor:pointer;padding:4px 0;}
+    .link-btn:hover{text-decoration:underline;}
+    .global-search-wrap{position:relative;width:min(360px,34vw);z-index:1000;}
+    .global-search{width:100%;height:40px;border:1px solid #e2e8f0;border-radius:12px;padding:0 14px 0 38px;background:#fff;outline:none;font-size:13px;box-shadow:0 5px 18px rgba(15,23,42,.05);}
+    .global-search:focus{border-color:#818cf8;box-shadow:0 0 0 3px rgba(99,102,241,.12);}
+    .global-search-icon{position:absolute;left:13px;top:10px;color:#64748b;font-size:19px;z-index:2;}
+    .global-search-results{position:absolute;top:46px;left:0;right:0;background:#fff;border:1px solid #e2e8f0;border-radius:14px;box-shadow:0 20px 50px rgba(15,23,42,.15);max-height:430px;overflow:auto;padding:8px;}
+    .search-result{padding:11px 12px;border-radius:10px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;}
+    .search-result:hover{background:#f8fafc;}
+    .search-result-icon{font-size:18px;flex:none}.search-result-title{font-weight:700;font-size:13px}.search-result-meta{font-size:11px;color:#64748b;margin-top:3px;line-height:1.5;}
+    .notification-btn{position:relative;border:1px solid #e2e8f0;background:#fff;width:40px;height:40px;border-radius:12px;cursor:pointer;font-size:18px;box-shadow:0 5px 18px rgba(15,23,42,.05);}
+    .notification-badge{position:absolute;right:-4px;top:-5px;min-width:18px;height:18px;border-radius:999px;background:#dc2626;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid #fff;}
+    .notification-panel{position:absolute;right:110px;top:68px;width:min(390px,calc(100vw - 30px));background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 25px 70px rgba(15,23,42,.16);z-index:2000;overflow:hidden;}
+    .notification-panel-head{padding:14px 15px;border-bottom:1px solid #eef2f7;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+    .notification-item{padding:12px 15px;border-bottom:1px solid #f1f5f9;cursor:pointer;display:flex;gap:10px}.notification-item:hover{background:#f8fafc}.notification-item.unread{background:#eef2ff}.notification-item-title{font-size:13px;font-weight:700}.notification-item-meta{font-size:11px;color:#64748b;margin-top:3px;}
+    .install-app-btn{white-space:nowrap;}
+    @media(max-width:900px){.global-search-wrap{width:220px}.notification-panel{right:55px}}
+    @media(max-width:650px){.global-search-wrap{display:none}.notification-panel{right:12px;top:64px}.install-app-btn{display:none!important}}
+    .staff-admin-delete{margin-top:12px;}
+
   </style>
 </head>
 
@@ -2105,6 +2126,9 @@
               Login করুন
             </button>
 
+            <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+              <button type="button" class="link-btn" onclick="resetPassword()">Forgot password?</button>
+            </div>
             <div id="loginMessage" class="auth-message"></div>
             <div style="display:flex;align-items:center;gap:10px;margin:18px 0;color:#94a3b8;font-size:12px;">
               <span style="height:1px;background:#e2e8f0;flex:1;"></span><span>অথবা</span><span style="height:1px;background:#e2e8f0;flex:1;"></span>
@@ -2241,6 +2265,13 @@
               onclick="registerUser()"
             >
               Register করুন
+            </button>
+
+            <div style="display:flex;align-items:center;gap:10px;margin:18px 0;color:#94a3b8;font-size:12px;">
+              <span style="height:1px;background:#e2e8f0;flex:1;"></span><span>অথবা</span><span style="height:1px;background:#e2e8f0;flex:1;"></span>
+            </div>
+            <button id="googleRegisterBtn" class="secondary-btn" style="width:100%;padding:13px;" onclick="registerWithGoogle()">
+              <span style="font-weight:800;">G</span>&nbsp; Google দিয়ে Registration
             </button>
 
             <div id="registerMessage" class="auth-message"></div>
@@ -2443,6 +2474,22 @@
 
 
         <div class="topbar-right">
+
+          <div class="global-search-wrap">
+            <span class="global-search-icon">⌕</span>
+            <input id="globalSearchInput" class="global-search" type="search" placeholder="Search notices, materials, events..." autocomplete="off" />
+            <div id="globalSearchResults" class="global-search-results hidden"></div>
+          </div>
+
+          <button id="notificationBtn" class="notification-btn" type="button" onclick="toggleNotifications()" aria-label="Notifications">
+            🔔<span id="notificationBadge" class="notification-badge hidden">0</span>
+          </button>
+          <div id="notificationPanel" class="notification-panel hidden">
+            <div class="notification-panel-head"><strong>Notifications</strong><button class="small-btn" onclick="markNotificationsRead()">Mark all read</button></div>
+            <div id="notificationList"><div class="empty" style="padding:20px;">Loading...</div></div>
+          </div>
+
+          <button id="installAppBtn" class="small-btn install-app-btn hidden" type="button" onclick="installApp()">📱 Install App</button>
 
           <div class="top-user">
 
@@ -2845,7 +2892,7 @@
         </section>
 
         <section id="page-staff" class="page">
-          <div class="section-header"><div class="section-heading"><h2>Teachers & Staff</h2><p>College-এর শিক্ষক ও কর্মচারীদের তথ্য এখানে দেখা যাবে।</p></div></div>
+          <div class="section-header"><div class="section-heading"><h2>Teachers & Staff</h2><p>College-এর শিক্ষক ও কর্মচারীদের তথ্য এখানে দেখা যাবে।</p></div><div id="staffAdminBtn"><button class="primary-btn" onclick="openStaffModal()">+ Add Teacher / Staff</button></div></div>
           <div id="staffGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;"><div class="empty">Loading...</div></div>
         </section>
 
@@ -2879,7 +2926,7 @@
                 <button class="secondary-btn" type="button" onclick="document.getElementById('profilePhotoInput').click()">📷 Change Photo</button>
                 <button class="danger-btn" type="button" onclick="removeProfilePhoto()">Remove</button>
               </div>
-              <div class="photo-note">JPG, PNG বা WebP • সর্বোচ্চ 5 MB</div>
+              <div class="photo-note">JPG, PNG বা WebP • No fixed size limit</div>
 
               <div
                 id="profileName"
@@ -3333,6 +3380,7 @@
       GoogleAuthProvider,
       signInWithPopup,
       updateProfile,
+      sendPasswordResetEmail,
       signOut
     } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
@@ -3403,6 +3451,10 @@
     const CLOUDINARY_PRESET =
       "campusone_materials";
 
+    // Client-side file-size limits are intentionally not enforced.
+    // Cloudinary/account/upload-preset limits still apply.
+    // For files larger than the provider's single-request limit, use chunked/resumable upload.
+
 
     /* =========================
        GLOBAL
@@ -3423,6 +3475,12 @@
     let eventsCache = [];
 
     let resultsCache = [];
+    let staffCache = [];
+    let searchCache = [];
+    let searchDataLoaded = false;
+    let deferredInstallPrompt = null;
+    let notifications = [];
+    let notificationUnread = 0;
 
     // Moderator permissions are controlled by Admin.
     let moderatorPermissions = {
@@ -3751,6 +3809,28 @@
 
 
     /* =========================
+       PASSWORD RESET
+    ========================= */
+
+    window.resetPassword = async function() {
+      const email = document.getElementById("loginEmail")?.value.trim() || "";
+      if (!email) {
+        setMessage("loginMessage", "Password reset করতে আগে Email লিখুন।", "error");
+        document.getElementById("loginEmail")?.focus();
+        return;
+      }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        setMessage("loginMessage", "Password reset link আপনার Email-এ পাঠানো হয়েছে। Inbox/Spam check করুন।", "success");
+        showToast("Password reset email পাঠানো হয়েছে।", "success");
+      } catch (error) {
+        console.error(error);
+        setMessage("loginMessage", friendlyAuthError(error), "error");
+      }
+    };
+
+
+    /* =========================
        REGISTER
     ========================= */
 
@@ -3978,63 +4058,68 @@
 
 
     /* =========================
-       GOOGLE LOGIN
+       GOOGLE LOGIN / REGISTRATION
     ========================= */
 
-    window.loginWithGoogle = async function() {
+    async function collectGoogleRegistration(user) {
+      const body = `
+        <div class="form-group"><label class="form-label">পূর্ণ নাম *</label><input id="googleRegName" class="form-input" value="${escapeHtml(user.displayName || "")}" placeholder="তোমার পূর্ণ নাম"></div>
+        <div class="form-group"><label class="form-label">Roll *</label><input id="googleRegRoll" class="form-input" type="number" min="1" step="1" inputmode="numeric" placeholder="তোমার Roll"></div>
+        <div class="form-group"><label class="form-label">Academic Year *</label><select id="googleRegAcademicYear" class="form-select"><option value="">Academic Year নির্বাচন করুন</option><option>HSC 1st Year</option><option>HSC 2nd Year</option></select></div>
+        <div class="form-group"><label class="form-label">Group *</label><select id="googleRegGroup" class="form-select"><option value="">Group নির্বাচন করুন</option><option>Science</option><option>Humanities</option><option>Business Studies</option></select></div>
+        <div class="form-group"><label class="form-label">Phone Number *</label><input id="googleRegPhone" class="form-input" type="tel" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX"></div>
+        <div class="form-group"><label class="form-label">Google Email</label><input class="form-input" value="${escapeHtml(user.email || "")}" disabled></div>
+        <div style="font-size:12px;color:#64748b;background:#f8fafc;border-radius:10px;padding:10px;">Google account দিয়ে authentication হবে, কিন্তু Student registration information সম্পূর্ণ দেওয়া বাধ্যতামূলক।</div>`;
+      openModal("Complete Student Registration", body, async () => {
+        const name=document.getElementById("googleRegName")?.value.trim()||"";
+        const roll=document.getElementById("googleRegRoll")?.value.trim()||"";
+        const academicYear=document.getElementById("googleRegAcademicYear")?.value||"";
+        const group=document.getElementById("googleRegGroup")?.value||"";
+        const phone=document.getElementById("googleRegPhone")?.value.trim()||"";
+        if(!name||!/^\d+$/.test(roll)||Number(roll)<1||!academicYear||!group||!/^01\d{9}$/.test(phone)){showToast("সব registration information সঠিকভাবে দিন।","warning");return;}
+        try {
+          await updateProfile(user,{displayName:name});
+          await setDoc(doc(db,"users",user.uid),{uid:user.uid,name,email:user.email||"",roll,academicYear,group,phone,role:"student",photoURL:user.photoURL||"",createdAt:serverTimestamp(),authProvider:"google"});
+          closeModal();
+          showToast("Google Registration সম্পূর্ণ হয়েছে।","success");
+          location.reload();
+        } catch(e){console.error(e);showToast("Registration information save হয়নি।","error");}
+      }, "Complete Registration");
+      document.getElementById("googleRegPhone")?.addEventListener("input",function(){this.value=this.value.replace(/\D/g,"").slice(0,11);});
+    }
 
-      const btn = document.getElementById("googleLoginBtn");
-
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = "Google Login হচ্ছে...";
-      }
-
+    async function googleAuthFlow(buttonId, messageId) {
+      const btn=document.getElementById(buttonId);
+      if(btn){btn.disabled=true;btn.textContent="Google account যাচাই হচ্ছে...";}
       try {
-
-        const provider = new GoogleAuthProvider();
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-
-        const ref = doc(db, "users", user.uid);
-        const snap = await getDoc(ref);
-
-        if (!snap.exists()) {
-
-          await setDoc(ref, {
-            uid: user.uid,
-            name: user.displayName || user.email?.split("@")[0] || "Student",
-            email: user.email || "",
-            roll: "", academicYear: "", group: "", phone: "",
-            role: "student",
-            photoURL: user.photoURL || "",
-            createdAt: serverTimestamp()
-          });
-
-        } else if (user.photoURL && !snap.data()?.photoURL) {
-
-          await updateDoc(ref, { photoURL: user.photoURL });
-
+        const provider=new GoogleAuthProvider();
+        provider.setCustomParameters({prompt:"select_account"});
+        const result=await signInWithPopup(auth,provider);
+        const user=result.user;
+        const ref=doc(db,"users",user.uid);
+        const snap=await getDoc(ref);
+        if(!snap.exists()){
+          await collectGoogleRegistration(user);
+          return;
         }
-
-        showToast("Google Login সফল হয়েছে।", "success");
-
-      } catch (error) {
-
+        const data=snap.data()||{};
+        const complete=!!data.name && !!data.roll && !!data.academicYear && !!data.group && /^01\d{9}$/.test(String(data.phone||""));
+        if(!complete){
+          await collectGoogleRegistration(user);
+          return;
+        }
+        if(user.photoURL && !data.photoURL) await updateDoc(ref,{photoURL:user.photoURL,updatedAt:serverTimestamp()});
+        showToast("Google Login সফল হয়েছে।","success");
+      } catch(error){
         console.error(error);
-        setMessage("loginMessage", friendlyAuthError(error), "error");
-
+        setMessage(messageId,friendlyAuthError(error),"error");
       } finally {
-
-        if (btn) {
-          btn.disabled = false;
-          btn.innerHTML = '<span style="font-weight:800;">G</span>&nbsp; Google দিয়ে Login';
-        }
-
+        if(btn){btn.disabled=false;btn.innerHTML=buttonId==="googleRegisterBtn"?'<span style="font-weight:800;">G</span>&nbsp; Google দিয়ে Registration':'<span style="font-weight:800;">G</span>&nbsp; Google দিয়ে Login';}
       }
+    }
 
-    };
-
+    window.loginWithGoogle = () => googleAuthFlow("googleLoginBtn","loginMessage");
+    window.registerWithGoogle = () => googleAuthFlow("googleRegisterBtn","registerMessage");
 
     /* =========================
        LOGOUT
@@ -4089,31 +4174,8 @@
         }
 
       } else {
-
-        currentProfile = {
-
-          uid: user.uid,
-
-          name:
-            user.displayName ||
-            user.email?.split("@")[0] ||
-            "Student",
-
-          email:
-            user.email || "",
-
-          role: "student",
-
-          createdAt: serverTimestamp()
-
-        };
-
-
-        await setDoc(
-          ref,
-          currentProfile
-        );
-
+        currentProfile = null;
+        throw new Error("PROFILE_REQUIRED");
       }
 
 
@@ -4294,6 +4356,8 @@
         const el = document.getElementById(id);
         if (el) el.classList.toggle("hidden", key === "maintenance" ? !isAdmin : !canManage(key));
       });
+      const staffBtn=document.getElementById("staffAdminBtn");
+      if(staffBtn) staffBtn.classList.toggle("hidden",!canManage("staff"));
       const pageControls={notices:"noticeAdminBtn",materials:"materialAdminBtn",routine:"routineAdminBtn",events:"eventAdminBtn",results:"resultAdminBtn"};
       Object.entries(pageControls).forEach(([key,id])=>{const el=document.getElementById(id);if(el)el.classList.toggle("hidden",!canManage(key));});
       const permPanel = document.getElementById("moderatorPermissionPanel");
@@ -4837,7 +4901,7 @@
             let imageUrl = existing?.imageUrl || "";
             let imagePublicId = existing?.imagePublicId || "";
             if (imageFile) {
-              if (!(["image/jpeg","image/png","image/webp"].includes(imageFile.type)) || imageFile.size > 5*1024*1024) { showToast("JPG, PNG বা WebP image সর্বোচ্চ 5 MB দিন।", "error"); return; }
+              if (!(["image/jpeg","image/png","image/webp"].includes(imageFile.type))) { showToast("JPG, PNG বা WebP image দিন।", "error"); return; }
               const imageData = await uploadImageToCloudinary(imageFile);
               imageUrl = imageData.secure_url || ""; imagePublicId = imageData.public_id || "";
             }
@@ -5221,7 +5285,7 @@
               margin-top:4px;
             "
           >
-            Maximum file size: 15 MB
+            No fixed size limit (Cloudinary limit applies)
           </div>
 
           <input
@@ -5320,24 +5384,7 @@
         return;
 
       }
-
-
-      if (
-        file.size >
-        15 * 1024 * 1024
-      ) {
-
-        showToast(
-          "PDF size 15 MB-এর বেশি হতে পারবে না।",
-          "error"
-        );
-
-        return;
-
-      }
-
-
-      const progress =
+const progress =
         document.getElementById(
           "uploadProgress"
         );
@@ -5587,7 +5634,7 @@
     window.openRoutineModal=function(){
       if(!canManage("routine")){showToast("Routine access lock করা আছে।","error");return;}
       const body=`<div class="form-group"><label class="form-label">Routine Title</label><input id="routineTitle" class="form-input" placeholder="যেমন: HSC 1st Year Class Routine"></div>
-        <div class="upload-box"><div style="font-size:34px;">🗓️</div><div style="font-weight:700;">Routine Picture</div><div style="color:#64748b;font-size:12px;margin-top:4px;">JPG, PNG বা WebP • সর্বোচ্চ 5 MB</div><input id="routineImage" type="file" accept="image/jpeg,image/png,image/webp"><div id="routineImagePreview" style="margin-top:10px;"></div></div>`;
+        <div class="upload-box"><div style="font-size:34px;">🗓️</div><div style="font-weight:700;">Routine Picture</div><div style="color:#64748b;font-size:12px;margin-top:4px;">JPG, PNG বা WebP • No fixed size limit</div><input id="routineImage" type="file" accept="image/jpeg,image/png,image/webp"><div id="routineImagePreview" style="margin-top:10px;"></div></div>`;
       openModal("Upload Class Routine",body,saveRoutine,"Upload Routine");
       document.getElementById("routineImage")?.addEventListener("change",()=>{const f=document.getElementById("routineImage").files?.[0],p=document.getElementById("routineImagePreview");if(f&&p){const r=new FileReader();r.onload=()=>p.innerHTML=`<img src="${r.result}" style="width:100%;max-height:180px;object-fit:contain;border-radius:10px;">`;r.readAsDataURL(f);}});
     };
@@ -5596,7 +5643,7 @@
       if(!canManage("routine"))return;
       const title=document.getElementById("routineTitle")?.value.trim()||""; const file=document.getElementById("routineImage")?.files?.[0]||null;
       if(!title||!file){showToast("Routine Title এবং Picture দুটোই দিন।","warning");return;}
-      if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){showToast("Routine picture JPG/PNG/WebP এবং সর্বোচ্চ 5 MB হতে হবে।","error");return;}
+      if(!["image/jpeg","image/png","image/webp"].includes(file.type)){showToast("Routine picture JPG/PNG/WebP হতে হবে।","error");return;}
       const btn=document.getElementById("modalSaveBtn"); try{btn.disabled=true;btn.textContent="Uploading...";const data=await uploadImageToCloudinary(file);await addDoc(collection(db,"routine"),{title,imageUrl:data.secure_url||"",imagePublicId:data.public_id||"",createdAt:serverTimestamp(),createdBy:currentUser.uid});closeModal();showToast("Routine upload হয়েছে।","success");await loadRoutine();}catch(e){console.error(e);showToast("Routine upload করতে সমস্যা হয়েছে।","error");}finally{if(btn){btn.disabled=false;btn.textContent="Upload Routine";}}
     }
 
@@ -5979,7 +6026,7 @@
           try {
             let imageUrl = "", imagePublicId = "";
             if (imageFile) {
-              if (!["image/jpeg","image/png","image/webp"].includes(imageFile.type) || imageFile.size > 5*1024*1024) { showToast("Event image JPG/PNG/WebP এবং সর্বোচ্চ 5 MB হতে হবে।", "error"); return; }
+              if (!["image/jpeg","image/png","image/webp"].includes(imageFile.type)) { showToast("Event image JPG/PNG/WebP হতে হবে।", "error"); return; }
               const imageData = await uploadImageToCloudinary(imageFile); imageUrl=imageData.secure_url||""; imagePublicId=imageData.public_id||"";
             }
             await addDoc(collection(db,"events"), {
@@ -6100,14 +6147,14 @@
       <div class="form-group"><label class="form-label">Academic Year</label><select id="resultAcademicYear" class="form-select"><option value="HSC 1st Year">HSC 1st Year</option><option value="HSC 2nd Year">HSC 2nd Year</option></select></div>
       <div class="form-group"><label class="form-label">Group</label><select id="resultGroup" class="form-select"><option value="Science">Science</option><option value="Humanities">Humanities</option><option value="Business Studies">Business Studies</option></select></div>
       <div class="form-group"><label class="form-label">Subject</label><input id="resultSubject" class="form-input" placeholder="যেমন: সকল বিষয়"></div>
-      <div class="upload-box"><div style="font-size:34px;">📊</div><div style="font-weight:700;">Result Picture</div><div style="color:#64748b;font-size:12px;margin-top:4px;">সবার Result একসাথে • JPG, PNG বা WebP • সর্বোচ্চ 5 MB</div><input id="resultImage" type="file" accept="image/jpeg,image/png,image/webp"><div id="resultImagePreview" style="margin-top:10px;"></div></div>
+      <div class="upload-box"><div style="font-size:34px;">📊</div><div style="font-weight:700;">Result Picture</div><div style="color:#64748b;font-size:12px;margin-top:4px;">সবার Result একসাথে • JPG, PNG বা WebP • No fixed size limit</div><input id="resultImage" type="file" accept="image/jpeg,image/png,image/webp"><div id="resultImagePreview" style="margin-top:10px;"></div></div>
       <div class="form-group"><label style="display:flex;align-items:center;gap:9px;cursor:pointer;"><input id="resultPublished" type="checkbox"><span>এখনই Publish করুন</span></label></div>`;
       openModal("Upload Student Result",body,saveResult,"Upload Result");
       document.getElementById("resultImage")?.addEventListener("change",()=>{const f=document.getElementById("resultImage").files?.[0],p=document.getElementById("resultImagePreview");if(f&&p){const r=new FileReader();r.onload=()=>p.innerHTML=`<img src="${r.result}" style="width:100%;max-height:180px;object-fit:contain;border-radius:10px;">`;r.readAsDataURL(f);}});
     };
     async function saveResult(){
       if(!canManage("results"))return; const title=document.getElementById("resultTitle")?.value.trim()||"";const academicYear=document.getElementById("resultAcademicYear")?.value||"";const group=document.getElementById("resultGroup")?.value||"";const subject=document.getElementById("resultSubject")?.value.trim()||"";const file=document.getElementById("resultImage")?.files?.[0]||null;const published=document.getElementById("resultPublished")?.checked||false;
-      if(!title||!subject||!file){showToast("Title, Subject এবং Result Picture দিন।","warning");return;} if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){showToast("Result picture JPG/PNG/WebP এবং সর্বোচ্চ 5 MB হতে হবে।","error");return;}
+      if(!title||!subject||!file){showToast("Title, Subject এবং Result Picture দিন।","warning");return;} if(!["image/jpeg","image/png","image/webp"].includes(file.type)){showToast("Result picture JPG/PNG/WebP হতে হবে।","error");return;}
       const btn=document.getElementById("modalSaveBtn");try{btn.disabled=true;btn.textContent="Uploading...";const data=await uploadImageToCloudinary(file);await addDoc(collection(db,"results"),{title,academicYear,group,subject,resultImageUrl:data.secure_url||"",resultImagePublicId:data.public_id||"",published,createdAt:serverTimestamp(),createdBy:currentUser.uid});closeModal();showToast(published?"Result publish হয়েছে।":"Result save হয়েছে।","success");await loadResults();await loadDashboard();}catch(e){console.error(e);showToast("Result save করতে সমস্যা হয়েছে।","error");}finally{if(btn){btn.disabled=false;btn.textContent="Upload Result";}}
     }
 
@@ -6156,14 +6203,7 @@
         input.value = "";
         return;
       }
-
-      if (file.size > 5 * 1024 * 1024) {
-        showToast("Profile picture সর্বোচ্চ 5 MB হতে পারবে।", "error");
-        input.value = "";
-        return;
-      }
-
-      try {
+try {
 
         showToast("Profile picture upload হচ্ছে...", "info");
 
@@ -6504,7 +6544,7 @@
           <label class="form-label">Message</label>
           <textarea id="supportMessage" class="form-textarea" style="min-height:150px;" placeholder="তোমার সমস্যাটি বিস্তারিত লিখো..."></textarea>
         </div>
-        <div class="upload-box"><div style="font-size:30px;">🖼️</div><div style="font-weight:700;">Picture (Optional)</div><div style="color:#64748b;font-size:12px;margin-top:4px;">JPG, PNG বা WebP • সর্বোচ্চ 5 MB</div><input id="supportImage" type="file" accept="image/jpeg,image/png,image/webp"><div id="supportImagePreview" style="margin-top:10px;"></div></div>
+        <div class="upload-box"><div style="font-size:30px;">🖼️</div><div style="font-weight:700;">Picture (Optional)</div><div style="color:#64748b;font-size:12px;margin-top:4px;">JPG, PNG বা WebP • No fixed size limit</div><input id="supportImage" type="file" accept="image/jpeg,image/png,image/webp"><div id="supportImagePreview" style="margin-top:10px;"></div></div>
 
       `;
 
@@ -6532,7 +6572,7 @@
         showToast("Subject এবং Message দুটোই দিন।", "warning");
         return;
       }
-      if(imageFile && (!["image/jpeg","image/png","image/webp"].includes(imageFile.type)||imageFile.size>5*1024*1024)){showToast("Support picture JPG/PNG/WebP এবং সর্বোচ্চ 5 MB হতে হবে।","error");return;}
+      if(imageFile && (!["image/jpeg","image/png","image/webp"].includes(imageFile.type))){showToast("Support picture JPG/PNG/WebP হতে হবে।","error");return;}
 
       const saveBtn = document.getElementById("modalSaveBtn");
 
@@ -6804,13 +6844,20 @@
 
     async function loadStaff() {
       const box=document.getElementById("staffGrid"); if(!box)return;
-      try { const snap=await getDocs(collection(db,"staff")); const rows=snap.docs.map(d=>d.data());
-        box.innerHTML=rows.length?rows.map(x=>`<div class="card"><div class="card-body" style="display:flex;gap:16px;align-items:flex-start;"><div style="width:85px;height:85px;border-radius:16px;overflow:hidden;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:30px;flex:none;">${x.photoURL?`<img src="${escapeHtml(x.photoURL)}" style="width:100%;height:100%;object-fit:cover;">`:"👨‍🏫"}</div><div><h3>${escapeHtml(x.name||"—")}</h3><div style="color:#64748b;font-size:13px;">${escapeHtml(x.designation||"Teacher/Staff")}</div>${x.department?`<div style="font-size:12px;margin-top:6px;">🏢 ${escapeHtml(x.department)}</div>`:""}${x.phone?`<div style="font-size:12px;margin-top:5px;">📱 ${escapeHtml(x.phone)}</div>`:""}${x.bio?`<p style="color:#64748b;font-size:12px;margin-top:7px;line-height:1.5;">${escapeHtml(x.bio)}</p>`:""}</div></div></div>`).join(""):'<div class="empty">এখনো কোনো Teacher/Staff যোগ করা হয়নি।</div>';
+      box.innerHTML='<div class="empty">Loading...</div>';
+      try {
+        const snap=await getDocs(collection(db,"staff"));
+        staffCache=snap.docs.map(d=>({id:d.id,...d.data()}));
+        staffCache.sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+        const manageable=canManage("staff");
+        box.innerHTML=staffCache.length?staffCache.map(x=>`<div class="card"><div class="card-body" style="display:flex;gap:16px;align-items:flex-start;"><div style="width:85px;height:85px;border-radius:16px;overflow:hidden;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:30px;flex:none;">${x.photoURL?`<img src="${escapeHtml(x.photoURL)}" style="width:100%;height:100%;object-fit:cover;" alt="${escapeHtml(x.name||"Teacher")}">`:"👨‍🏫"}</div><div style="min-width:0;flex:1;"><h3 style="margin:0;">${escapeHtml(x.name||"—")}</h3><div style="color:#64748b;font-size:13px;margin-top:3px;">${escapeHtml(x.designation||"Teacher/Staff")}</div>${x.department?`<div style="font-size:12px;margin-top:7px;">🏢 ${escapeHtml(x.department)}</div>`:""}${x.phone?`<div style="font-size:12px;margin-top:5px;">📱 ${escapeHtml(x.phone)}</div>`:""}${x.bio?`<p style="color:#64748b;font-size:12px;margin-top:7px;line-height:1.5;">${escapeHtml(x.bio)}</p>`:""}${manageable?`<button class="danger-btn staff-admin-delete" onclick="deleteStaff('${x.id}')">🗑 Remove</button>`:""}</div></div></div>`).join(""):'<div class="empty">এখনো কোনো Teacher/Staff যোগ করা হয়নি।</div>';
       } catch(e){ console.error(e); box.innerHTML='<div class="empty">Teachers & Staff load করতে সমস্যা হয়েছে।</div>'; }
     }
 
+    window.deleteStaff=async function(id){if(!canManage("staff"))return;if(!confirm("এই Teacher/Staff remove করতে চান?"))return;try{await deleteDoc(doc(db,"staff",id));showToast("Teacher/Staff remove হয়েছে।","success");await loadStaff();}catch(e){console.error(e);showToast("Remove করতে সমস্যা হয়েছে।","error");}};
+
     window.openStaffModal=function(){ if(!canManage("staff")){showToast("Teachers & Staff access lock করা আছে।","error");return;} const body=`<div class="form-group"><label class="form-label">Name</label><input id="staffName" class="form-input" placeholder="Teacher/Staff name"></div><div class="form-group"><label class="form-label">Designation</label><input id="staffDesignation" class="form-input" placeholder="Lecturer / Office Staff"></div><div class="form-group"><label class="form-label">Department</label><input id="staffDepartment" class="form-input" placeholder="Department"></div><div class="form-group"><label class="form-label">Phone</label><input id="staffPhone" class="form-input" placeholder="01XXXXXXXXX"></div><div class="form-group"><label class="form-label">Photo (optional)</label><input id="staffPhoto" type="file" accept="image/jpeg,image/png,image/webp"></div><div class="form-group"><label class="form-label">Bio</label><textarea id="staffBio" class="form-textarea" placeholder="Short information"></textarea></div>`; openModal("Add Teacher / Staff",body,saveStaff,"Save"); };
-    async function saveStaff(){ const name=document.getElementById("staffName")?.value.trim()||""; if(!name){showToast("Name দিন।","warning");return;} try{let photoURL=""; const f=document.getElementById("staffPhoto")?.files?.[0]; if(f){if(!["image/jpeg","image/png","image/webp"].includes(f.type)||f.size>5*1024*1024){showToast("JPG/PNG/WebP, সর্বোচ্চ 5 MB।","error");return;} photoURL=(await uploadImageToCloudinary(f)).secure_url||"";} await addDoc(collection(db,"staff"),{name,designation:document.getElementById("staffDesignation")?.value.trim()||"",department:document.getElementById("staffDepartment")?.value.trim()||"",phone:document.getElementById("staffPhone")?.value.trim()||"",bio:document.getElementById("staffBio")?.value.trim()||"",photoURL,createdAt:serverTimestamp(),createdBy:currentUser.uid}); closeModal();showToast("Teacher/Staff add হয়েছে।","success");await loadStaff();}catch(e){console.error(e);showToast("Teacher/Staff add করতে সমস্যা হয়েছে।","error");} }
+    async function saveStaff(){ const name=document.getElementById("staffName")?.value.trim()||""; if(!name){showToast("Name দিন।","warning");return;} try{let photoURL=""; const f=document.getElementById("staffPhoto")?.files?.[0]; if(f){if(!["image/jpeg","image/png","image/webp"].includes(f.type)){showToast("JPG/PNG/WebP।","error");return;} photoURL=(await uploadImageToCloudinary(f)).secure_url||"";} await addDoc(collection(db,"staff"),{name,designation:document.getElementById("staffDesignation")?.value.trim()||"",department:document.getElementById("staffDepartment")?.value.trim()||"",phone:document.getElementById("staffPhone")?.value.trim()||"",bio:document.getElementById("staffBio")?.value.trim()||"",photoURL,createdAt:serverTimestamp(),createdBy:currentUser.uid}); closeModal();showToast("Teacher/Staff add হয়েছে।","success");await loadStaff();}catch(e){console.error(e);showToast("Teacher/Staff add করতে সমস্যা হয়েছে।","error");} }
 
     /* =========================
        ADMIN USERS
@@ -7299,6 +7346,84 @@
     });
 
     /* =========================
+       NOTIFICATIONS
+    ========================= */
+
+    function getSeenNotifications(){try{return JSON.parse(localStorage.getItem("campusone_seen_notifications")||"{}")||{};}catch{return {};}}
+    function saveSeenNotifications(v){try{localStorage.setItem("campusone_seen_notifications",JSON.stringify(v));}catch{}}
+
+    async function refreshNotifications(){
+      if(!currentUser)return;
+      try{
+        const sources=[
+          ["notices","Notice","🔔"],
+          ["materials","Study Material","📚"],
+          ["events","Event","🎉"],
+          ["results","Result","📊"]
+        ];
+        const rows=[];
+        for(const [col,label,icon] of sources){
+          const snap=await getDocs(collection(db,col));
+          snap.docs.forEach(d=>{const x=d.data()||{}; if(col==="results" && x.published!==true)return; rows.push({id:`${col}:${d.id}`,type:col,label,icon,title:x.title||label,createdAt:x.createdAt||null});});
+        }
+        rows.sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
+        notifications=rows.slice(0,30);
+        const seen=getSeenNotifications();
+        // First visit: mark current items as seen, preventing a notification storm.
+        if(Object.keys(seen).length===0 && notifications.length){notifications.forEach(n=>seen[n.id]=true);saveSeenNotifications(seen);}
+        notificationUnread=notifications.filter(n=>!seen[n.id]).length;
+        renderNotifications();
+      }catch(e){console.warn("Notifications:",e);}
+    }
+
+    function renderNotifications(){
+      const badge=document.getElementById("notificationBadge");
+      if(badge){badge.textContent=notificationUnread>99?"99+":String(notificationUnread);badge.classList.toggle("hidden",notificationUnread===0);}
+      const box=document.getElementById("notificationList"); if(!box)return;
+      const seen=getSeenNotifications();
+      box.innerHTML=notifications.length?notifications.slice(0,12).map(n=>`<div class="notification-item ${seen[n.id]?"":"unread"}" onclick="openNotification('${escapeHtml(n.type)}','${escapeHtml(n.id.split(':')[1])}')"><div style="font-size:20px;">${n.icon}</div><div><div class="notification-item-title">${escapeHtml(n.title)}</div><div class="notification-item-meta">New ${escapeHtml(n.label)} • ${formatDateTime(n.createdAt)}</div></div></div>`).join(""):'<div class="empty" style="padding:20px;">কোনো notification নেই।</div>';
+    }
+
+    window.toggleNotifications=function(){const p=document.getElementById("notificationPanel");if(!p)return;p.classList.toggle("hidden");if(!p.classList.contains("hidden"))refreshNotifications();};
+    window.markNotificationsRead=function(){const seen=getSeenNotifications();notifications.forEach(n=>seen[n.id]=true);saveSeenNotifications(seen);notificationUnread=0;renderNotifications();};
+    window.openNotification=function(type,id){const map={notices:"notices",materials:"materials",events:"events",results:"results"};if(map[type])showPage(map[type]);document.getElementById("notificationPanel")?.classList.add("hidden");const seen=getSeenNotifications();seen[`${type}:${id}`]=true;saveSeenNotifications(seen);notificationUnread=Math.max(0,notificationUnread-1);renderNotifications();};
+
+    /* =========================
+       GLOBAL SEARCH
+    ========================= */
+    async function ensureSearchData(){
+      if(searchDataLoaded)return;
+      const collections=["notices","materials","events","routine","results","staff"];
+      const all=[];
+      for(const col of collections){
+        try{const snap=await getDocs(collection(db,col));snap.docs.forEach(d=>{const x=d.data()||{};if(col==="results"&&x.published!==true)return;all.push({id:d.id,type:col,...x});});}catch(e){console.warn("Search",col,e);}
+      }
+      searchCache=all;searchDataLoaded=true;
+    }
+    function searchIcon(type){return {notices:"🔔",materials:"📚",events:"🎉",routine:"🗓️",results:"📊",staff:"👨‍🏫"}[type]||"🔎";}
+    function searchLabel(type){return {notices:"Notice",materials:"Study Material",events:"Event",routine:"Routine",results:"Result",staff:"Teacher / Staff"}[type]||type;}
+    window.performGlobalSearch=async function(term){
+      const box=document.getElementById("globalSearchResults"); if(!box)return;
+      term=term.trim().toLowerCase();
+      if(!term){box.classList.add("hidden");return;}
+      box.classList.remove("hidden");box.innerHTML='<div class="empty" style="padding:20px;">Searching...</div>';
+      await ensureSearchData();
+      const fields=["title","name","designation","department","subject","description","message","bio"];
+      const matches=searchCache.filter(x=>fields.some(k=>String(x[k]||"").toLowerCase().includes(term))).slice(0,12);
+      if(!matches.length){box.innerHTML='<div class="empty" style="padding:20px;">কোনো result পাওয়া যায়নি।</div>';return;}
+      box.innerHTML=matches.map(x=>`<div class="search-result" onclick="openSearchResult('${x.type}','${x.id}')"><div class="search-result-icon">${searchIcon(x.type)}</div><div><div class="search-result-title">${escapeHtml(x.title||x.name||"Untitled")}</div><div class="search-result-meta">${searchLabel(x.type)}${x.subject?` • ${escapeHtml(x.subject)}`:""}${x.department?` • ${escapeHtml(x.department)}`:""}</div></div></div>`).join("");
+    };
+    window.openSearchResult=function(type,id){const page={notices:"notices",materials:"materials",events:"events",routine:"routine",results:"results",staff:"staff"}[type];if(page)showPage(page);document.getElementById("globalSearchResults")?.classList.add("hidden");document.getElementById("globalSearchInput").value="";};
+
+    /* =========================
+       PWA INSTALL
+    ========================= */
+    window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferredInstallPrompt=e;document.getElementById("installAppBtn")?.classList.remove("hidden");});
+    window.installApp=async function(){if(!deferredInstallPrompt)return;deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;document.getElementById("installAppBtn")?.classList.add("hidden");};
+    if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(e=>console.warn("Service worker:",e)));}
+    setInterval(()=>{if(currentUser) refreshNotifications();}, 60000);
+
+    /* =========================
        AUTH STATE
     ========================= */
 
@@ -7339,6 +7464,8 @@
 
 
             showPage("dashboard");
+            refreshNotifications();
+            searchDataLoaded=false;
             // Dashboard is loaded once by showPage(); do not duplicate the Firestore reads.
 
           } else {
@@ -7416,6 +7543,9 @@
       }
     );
 
+
+    document.getElementById("globalSearchInput")?.addEventListener("input",e=>performGlobalSearch(e.target.value));
+    document.addEventListener("click",e=>{if(!e.target.closest(".global-search-wrap"))document.getElementById("globalSearchResults")?.classList.add("hidden");if(!e.target.closest(".notification-btn")&&!e.target.closest(".notification-panel"))document.getElementById("notificationPanel")?.classList.add("hidden");});
 
     /* =========================
        ENTER KEY LOGIN
