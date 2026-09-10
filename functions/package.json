@@ -1,7 +1,9 @@
 {
   "name": "campusone-functions",
   "private": true,
-  "engines": { "node": "20" },
+  "engines": {
+    "node": "20"
+  },
   "main": "index.js",
   "dependencies": {
     "firebase-admin": "latest",
