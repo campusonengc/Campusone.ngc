@@ -1967,6 +1967,72 @@
     .staff-admin-delete{margin-top:12px;}
 
 
+
+    /* =========================
+       CAMPUSONE UI POLISH
+    ========================= */
+    .user-cell{display:flex;align-items:center;gap:10px;min-width:170px}
+    .user-list-avatar{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-weight:800;overflow:hidden}
+    .user-list-avatar img{width:100%;height:100%;object-fit:cover}
+    .user-cell-name{font-weight:800;line-height:1.25}.user-cell-email{font-size:11px;color:var(--muted);margin-top:2px}
+    .role-badge-admin{background:#ede9fe;color:#6d28d9}.role-badge-mod{background:#dbeafe;color:#1d4ed8}.role-badge-student{background:#e0f2fe;color:#0369a1}
+    .user-table-wrap{overflow-x:auto}
+    .site-footer{margin-top:28px;border-top:1px solid var(--border);padding:24px 4px 30px;color:var(--muted)}
+    .site-footer-inner{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+    .footer-brand{font-weight:800;color:var(--text)}.footer-copy{font-size:12px;margin-top:4px}
+    .footer-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .footer-link{border:0;background:none;color:var(--muted);font:inherit;font-size:12px;font-weight:700;cursor:pointer;padding:4px 0;text-decoration:none}
+    .footer-link:hover{color:var(--primary);text-decoration:underline}
+    .site-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+    .site-info-card{padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--card)}
+    .site-info-card h4{margin:0 0 7px;font-size:14px;color:var(--text)}.site-info-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+    .site-info-card a{color:var(--primary);font-weight:700;text-decoration:none}
+    .dark-mode .topbar{background:rgba(2,6,23,.94);border-color:var(--border)}
+    .dark-mode .mobile-menu,.dark-mode .global-search,.dark-mode .notification-btn,.dark-mode .theme-toggle{background:#111827;color:#e5e7eb;border-color:#334155}
+    .dark-mode .global-search-results,.dark-mode .notification-panel{background:#111827;color:#e5e7eb;border-color:#334155}
+    .dark-mode .search-result:hover,.dark-mode .notification-item:hover{background:#1e293b}
+    .dark-mode .notification-item.unread{background:#1e1b4b}
+    .dark-mode .notification-panel-head,.dark-mode .notification-item{border-color:#263244}
+    .dark-mode .access-toggle{background:#111827;border-color:#334155;color:#e5e7eb}
+    .dark-mode .access-status.unlocked{background:#14532d;color:#bbf7d0}.dark-mode .access-status.locked{background:#450a0a;color:#fecaca}
+    .dark-mode .role-badge-admin{background:#3b0764;color:#e9d5ff}.dark-mode .role-badge-mod{background:#172554;color:#bfdbfe}.dark-mode .role-badge-student{background:#082f49;color:#bae6fd}
+    .dark-mode .table-card table,.dark-mode table{color:#e5e7eb}.dark-mode th{background:#0f172a;color:#cbd5e1;border-color:#334155}.dark-mode td{border-color:#263244;color:#e5e7eb}
+    .dark-mode .site-footer{border-color:#263244}.dark-mode .footer-brand{color:#f8fafc}.dark-mode .site-info-card{background:#111827;border-color:#334155}
+    .dark-mode .badge-success{background:#14532d;color:#bbf7d0}.dark-mode .badge-danger{background:#450a0a;color:#fecaca}.dark-mode .badge-info{background:#172554;color:#bfdbfe}
+    .dark-mode .small-btn{background:#111827;color:#e5e7eb;border-color:#334155}
+    .dark-mode .primary-btn{color:#fff}
+    @media(max-width:700px){
+      .global-search-wrap{display:block!important;position:absolute;left:14px;right:14px;top:72px;width:auto!important;z-index:2500}
+      .global-search{height:42px}
+      .global-search-results{top:48px}
+      .topbar{position:sticky;z-index:2600}
+      .topbar-right{gap:7px}
+      .site-info-grid{grid-template-columns:1fr}
+      .user-table-wrap{overflow:visible}
+      #adminUsersTable thead{display:none}
+      #adminUsersTable,#adminUsersTable tbody,#adminUsersTable tr,#adminUsersTable td{display:block;width:100%}
+      #adminUsersTable tr{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;margin-bottom:10px;box-shadow:0 5px 18px rgba(15,23,42,.06)}
+      #adminUsersTable td{border:0!important;padding:7px 2px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;text-align:right}
+      #adminUsersTable td:before{font-size:11px;font-weight:800;color:var(--muted);text-align:left;flex:none}
+      #adminUsersTable td:nth-child(1):before{content:"SL"}
+      #adminUsersTable td:nth-child(2):before{content:"Student"}
+      #adminUsersTable td:nth-child(3):before{content:"Roll"}
+      #adminUsersTable td:nth-child(4):before{content:"Academic Year"}
+      #adminUsersTable td:nth-child(5):before{content:"Group"}
+      #adminUsersTable td:nth-child(6):before{content:"Phone"}
+      #adminUsersTable td:nth-child(7):before{content:"Email"}
+      #adminUsersTable td:nth-child(8):before{content:"Role"}
+      #adminUsersTable td:nth-child(9):before{content:"Status"}
+      #adminUsersTable td:nth-child(10):before{content:"Last Seen"}
+      #adminUsersTable td:nth-child(11):before{content:"Created"}
+      #adminUsersTable td:nth-child(2){display:block;text-align:left;padding-bottom:10px;border-bottom:1px solid var(--border)!important;margin-bottom:4px}
+      #adminUsersTable td:nth-child(2):before{display:none}
+      #adminUsersTable td:nth-child(2) .user-cell{width:100%}
+      #adminUsersTable td:nth-child(7){word-break:break-word}
+      #adminUsersTable td:nth-child(8) select{max-width:150px}
+      .site-footer-inner{align-items:flex-start}
+    }
+
     /* =========================
        CAMPUSONE EXTRA FEATURES
     ========================= */
@@ -3259,6 +3325,12 @@
               <p>Click করে Website On / Off করুন।</p>
             </div>
 
+            <div id="adminSiteInfoAction" class="admin-action" onclick="openSiteInfoModal()">
+              <div class="admin-action-icon">🔗</div>
+              <h3>Website Info & Links</h3>
+              <p>Developer, Facebook Group ও About তথ্য edit করুন।</p>
+            </div>
+
             <div id="adminModeratorAccessAction" class="admin-action" onclick="openModeratorAccessPanel()">
               <div class="admin-action-icon">🛡️</div>
               <h3>Moderator Access</h3>
@@ -3310,7 +3382,7 @@
             </div>
 
 
-            <div class="table-card">
+            <div class="table-card user-table-wrap">
 
               <table>
 
@@ -3334,7 +3406,21 @@
 
       </div>
 
-    </main>
+    
+      <footer class="site-footer">
+        <div class="site-footer-inner">
+          <div>
+            <div id="footerBrand" class="footer-brand">CampusOne NGC</div>
+            <div id="footerCopyright" class="footer-copy">© 2026 CampusOne NGC. All rights reserved.</div>
+          </div>
+          <div class="footer-links">
+            <button class="footer-link" onclick="openSiteInfo('about')">About</button>
+            <button class="footer-link" onclick="openSiteInfo('developer')">Developer</button>
+            <a id="footerFacebook" class="footer-link" href="#" target="_blank" rel="noopener">Facebook Group</a>
+          </div>
+        </div>
+      </footer>
+</main>
 
   </div>
 
@@ -4227,8 +4313,11 @@
       }
 
 
-      await loadModeratorPermissions();
+      if (currentProfile?.role === "admin" || currentProfile?.role === "moderator") {
+        await loadModeratorPermissions();
+      }
       updateUserUI();
+      loadSiteInfo();
 
     }
 
@@ -4399,7 +4488,8 @@
         users: "adminUsersAction",
         staff: "adminStaffAction",
         gallery: "adminGalleryAction",
-        maintenance: "adminMaintenanceAction"
+        maintenance: "adminMaintenanceAction",
+        siteInfo: "adminSiteInfoAction"
       };
       Object.entries(permissionElements).forEach(([key, id]) => {
         const el = document.getElementById(id);
@@ -6970,7 +7060,7 @@ try {
 
         const users =
           snap.docs.map(
-            d => d.data()
+            d => ({ id: d.id, ...d.data() })
           );
 
 
@@ -7007,9 +7097,10 @@ try {
               <td><strong>${index + 1}</strong></td>
 
               <td>
-                ${escapeHtml(
-                  u.name || "—"
-                )}
+                <div class="user-cell">
+                  <div class="user-list-avatar">${u.photoURL ? `<img src="${escapeHtml(u.photoURL)}" alt="">` : escapeHtml(String(u.name || "U").trim().charAt(0).toUpperCase() || "U")}</div>
+                  <div><div class="user-cell-name">${escapeHtml(u.name || "Unnamed Student")}</div><div class="user-cell-email">${escapeHtml(u.email || "No email")}</div></div>
+                </div>
               </td>
 
               <td>${escapeHtml(u.roll || "—")}</td>
@@ -7019,11 +7110,11 @@ try {
               <td>${escapeHtml(u.email || "—")}</td>
 
               <td>
-                ${u.role === "admin" ? `<span class="badge badge-purple">Admin</span>` : isAdmin() ? `
-                  <select class="form-select" style="min-width:130px;" onchange="changeUserRole('${escapeHtml(u.uid || "")}', this.value)">
-                    <option value="student" ${u.role === "student" ? "selected" : ""}>Student</option>
-                    <option value="moderator" ${u.role === "moderator" ? "selected" : ""}>Moderator</option>
-                  </select>` : u.role === "moderator" ? `<span class="badge badge-info">Moderator</span>` : `<span class="badge badge-info">Student</span>`}
+                ${u.role === "admin" ? `<span class="badge role-badge-admin">👑 Admin</span>` : isAdmin() ? `
+                  <select class="form-select" style="min-width:130px;" onchange="changeUserRole('${escapeHtml(u.id || u.uid || "")}', this.value)">
+                    <option value="student" ${u.role === "student" ? "selected" : ""}>🎓 Student</option>
+                    <option value="moderator" ${u.role === "moderator" ? "selected" : ""}>🛡️ Moderator</option>
+                  </select>` : u.role === "moderator" ? `<span class="badge role-badge-mod">🛡️ Moderator</span>` : `<span class="badge role-badge-student">🎓 Student</span>`}
               </td>
               <td>
                 <div class="admin-users-actions">
@@ -7476,9 +7567,8 @@ try {
       if(searchDataLoaded)return;
       const collections=["notices","materials","events","routine","results","staff","gallery"];
       const all=[];
-      for(const col of collections){
-        try{const snap=await getDocs(collection(db,col));snap.docs.forEach(d=>{const x=d.data()||{};if(col==="results"&&x.published!==true)return;all.push({id:d.id,type:col,...x});});}catch(e){console.warn("Search",col,e);}
-      }
+      const snaps = await Promise.all(collections.map(col => getDocs(collection(db,col)).catch(e => { console.warn("Search",col,e); return null; })));
+      snaps.forEach((snap,i)=>{ if(!snap) return; const col=collections[i]; snap.docs.forEach(d=>{const x=d.data()||{};if(col==="results"&&x.published!==true)return;all.push({id:d.id,type:col,...x});}); });
       searchCache=all;searchDataLoaded=true;
     }
     function searchIcon(type){return {notices:"🔔",materials:"📚",events:"🎉",routine:"🗓️",results:"📊",staff:"👨‍🏫",gallery:"🖼️"}[type]||"🔎";}
@@ -7519,6 +7609,67 @@ try {
     };
     window.deleteGallery=async function(id){if(!canManage("gallery"))return;if(!confirm("এই photo delete করতে চান?"))return;try{await deleteDoc(doc(db,"gallery",id));showToast("Gallery photo delete হয়েছে।","success");await loadGallery();if(isAdmin())loadAdminStats();}catch(e){console.error(e);showToast("Photo delete হয়নি।","error");}};
 
+
+    /* =========================
+       WEBSITE INFO / FOOTER
+    ========================= */
+    const defaultSiteInfo = {
+      collegeName: "CampusOne NGC",
+      about: "CampusOne NGC is the student portal for Niamatpur Govt. College.",
+      developer: "CampusOne NGC Development Team",
+      developerUrl: "",
+      facebookUrl: "",
+      facebookText: "Join our Facebook Group",
+      copyright: "© 2026 CampusOne NGC. All rights reserved."
+    };
+    let siteInfo = { ...defaultSiteInfo };
+
+    function renderSiteInfo(){
+      const brand=document.getElementById("footerBrand");
+      const copy=document.getElementById("footerCopyright");
+      const fb=document.getElementById("footerFacebook");
+      if(brand) brand.textContent=siteInfo.collegeName||defaultSiteInfo.collegeName;
+      if(copy) copy.textContent=siteInfo.copyright||defaultSiteInfo.copyright;
+      if(fb){
+        fb.textContent=siteInfo.facebookText||"Facebook Group";
+        fb.href=siteInfo.facebookUrl||"#";
+        fb.style.pointerEvents=siteInfo.facebookUrl?"auto":"none";
+        fb.style.opacity=siteInfo.facebookUrl?"1":".55";
+      }
+    }
+    async function loadSiteInfo(){
+      try{
+        const snap=await getDoc(doc(db,"settings","siteInfo"));
+        if(snap.exists()) siteInfo={...defaultSiteInfo,...snap.data()};
+      }catch(e){console.warn("Site info load:",e);}
+      renderSiteInfo();
+    }
+    window.openSiteInfo=function(section){
+      const title=section==="developer"?"Developer":section==="about"?"About":"Website Information";
+      const body=section==="developer"
+        ? `<div class="site-info-card"><h4>${escapeHtml(siteInfo.developer||"Developer")}</h4><p>${escapeHtml(siteInfo.about||"")}</p>${siteInfo.developerUrl?`<p style="margin-top:10px;"><a href="${escapeHtml(siteInfo.developerUrl)}" target="_blank" rel="noopener">Developer Link ↗</a></p>`:""}</div>`
+        : section==="about"
+        ? `<div class="site-info-card"><h4>${escapeHtml(siteInfo.collegeName||"About")}</h4><p>${escapeHtml(siteInfo.about||"")}</p></div>`
+        : `<div class="site-info-grid"><div class="site-info-card"><h4>About</h4><p>${escapeHtml(siteInfo.about||"")}</p></div><div class="site-info-card"><h4>Developer</h4><p>${escapeHtml(siteInfo.developer||"")}</p>${siteInfo.developerUrl?`<p style="margin-top:8px;"><a href="${escapeHtml(siteInfo.developerUrl)}" target="_blank" rel="noopener">Developer Link ↗</a></p>`:""}</div><div class="site-info-card"><h4>Facebook Group</h4><p>${siteInfo.facebookUrl?`<a href="${escapeHtml(siteInfo.facebookUrl)}" target="_blank" rel="noopener">${escapeHtml(siteInfo.facebookText||"Join our Facebook Group")} ↗</a>`:"Link not set"}</p></div></div>`;
+      openModal(title,body,null,"Close");
+    };
+    window.openSiteInfoModal=async function(){
+      if(!isAdmin()) return;
+      const snap=await getDoc(doc(db,"settings","siteInfo")).catch(()=>null);
+      const x=snap?.exists()?{...defaultSiteInfo,...snap.data()}:siteInfo;
+      const body=`<div class="form-group"><label class="form-label">College / Website Name</label><input id="siteCollegeName" class="form-input" value="${escapeHtml(x.collegeName)}"></div>
+      <div class="form-group"><label class="form-label">About</label><textarea id="siteAbout" class="form-input" rows="4">${escapeHtml(x.about)}</textarea></div>
+      <div class="form-group"><label class="form-label">Developer</label><input id="siteDeveloper" class="form-input" value="${escapeHtml(x.developer)}"></div>
+      <div class="form-group"><label class="form-label">Developer Link (optional)</label><input id="siteDeveloperUrl" class="form-input" value="${escapeHtml(x.developerUrl)}" placeholder="https://..."></div>
+      <div class="form-group"><label class="form-label">Facebook Group Link</label><input id="siteFacebookUrl" class="form-input" value="${escapeHtml(x.facebookUrl)}" placeholder="https://facebook.com/groups/..."></div>
+      <div class="form-group"><label class="form-label">Facebook Link Text</label><input id="siteFacebookText" class="form-input" value="${escapeHtml(x.facebookText)}"></div>
+      <div class="form-group"><label class="form-label">Copyright</label><input id="siteCopyright" class="form-input" value="${escapeHtml(x.copyright)}"></div>`;
+      openModal("Website Info & Links",body,async()=>{
+        const next={collegeName:document.getElementById("siteCollegeName").value.trim(),about:document.getElementById("siteAbout").value.trim(),developer:document.getElementById("siteDeveloper").value.trim(),developerUrl:document.getElementById("siteDeveloperUrl").value.trim(),facebookUrl:document.getElementById("siteFacebookUrl").value.trim(),facebookText:document.getElementById("siteFacebookText").value.trim(),copyright:document.getElementById("siteCopyright").value.trim(),updatedAt:serverTimestamp(),updatedBy:currentUser.uid};
+        try{await setDoc(doc(db,"settings","siteInfo"),next,{merge:true});siteInfo={...defaultSiteInfo,...next};renderSiteInfo();closeModal();showToast("Website info Firebase-এ save হয়েছে।","success");}catch(e){console.error(e);showToast("Website info save হয়নি।","error");}
+      },"Save");
+    };
+
     /* =========================
        DARK MODE
     ========================= */
@@ -7551,7 +7702,7 @@ try {
 
 
             await loadUserProfile(user);
-            await loadMaintenanceMode();
+            loadMaintenanceMode();
             updateActivityAndViews();
             if (isAdmin()) loadAdminStats();
 
