@@ -2075,6 +2075,87 @@
     body.dark-mode .site-footer{background:#111827;box-shadow:0 -6px 20px rgba(0,0,0,.25);}
 
 </style>
+
+<style id="final-footer-notification-fix">
+/* ===== FULL WEBSITE FIXED FOOTER ===== */
+.site-footer{
+  position:fixed !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  width:100vw !important;
+  max-width:none !important;
+  margin:0 !important;
+  z-index:9999 !important;
+  box-sizing:border-box !important;
+  text-align:center !important;
+}
+.site-footer-inner{
+  width:100% !important;
+  max-width:none !important;
+  margin:0 auto !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  text-align:center !important;
+  box-sizing:border-box !important;
+}
+.site-footer-inner > div,
+.footer-brand,
+.footer-copy,
+.footer-links,
+.footer-link{
+  text-align:center !important;
+}
+.footer-links{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex-wrap:wrap !important;
+}
+
+/* Reserve only footer space; existing section padding remains unchanged. */
+main{
+  padding-bottom:90px;
+}
+
+/* ===== DASHBOARD NOTIFICATION SCROLL ===== */
+.notification-panel{
+  max-height:min(70vh,600px) !important;
+  overflow:hidden !important;
+}
+.notification-list{
+  max-height:min(58vh,500px) !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  -webkit-overflow-scrolling:touch !important;
+  overscroll-behavior:contain !important;
+  scrollbar-width:thin !important;
+}
+.notification-list::-webkit-scrollbar{
+  width:6px;
+}
+.notification-list::-webkit-scrollbar-thumb{
+  border-radius:10px;
+}
+
+@media(max-width:700px){
+  main{
+    padding-bottom:115px;
+  }
+  .site-footer-inner{
+    flex-direction:column !important;
+    justify-content:center !important;
+  }
+  .notification-panel{
+    max-height:75vh !important;
+  }
+  .notification-list{
+    max-height:60vh !important;
+  }
+}
+</style>
+
 </head>
 
 <body>
