@@ -1966,6 +1966,25 @@
     @media(max-width:650px){.global-search-wrap{display:none}.notification-panel{right:12px;top:64px}.install-app-btn{display:none!important}}
     .staff-admin-delete{margin-top:12px;}
 
+
+    /* =========================
+       CAMPUSONE EXTRA FEATURES
+    ========================= */
+    body.dark-mode{--bg:#0b1120;--card:#111827;--text:#e5e7eb;--muted:#94a3b8;--border:#263244;--sidebar:#020617;--sidebar-hover:#111827;--sidebar-text:#cbd5e1;background:var(--bg);color:var(--text)}
+    body.dark-mode .card,body.dark-mode .stat-card,body.dark-mode .support-ticket,body.dark-mode .admin-action,body.dark-mode .notification-panel,body.dark-mode .modal,body.dark-mode .table-card{background:var(--card);color:var(--text);border-color:var(--border)}
+    body.dark-mode input,body.dark-mode select,body.dark-mode textarea{background:#0f172a;color:#e5e7eb;border-color:#334155}
+    body.dark-mode .secondary-btn,body.dark-mode .small-btn{background:#111827;color:#e5e7eb;border-color:#334155}
+    body.dark-mode .support-message{background:#0f172a}
+    .theme-toggle{border:1px solid var(--border);background:var(--card);color:var(--text);width:40px;height:40px;border-radius:12px;font-size:18px}
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+    .gallery-card{border:1px solid var(--border);background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+    .gallery-card img{width:100%;height:190px;object-fit:cover;display:block;cursor:pointer}
+    .gallery-info{padding:12px 14px}.gallery-title{font-weight:800;font-size:14px}.gallery-meta{font-size:11px;color:var(--muted);margin-top:3px}
+    .gallery-actions{display:flex;gap:7px;margin-top:10px}
+    .last-seen-online{color:#16a34a;font-weight:800}.last-seen-offline{color:var(--muted)}
+    .analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:15px 0 20px}
+    .analytics-mini{border:1px solid var(--border);background:var(--card);border-radius:15px;padding:15px}.analytics-mini .num{font-size:24px;font-weight:800}.analytics-mini .lbl{font-size:12px;color:var(--muted);margin-top:3px}
+
   </style>
 </head>
 
@@ -2378,6 +2397,10 @@
           <span class="nav-icon">🎧</span>
           <span>Support</span>
         </button>
+        <button class="nav-item" data-page="gallery" onclick="showPage('gallery', this)">
+          <span class="nav-icon">🖼️</span>
+          <span>Gallery</span>
+        </button>
 
 <div class="nav-title">Account</div>
 
@@ -2480,6 +2503,8 @@
             <input id="globalSearchInput" class="global-search" type="search" placeholder="Search notices, materials, events..." autocomplete="off" />
             <div id="globalSearchResults" class="global-search-results hidden"></div>
           </div>
+
+          <button id="themeToggle" class="theme-toggle" type="button" onclick="toggleDarkMode()" aria-label="Toggle dark mode">🌙</button>
 
           <button id="notificationBtn" class="notification-btn" type="button" onclick="toggleNotifications()" aria-label="Notifications">
             🔔<span id="notificationBadge" class="notification-badge hidden">0</span>
@@ -2891,6 +2916,14 @@
           </div>
         </section>
 
+        <section id="page-gallery" class="page">
+          <div class="section-header">
+            <div class="section-heading"><h2>Campus Gallery</h2><p>College-এর অনুষ্ঠান, সেমিনার, খেলাধুলা ও অন্যান্য ছবি এখানে দেখা যাবে।</p></div>
+            <div id="galleryAdminBtn"><button class="primary-btn" onclick="openGalleryModal()">+ Add Photo</button></div>
+          </div>
+          <div id="galleryGrid" class="gallery-grid"><div class="empty">Loading...</div></div>
+        </section>
+
         <section id="page-staff" class="page">
           <div class="section-header"><div class="section-heading"><h2>Teachers & Staff</h2><p>College-এর শিক্ষক ও কর্মচারীদের তথ্য এখানে দেখা যাবে।</p></div><div id="staffAdminBtn"><button class="primary-btn" onclick="openStaffModal()">+ Add Teacher / Staff</button></div></div>
           <div id="staffGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;"><div class="empty">Loading...</div></div>
@@ -3090,6 +3123,12 @@
             <div class="stat-card"><div class="stat-icon">🛡️</div><div><div id="adminModeratorCount" class="stat-number">0</div><div class="stat-label">Moderators</div></div></div>
           </div>
 
+          <div class="analytics-grid">
+            <div class="analytics-mini"><div id="adminGalleryCount" class="num">0</div><div class="lbl">Gallery Photos</div></div>
+            <div class="analytics-mini"><div id="adminOpenSupport" class="num">0</div><div class="lbl">Open Support Tickets</div></div>
+            <div class="analytics-mini"><div id="adminBlockedUsers" class="num">0</div><div class="lbl">Blocked Users</div></div>
+          </div>
+
           <div class="admin-grid">
 
             <div
@@ -3208,6 +3247,12 @@
 
             </div>
 
+            <div id="adminGalleryAction" class="admin-action" onclick="openAdminFeature('gallery')">
+              <div class="admin-action-icon">🖼️</div>
+              <h3>Campus Gallery</h3>
+              <p>College gallery photo add/manage করুন।</p>
+            </div>
+
             <div id="adminMaintenanceAction" class="admin-action" onclick="openMaintenanceModal()">
               <div class="admin-action-icon">🛠️</div>
               <h3>Maintenance Mode</h3>
@@ -3272,7 +3317,7 @@
                 <thead>
 
                   <tr>
-                    <th>SL</th><th>Name</th><th>Roll</th><th>Academic Year</th><th>Group</th><th>Phone</th><th>Email</th><th>Role / Access</th><th>Status</th><th>Created</th>
+                    <th>SL</th><th>Name</th><th>Roll</th><th>Academic Year</th><th>Group</th><th>Phone</th><th>Email</th><th>Role / Access</th><th>Status</th><th>Last Seen</th><th>Created</th>
                   </tr>
 
                 </thead>
@@ -3491,7 +3536,8 @@
       results: false,
       support: false,
       users: false,
-      staff: false
+      staff: false,
+      gallery: false
     };
 
     const moderatorPermissionLabels = {
@@ -3502,7 +3548,8 @@
       results: "Results",
       support: "Support Messages",
       users: "User Management",
-      staff: "Teachers & Staff"
+      staff: "Teachers & Staff",
+      gallery: "Campus Gallery"
     };
 
 
@@ -3525,6 +3572,7 @@
       results: "My Results",
       support: "Support Center",
       staff: "Teachers & Staff",
+      gallery: "Campus Gallery",
       profile: "My Profile",
       admin: "Admin Panel"
 
@@ -4200,7 +4248,7 @@
     async function loadModeratorPermissions() {
       const defaults = {
         notices: false, materials: false, routine: false, events: false,
-        results: false, support: false, users: false, staff: false
+        results: false, support: false, users: false, staff: false, gallery: false
       };
 
       // Always read the saved Firebase configuration. Admin-এর own
@@ -4350,6 +4398,7 @@
         support: "adminSupportAction",
         users: "adminUsersAction",
         staff: "adminStaffAction",
+        gallery: "adminGalleryAction",
         maintenance: "adminMaintenanceAction"
       };
       Object.entries(permissionElements).forEach(([key, id]) => {
@@ -4358,7 +4407,9 @@
       });
       const staffBtn=document.getElementById("staffAdminBtn");
       if(staffBtn) staffBtn.classList.toggle("hidden",!canManage("staff"));
-      const pageControls={notices:"noticeAdminBtn",materials:"materialAdminBtn",routine:"routineAdminBtn",events:"eventAdminBtn",results:"resultAdminBtn"};
+      const galleryBtn=document.getElementById("galleryAdminBtn");
+      if(galleryBtn) galleryBtn.classList.toggle("hidden",!canManage("gallery"));
+      const pageControls={notices:"noticeAdminBtn",materials:"materialAdminBtn",routine:"routineAdminBtn",events:"eventAdminBtn",results:"resultAdminBtn",gallery:"galleryAdminBtn"};
       Object.entries(pageControls).forEach(([key,id])=>{const el=document.getElementById(id);if(el)el.classList.toggle("hidden",!canManage(key));});
       const permPanel = document.getElementById("moderatorPermissionPanel");
       if (permPanel) permPanel.classList.add("hidden");
@@ -4501,6 +4552,10 @@
 
       if (page === "staff") {
         loadStaff();
+      }
+
+      if (page === "gallery") {
+        loadGallery();
       }
 
     };
@@ -6632,7 +6687,7 @@ try {
     window.openAdminFeature=function(feature){
       if(feature==="users"){openAdminUsersPanel();return;}
       if(feature==="support"){loadAdminSupport();return;}
-      if(feature==="notices"||feature==="materials"||feature==="routine"||feature==="events"||feature==="results"||feature==="staff"){
+      if(feature==="notices"||feature==="materials"||feature==="routine"||feature==="events"||feature==="results"||feature==="staff"||feature==="gallery"){
         if(!canManage(feature)){showToast("এই section-এর access lock করা আছে।","error");return;}
         showPage(feature);
         const controls={notices:"noticeAdminBtn",materials:"materialAdminBtn",routine:"routineAdminBtn",events:"eventAdminBtn",results:"resultAdminBtn"};
@@ -6896,7 +6951,7 @@ try {
 
       tbody.innerHTML =
         `<tr>
-          <td colspan="5">
+          <td colspan="11">
             Loading...
           </td>
         </tr>`;
@@ -6978,6 +7033,10 @@ try {
               </td>
 
               <td>
+                ${formatLastSeen(u.lastActiveAt)}
+              </td>
+
+              <td>
                 ${formatDate(
                   u.createdAt
                 )}
@@ -6993,7 +7052,7 @@ try {
 
         tbody.innerHTML =
           `<tr>
-            <td colspan="9">
+            <td colspan="11">
               Users load করতে সমস্যা হয়েছে।
             </td>
           </tr>`;
@@ -7081,6 +7140,18 @@ try {
       catch(e){ console.error(e); showToast("User status update করতে সমস্যা হয়েছে।","error"); }
     };
 
+    function formatLastSeen(ts) {
+      const ms = ts?.toMillis?.() || 0;
+      if (!ms) return `<span class="last-seen-offline">Never</span>`;
+      const diff = Math.max(0, Date.now() - ms);
+      if (diff <= 15 * 60 * 1000) return `<span class="last-seen-online">● Online</span>`;
+      const mins = Math.floor(diff / 60000);
+      if (mins < 60) return `<span class="last-seen-offline">${mins}m ago</span>`;
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return `<span class="last-seen-offline">${hrs}h ago</span>`;
+      return `<span class="last-seen-offline">${Math.floor(hrs/24)}d ago</span>`;
+    }
+
     function getDhakaDateKey() {
       return new Intl.DateTimeFormat("en-CA", { timeZone:"Asia/Dhaka", year:"numeric", month:"2-digit", day:"2-digit" }).format(new Date());
     }
@@ -7104,16 +7175,21 @@ try {
       const totalViewsEl = document.getElementById("adminTotalViews");
       const adminEl = document.getElementById("adminAdminCount");
       const modEl = document.getElementById("adminModeratorCount");
+      const galleryEl = document.getElementById("adminGalleryCount");
+      const supportEl = document.getElementById("adminOpenSupport");
+      const blockedEl = document.getElementById("adminBlockedUsers");
       if (!totalEl || !activeEl || !viewsEl || !totalViewsEl || !adminEl || !modEl) return;
 
       try {
-        const [usersSnap, todaySnap, globalSnap] = await Promise.all([
+        const [usersSnap, todaySnap, globalSnap, gallerySnap, supportSnap] = await Promise.all([
           getDocs(collection(db, "users")),
           getDoc(doc(db, "siteStats", getDhakaDateKey())),
-          getDoc(doc(db, "siteStats", "global"))
+          getDoc(doc(db, "siteStats", "global")),
+          getDocs(collection(db, "gallery")),
+          getDocs(collection(db, "supportTickets"))
         ]);
 
-        let active = 0, admins = 0, moderators = 0;
+        let active = 0, admins = 0, moderators = 0, blocked = 0;
         const now = Date.now();
         usersSnap.forEach(d => {
           const u = d.data() || {};
@@ -7121,12 +7197,16 @@ try {
           if (ts && now - ts <= 15 * 60 * 1000) active++;
           if (u.role === "admin") admins++;
           if (u.role === "moderator") moderators++;
+          if (u.blocked === true) blocked++;
         });
 
         totalEl.textContent = usersSnap.size;
         activeEl.textContent = active;
         adminEl.textContent = admins;
         modEl.textContent = moderators;
+        if(galleryEl) galleryEl.textContent = gallerySnap.size;
+        if(blockedEl) blockedEl.textContent = blocked;
+        if(supportEl) supportEl.textContent = supportSnap.docs.filter(d => !["closed","resolved"].includes(String(d.data()?.status||"").toLowerCase())).length;
 
         const today = todaySnap.exists() ? Number(todaySnap.data()?.views || 0) : 0;
         let total = globalSnap.exists() ? Number(globalSnap.data()?.views || 0) : 0;
@@ -7359,7 +7439,8 @@ try {
           ["notices","Notice","🔔"],
           ["materials","Study Material","📚"],
           ["events","Event","🎉"],
-          ["results","Result","📊"]
+          ["results","Result","📊"],
+          ["gallery","Gallery","🖼️"]
         ];
         const rows=[];
         for(const [col,label,icon] of sources){
@@ -7386,22 +7467,22 @@ try {
 
     window.toggleNotifications=function(){const p=document.getElementById("notificationPanel");if(!p)return;p.classList.toggle("hidden");if(!p.classList.contains("hidden"))refreshNotifications();};
     window.markNotificationsRead=function(){const seen=getSeenNotifications();notifications.forEach(n=>seen[n.id]=true);saveSeenNotifications(seen);notificationUnread=0;renderNotifications();};
-    window.openNotification=function(type,id){const map={notices:"notices",materials:"materials",events:"events",results:"results"};if(map[type])showPage(map[type]);document.getElementById("notificationPanel")?.classList.add("hidden");const seen=getSeenNotifications();seen[`${type}:${id}`]=true;saveSeenNotifications(seen);notificationUnread=Math.max(0,notificationUnread-1);renderNotifications();};
+    window.openNotification=function(type,id){const map={notices:"notices",materials:"materials",events:"events",results:"results",gallery:"gallery"};if(map[type])showPage(map[type]);document.getElementById("notificationPanel")?.classList.add("hidden");const seen=getSeenNotifications();seen[`${type}:${id}`]=true;saveSeenNotifications(seen);notificationUnread=Math.max(0,notificationUnread-1);renderNotifications();};
 
     /* =========================
        GLOBAL SEARCH
     ========================= */
     async function ensureSearchData(){
       if(searchDataLoaded)return;
-      const collections=["notices","materials","events","routine","results","staff"];
+      const collections=["notices","materials","events","routine","results","staff","gallery"];
       const all=[];
       for(const col of collections){
         try{const snap=await getDocs(collection(db,col));snap.docs.forEach(d=>{const x=d.data()||{};if(col==="results"&&x.published!==true)return;all.push({id:d.id,type:col,...x});});}catch(e){console.warn("Search",col,e);}
       }
       searchCache=all;searchDataLoaded=true;
     }
-    function searchIcon(type){return {notices:"🔔",materials:"📚",events:"🎉",routine:"🗓️",results:"📊",staff:"👨‍🏫"}[type]||"🔎";}
-    function searchLabel(type){return {notices:"Notice",materials:"Study Material",events:"Event",routine:"Routine",results:"Result",staff:"Teacher / Staff"}[type]||type;}
+    function searchIcon(type){return {notices:"🔔",materials:"📚",events:"🎉",routine:"🗓️",results:"📊",staff:"👨‍🏫",gallery:"🖼️"}[type]||"🔎";}
+    function searchLabel(type){return {notices:"Notice",materials:"Study Material",events:"Event",routine:"Routine",results:"Result",staff:"Teacher / Staff",gallery:"Gallery"}[type]||type;}
     window.performGlobalSearch=async function(term){
       const box=document.getElementById("globalSearchResults"); if(!box)return;
       term=term.trim().toLowerCase();
@@ -7413,7 +7494,37 @@ try {
       if(!matches.length){box.innerHTML='<div class="empty" style="padding:20px;">কোনো result পাওয়া যায়নি।</div>';return;}
       box.innerHTML=matches.map(x=>`<div class="search-result" onclick="openSearchResult('${x.type}','${x.id}')"><div class="search-result-icon">${searchIcon(x.type)}</div><div><div class="search-result-title">${escapeHtml(x.title||x.name||"Untitled")}</div><div class="search-result-meta">${searchLabel(x.type)}${x.subject?` • ${escapeHtml(x.subject)}`:""}${x.department?` • ${escapeHtml(x.department)}`:""}</div></div></div>`).join("");
     };
-    window.openSearchResult=function(type,id){const page={notices:"notices",materials:"materials",events:"events",routine:"routine",results:"results",staff:"staff"}[type];if(page)showPage(page);document.getElementById("globalSearchResults")?.classList.add("hidden");document.getElementById("globalSearchInput").value="";};
+    window.openSearchResult=function(type,id){const page={notices:"notices",materials:"materials",events:"events",routine:"routine",results:"results",staff:"staff",gallery:"gallery"}[type];if(page)showPage(page);document.getElementById("globalSearchResults")?.classList.add("hidden");document.getElementById("globalSearchInput").value="";};
+
+    /* =========================
+       GALLERY
+    ========================= */
+    async function loadGallery(){
+      const box=document.getElementById("galleryGrid"); if(!box)return;
+      box.innerHTML='<div class="empty">Loading...</div>';
+      try{
+        const snap=await getDocs(collection(db,"gallery"));
+        const rows=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
+        if(!rows.length){box.innerHTML='<div class="empty">কোনো gallery photo নেই।</div>';return;}
+        box.innerHTML=rows.map(x=>`<div class="gallery-card"><img src="${escapeHtml(x.imageUrl||"")}" alt="${escapeHtml(x.title||"Gallery")}" onclick="window.open('${escapeHtml(x.imageUrl||"")}','_blank')"><div class="gallery-info"><div class="gallery-title">${escapeHtml(x.title||"Untitled Photo")}</div><div class="gallery-meta">${escapeHtml(x.category||"Campus")}${x.createdAt?` • ${formatDate(x.createdAt)}`:""}</div>${canManage("gallery")?`<div class="gallery-actions"><button class="danger-btn" onclick="deleteGallery('${escapeHtml(x.id)}')">Delete</button></div>`:""}</div></div>`).join("");
+      }catch(e){console.error(e);box.innerHTML='<div class="empty">Gallery load করতে সমস্যা হয়েছে।</div>';}
+    }
+    window.openGalleryModal=function(){
+      if(!canManage("gallery"))return;
+      const body=`<div class="form-group"><label class="form-label">Title</label><input id="galleryTitle" class="form-input" placeholder="Photo title"></div><div class="form-group"><label class="form-label">Category</label><input id="galleryCategory" class="form-input" placeholder="Event / Seminar / Sports"></div><div class="form-group"><label class="form-label">Photo</label><input id="galleryFile" type="file" accept="image/jpeg,image/png,image/webp"></div>`;
+      openModal("Add Gallery Photo",body,async()=>{
+        const title=document.getElementById("galleryTitle")?.value.trim(); const category=document.getElementById("galleryCategory")?.value.trim()||"Campus"; const file=document.getElementById("galleryFile")?.files?.[0]; const btn=document.getElementById("modalSaveBtn");
+        if(!title||!file){showToast("Title ও photo দিন।","warning");return;} if(!["image/jpeg","image/png","image/webp"].includes(file.type)){showToast("JPG, PNG বা WebP image দিন।","error");return;}
+        try{btn.disabled=true;btn.textContent="Uploading...";const data=await uploadImageToCloudinary(file);await addDoc(collection(db,"gallery"),{title,category,imageUrl:data.secure_url||"",imagePublicId:data.public_id||"",createdAt:serverTimestamp(),createdBy:currentUser.uid});closeModal();showToast("Gallery photo যোগ হয়েছে।","success");await loadGallery();if(isAdmin())loadAdminStats();}catch(e){console.error(e);showToast("Gallery photo upload হয়নি।","error");}finally{btn.disabled=false;btn.textContent="Save";}} ,"Upload");
+    };
+    window.deleteGallery=async function(id){if(!canManage("gallery"))return;if(!confirm("এই photo delete করতে চান?"))return;try{await deleteDoc(doc(db,"gallery",id));showToast("Gallery photo delete হয়েছে।","success");await loadGallery();if(isAdmin())loadAdminStats();}catch(e){console.error(e);showToast("Photo delete হয়নি।","error");}};
+
+    /* =========================
+       DARK MODE
+    ========================= */
+    function applyDarkMode(){const on=localStorage.getItem("campusone_dark_mode")==="1";document.body.classList.toggle("dark-mode",on);const b=document.getElementById("themeToggle");if(b)b.textContent=on?"☀️":"🌙";}
+    window.toggleDarkMode=function(){const on=!document.body.classList.contains("dark-mode");localStorage.setItem("campusone_dark_mode",on?"1":"0");applyDarkMode();};
+    applyDarkMode();
 
     /* =========================
        PWA INSTALL
