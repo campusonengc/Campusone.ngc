@@ -2051,112 +2051,21 @@
     .analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:15px 0 20px}
     .analytics-mini{border:1px solid var(--border);background:var(--card);border-radius:15px;padding:15px}.analytics-mini .num{font-size:24px;font-weight:800}.analytics-mini .lbl{font-size:12px;color:var(--muted);margin-top:3px}
 
-  
-    /* =========================
-       FIXED FOOTER + NOTIFICATION SCROLL
-    ========================= */
-    #app{min-height:100vh;display:flex;flex-direction:column;}
-    #app main{flex:1;display:flex;flex-direction:column;}
-    .site-footer{position:fixed;left:260px;right:0;bottom:0;z-index:1800;margin:0!important;padding:14px 24px 16px!important;background:var(--card);border-top:1px solid var(--border);box-shadow:0 -6px 20px rgba(15,23,42,.06);}
-    .site-footer-inner{max-width:1500px;margin:0 auto;}
-    #app main{padding-bottom:105px;}
-    .notification-panel{display:flex;flex-direction:column;max-height:min(560px,calc(100vh - 95px));}
-    .notification-panel-head{flex:none;}
-    #notificationList{overflow-y:auto;overflow-x:hidden;max-height:480px;min-height:0;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
-    .notification-item{min-height:64px;}
-    @media(max-width:800px){
-      .site-footer{left:0;padding:12px 16px 14px!important;}
-      #app main{padding-bottom:125px;}
-    }
-    @media(max-width:650px){
-      .notification-panel{right:12px!important;top:64px!important;width:min(390px,calc(100vw - 24px));max-height:calc(100vh - 82px);}
-      #notificationList{max-height:calc(100vh - 145px);}
-    }
-    body.dark-mode .site-footer{background:#111827;box-shadow:0 -6px 20px rgba(0,0,0,.25);}
-
-</style>
-
-<style id="final-footer-notification-fix">
-/* ===== FULL WEBSITE FIXED FOOTER ===== */
-.site-footer{
-  position:fixed !important;
-  left:0 !important;
-  right:0 !important;
-  bottom:0 !important;
-  width:100vw !important;
-  max-width:none !important;
-  margin:0 !important;
-  z-index:9999 !important;
-  box-sizing:border-box !important;
-  text-align:center !important;
-}
-.site-footer-inner{
-  width:100% !important;
-  max-width:none !important;
-  margin:0 auto !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  text-align:center !important;
-  box-sizing:border-box !important;
-}
-.site-footer-inner > div,
-.footer-brand,
-.footer-copy,
-.footer-links,
-.footer-link{
-  text-align:center !important;
-}
-.footer-links{
-  display:flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  flex-wrap:wrap !important;
-}
-
-/* Reserve only footer space; existing section padding remains unchanged. */
-main{
-  padding-bottom:90px;
-}
-
-/* ===== DASHBOARD NOTIFICATION SCROLL ===== */
-.notification-panel{
-  max-height:min(70vh,600px) !important;
-  overflow:hidden !important;
-}
-.notification-list{
-  max-height:min(58vh,500px) !important;
-  overflow-y:auto !important;
-  overflow-x:hidden !important;
-  -webkit-overflow-scrolling:touch !important;
-  overscroll-behavior:contain !important;
-  scrollbar-width:thin !important;
-}
-.notification-list::-webkit-scrollbar{
-  width:6px;
-}
-.notification-list::-webkit-scrollbar-thumb{
-  border-radius:10px;
-}
-
-@media(max-width:700px){
-  main{
-    padding-bottom:115px;
-  }
-  .site-footer-inner{
-    flex-direction:column !important;
-    justify-content:center !important;
-  }
-  .notification-panel{
-    max-height:75vh !important;
-  }
-  .notification-list{
-    max-height:60vh !important;
-  }
-}
-</style>
-
-</head>
+  </style>
+<style id="footer-layout-fix">
+/* Footer: separate bottom row, never overlays sidebar/content */
+#app{min-height:100vh;display:flex;flex-direction:column;}
+#app main{flex:1;min-height:0;}
+.site-footer{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;width:100%!important;height:42px!important;min-height:42px!important;flex:0 0 42px!important;box-sizing:border-box!important;margin:0!important;padding:0 16px!important;z-index:20!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;}
+.site-footer-inner{width:100%!important;max-width:none!important;height:100%!important;margin:0!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:18px!important;flex-wrap:nowrap!important;text-align:center!important;}
+.site-footer-inner>div{display:flex!important;align-items:center!important;gap:10px!important;white-space:nowrap!important;}
+.footer-brand,.footer-copy,.footer-links,.footer-link{white-space:nowrap!important;text-align:center!important;}
+.footer-links{display:flex!important;align-items:center!important;justify-content:center!important;gap:14px!important;flex-wrap:nowrap!important;}
+main{padding-bottom:0!important;}
+/* Notification list: actual element is #notificationList */
+#notificationList{max-height:min(58vh,500px)!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important;scrollbar-width:thin!important;}
+@media(max-width:800px){.site-footer{height:40px!important;min-height:40px!important;flex-basis:40px!important;padding:0 10px!important;}.site-footer-inner{gap:10px!important;font-size:12px!important}.site-footer-inner>div{gap:6px!important}.footer-links{gap:9px!important;}}
+</style></head>
 
 <body>
 
