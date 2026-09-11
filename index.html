@@ -11,15 +11,18 @@
 
   <!-- Search Engine / SEO -->
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="image" content="https://campusonengc.github.io/Campusone.ngc/logo.png" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="description" content="CampusOne NGC — Student Portal for notices, events, study materials, class routine, results, teachers & staff, and student support." />
   <meta name="keywords" content="CampusOne NGC, CampusOne, NGC Student Portal, student portal, National Government College, college portal, notices, results, routine, study materials, events" />
   <link rel="canonical" href="https://campusonengc.github.io/Campusone.ngc/" />
 
   <!-- Favicon / Web Logo -->
-  <link rel="icon" type="image/png" sizes="48x48" href="logo.png" />
-  <link rel="shortcut icon" type="image/png" href="logo.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="logo.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="https://campusonengc.github.io/Campusone.ngc/logo.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="https://campusonengc.github.io/Campusone.ngc/logo.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="https://campusonengc.github.io/Campusone.ngc/logo.png" />
+  <link rel="shortcut icon" type="image/png" href="https://campusonengc.github.io/Campusone.ngc/logo.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://campusonengc.github.io/Campusone.ngc/logo.png" />
 
   <!-- Social sharing -->
   <meta property="og:type" content="website" />
@@ -2360,6 +2363,24 @@ body.dark-mode #events .event-card {
   border-color: #2b374b !important;
 }
 
+
+/* ===== CampusOne NGC logo setup ===== */
+.brand-icon img,
+.brand-large .brand-icon img,
+.sidebar-brand .brand-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: inherit;
+}
+.brand-large .brand-icon img {
+  padding: 4px;
+}
+.sidebar-brand .brand-icon img {
+  padding: 3px;
+}
+
 </style>
 </head>
 
@@ -2396,7 +2417,7 @@ body.dark-mode #events .event-card {
       <div class="auth-hero">
 
         <div class="brand-large">
-  <div class="brand-icon ngc-logo">NGC</div>
+  <div class="brand-icon ngc-logo"><img src="https://campusonengc.github.io/Campusone.ngc/logo.png" alt="CampusOne NGC logo" /></div>
   <div class="brand-name">CampusOne NGC</div>
 </div>
         <h1>
@@ -2693,7 +2714,7 @@ body.dark-mode #events .event-card {
 
       <div class="sidebar-brand">
 
-        <div class="brand-icon">NGC</div>
+        <div class="brand-icon"><img src="https://campusonengc.github.io/Campusone.ngc/logo.png" alt="CampusOne NGC logo" /></div>
 
         <span>CampusOne NGC</span>
 
