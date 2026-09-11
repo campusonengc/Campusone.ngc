@@ -853,6 +853,7 @@
       flex: 1;
       margin-left: 270px;
       min-width: 0;
+      padding-bottom: 78px;
     }
 
     .topbar {
@@ -876,14 +877,48 @@
     }
 
     .mobile-menu {
-      display: none;
-      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
       background: #f1f5f9;
+      color: var(--text);
       width: 40px;
       height: 40px;
       border-radius: 10px;
       font-size: 20px;
+      flex-shrink: 0;
     }
+
+    .sidebar-close {
+      margin-left: auto;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: #fff;
+      border-radius: 9px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-close:hover { background: rgba(255,255,255,.12); }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,.45);
+      z-index: 950;
+    }
+
+    .sidebar-overlay.show { display: block; }
+
+    body.sidebar-collapsed .sidebar { transform: translateX(-100%); }
+    body.sidebar-collapsed .main { margin-left: 0; }
+    body.sidebar-collapsed .site-footer { left: 0; }
 
     .page-title {
       font-size: 21px;
@@ -1720,6 +1755,10 @@
     }
 
     @media (max-width: 900px) {
+      body.sidebar-collapsed .sidebar { transform: translateX(-100%); }
+      body.sidebar-collapsed .main { margin-left: 0; }
+      .main { padding-bottom: 86px; }
+      .site-footer { left: 0; padding: 10px 14px; }
       .auth-wrapper {
         grid-template-columns: 1fr;
       }
@@ -1977,7 +2016,7 @@
     .user-cell-name{font-weight:800;line-height:1.25}.user-cell-email{font-size:11px;color:var(--muted);margin-top:2px}
     .role-badge-admin{background:#ede9fe;color:#6d28d9}.role-badge-mod{background:#dbeafe;color:#1d4ed8}.role-badge-student{background:#e0f2fe;color:#0369a1}
     .user-table-wrap{overflow-x:auto}
-    .site-footer{margin-top:28px;border-top:1px solid var(--border);padding:24px 4px 30px;color:var(--muted)}
+    .site-footer{position:fixed;left:270px;right:0;bottom:0;z-index:850;margin:0;border-top:1px solid var(--border);padding:12px 24px;color:var(--muted);background:rgba(255,255,255,.96);backdrop-filter:blur(12px);box-shadow:0 -6px 20px rgba(15,23,42,.06)}
     .site-footer-inner{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
     .footer-brand{font-weight:800;color:var(--text)}.footer-copy{font-size:12px;margin-top:4px}
     .footer-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
@@ -1997,7 +2036,7 @@
     .dark-mode .access-status.unlocked{background:#14532d;color:#bbf7d0}.dark-mode .access-status.locked{background:#450a0a;color:#fecaca}
     .dark-mode .role-badge-admin{background:#3b0764;color:#e9d5ff}.dark-mode .role-badge-mod{background:#172554;color:#bfdbfe}.dark-mode .role-badge-student{background:#082f49;color:#bae6fd}
     .dark-mode .table-card table,.dark-mode table{color:#e5e7eb}.dark-mode th{background:#0f172a;color:#cbd5e1;border-color:#334155}.dark-mode td{border-color:#263244;color:#e5e7eb}
-    .dark-mode .site-footer{border-color:#263244}.dark-mode .footer-brand{color:#f8fafc}.dark-mode .site-info-card{background:#111827;border-color:#334155}
+    .dark-mode .site-footer{border-color:#263244;background:rgba(2,6,23,.96)}.dark-mode .footer-brand{color:#f8fafc}.dark-mode .site-info-card{background:#111827;border-color:#334155}
     .dark-mode .badge-success{background:#14532d;color:#bbf7d0}.dark-mode .badge-danger{background:#450a0a;color:#fecaca}.dark-mode .badge-info{background:#172554;color:#bfdbfe}
     .dark-mode .small-btn{background:#111827;color:#e5e7eb;border-color:#334155}
     .dark-mode .primary-btn{color:#fff}
@@ -2380,6 +2419,8 @@
 
     <!-- SIDEBAR -->
 
+    <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+
     <aside id="sidebar" class="sidebar">
 
       <div class="sidebar-brand">
@@ -2387,6 +2428,8 @@
         <div class="brand-icon">NGC</div>
 
         <span>CampusOne NGC</span>
+
+        <button class="sidebar-close" type="button" onclick="closeSidebar()" aria-label="Close sidebar">×</button>
 
       </div>
 
@@ -4574,6 +4617,9 @@
       document
         .getElementById("sidebar")
         .classList.remove("open");
+      document
+        .getElementById("sidebarOverlay")
+        .classList.remove("show");
 
 
       if (page === "dashboard") {
@@ -4641,9 +4687,29 @@
 
     window.toggleSidebar = function() {
 
-      document
-        .getElementById("sidebar")
-        .classList.toggle("open");
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebarOverlay");
+
+      if (window.innerWidth <= 900) {
+        sidebar.classList.toggle("open");
+        overlay.classList.toggle("show", sidebar.classList.contains("open"));
+      } else {
+        document.body.classList.toggle("sidebar-collapsed");
+      }
+
+    };
+
+    window.closeSidebar = function() {
+
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("sidebarOverlay");
+
+      sidebar.classList.remove("open");
+      overlay.classList.remove("show");
+
+      if (window.innerWidth > 900) {
+        document.body.classList.add("sidebar-collapsed");
+      }
 
     };
 
