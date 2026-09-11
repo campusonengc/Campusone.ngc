@@ -1985,6 +1985,173 @@
     .analytics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:15px 0 20px}
     .analytics-mini{border:1px solid var(--border);background:var(--card);border-radius:15px;padding:15px}.analytics-mini .num{font-size:24px;font-weight:800}.analytics-mini .lbl{font-size:12px;color:var(--muted);margin-top:3px}
 
+  
+/* =========================
+   CAMPUSONE LOGO + AUTH FINAL POLISH
+========================= */
+
+.loader-logo{
+  width:76px !important;
+  height:76px !important;
+  padding:7px !important;
+  border-radius:22px !important;
+  background:rgba(255,255,255,.96) !important;
+  border:1px solid rgba(99,102,241,.14) !important;
+  box-shadow:0 18px 45px rgba(79,70,229,.18) !important;
+}
+.loader-logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  border-radius:16px;
+}
+
+.ngc-logo{
+  padding:6px !important;
+  overflow:hidden;
+}
+.ngc-logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  border-radius:13px;
+}
+
+.sidebar-brand .ngc-logo{
+  width:42px !important;
+  height:42px !important;
+  padding:4px !important;
+  border-radius:12px !important;
+  background:rgba(255,255,255,.10) !important;
+  border:1px solid rgba(255,255,255,.16) !important;
+  box-shadow:none !important;
+}
+.sidebar-brand .ngc-logo img{
+  border-radius:8px;
+}
+
+.topbar-branding{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+.topbar-logo{
+  width:36px;
+  height:36px;
+  object-fit:contain;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  padding:2px;
+  box-shadow:0 5px 14px rgba(15,23,42,.08);
+}
+
+/* Auth: cleaner, more premium form surface */
+.auth-panel{
+  background:
+    radial-gradient(circle at 100% 0%, rgba(99,102,241,.08), transparent 28%),
+    rgba(255,255,255,.98) !important;
+}
+.auth-tabs{
+  margin-bottom:24px !important;
+}
+.auth-tab{
+  min-height:43px;
+  font-size:14px;
+}
+#loginForm h2,#registerForm h2{
+  letter-spacing:-.8px;
+}
+.auth-subtitle{
+  font-size:13px;
+  margin-bottom:24px !important;
+}
+.form-label{
+  font-size:13px !important;
+  margin-bottom:8px !important;
+}
+.form-input,.form-select{
+  min-height:50px !important;
+  border-radius:14px !important;
+}
+.input-wrap span{
+  color:#64748b !important;
+}
+#loginForm .primary-btn,#registerForm .primary-btn{
+  min-height:52px !important;
+  border-radius:14px !important;
+  font-size:15px !important;
+}
+#googleLoginBtn,#googleRegisterBtn{
+  min-height:50px !important;
+  border-radius:14px !important;
+  background:#fff !important;
+}
+.mobile-auth-brand{
+  display:none;
+}
+
+/* Give registration fields a more organized card-like feel */
+#registerForm{
+  row-gap:0;
+}
+#registerForm .form-group{
+  position:relative;
+}
+#registerForm .form-input,
+#registerForm .form-select{
+  background:#fbfdff;
+}
+#registerForm .primary-btn{
+  margin-top:6px;
+}
+
+@media(max-width:900px){
+  .topbar-branding .topbar-logo{
+    width:34px;
+    height:34px;
+  }
+}
+@media(max-width:650px){
+  .mobile-auth-brand{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:11px;
+    margin:0 auto 20px;
+  }
+  .mobile-auth-brand img{
+    width:52px;
+    height:52px;
+    padding:3px;
+    object-fit:contain;
+    border-radius:15px;
+    background:#fff;
+    border:1px solid #e2e8f0;
+    box-shadow:0 8px 22px rgba(79,70,229,.12);
+  }
+  .mobile-auth-brand div{
+    display:flex;
+    flex-direction:column;
+    line-height:1.2;
+  }
+  .mobile-auth-brand strong{
+    font-family:Inter,sans-serif;
+    font-size:17px;
+    color:#172033;
+  }
+  .mobile-auth-brand span{
+    font-size:11px;
+    color:#64748b;
+    margin-top:3px;
+  }
+  .topbar-logo{
+    display:none;
+  }
+}
+
   </style>
 </head>
 
@@ -1995,7 +2162,7 @@
   ========================= -->
 
   <div id="pageLoader">
-    <div class="loader-logo">NGC</div>
+    <div class="loader-logo"><img src="logo.png" alt="CampusOne NGC Logo"></div>
     <div class="spinner"></div>
     <div style="color:#64748b;font-size:13px;">CampusOne NGC চালু হচ্ছে...</div>
   </div>
@@ -2021,7 +2188,7 @@
       <div class="auth-hero">
 
         <div class="brand-large">
-  <div class="brand-icon ngc-logo">NGC</div>
+  <div class="brand-icon ngc-logo"><img src="logo.png" alt="CampusOne NGC Logo"></div>
   <div class="brand-name">CampusOne NGC</div>
 </div>
         <h1>
@@ -2318,7 +2485,7 @@
 
       <div class="sidebar-brand">
 
-        <div class="brand-icon">NGC</div>
+        <div class="brand-icon ngc-logo"><img src="logo.png" alt="CampusOne NGC Logo"></div>
 
         <span>CampusOne NGC</span>
 
