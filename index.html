@@ -2546,6 +2546,19 @@ body.dark-mode #events .event-card {
 }
 
 </style>
+
+<style>
+.admin-stat-clickable{cursor:pointer;transition:transform .18s,box-shadow .18s;user-select:none}
+.admin-stat-clickable{position:relative}
+.admin-stat-clickable:active{transform:scale(.99)}
+.admin-stat-clickable::after{content:'↗';position:absolute;right:14px;top:10px;font-size:13px;opacity:.45}
+
+.admin-stat-clickable:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(79,70,229,.16)}
+.admin-stat-clickable:focus{outline:2px solid var(--primary,#4f46e5);outline-offset:3px}
+.admin-stat-modal-table{width:100%;border-collapse:collapse;font-size:13px}
+.admin-stat-modal-table th,.admin-stat-modal-table td{padding:9px 8px;border-bottom:1px solid var(--border,#e5e7eb);text-align:left}
+.admin-stat-modal-table th{font-weight:700}
+</style>
 </head>
 
 <body>
@@ -3703,32 +3716,32 @@ body.dark-mode #events .event-card {
 
 
           <div id="adminStatsGrid" class="stat-grid" style="margin:20px 0;">
-            <div class="stat-card"><div class="stat-icon">👥</div><div><div id="adminTotalUsers" class="stat-number">0</div><div class="stat-label">Total Users</div></div></div>
-            <div class="stat-card"><div class="stat-icon">🟢</div><div><div id="adminActiveUsers" class="stat-number">0</div><div class="stat-label">Active Users</div></div></div>
-            <div class="stat-card"><div class="stat-icon">👁️</div><div><div id="adminTotalViews" class="stat-number">0</div><div class="stat-label">Total Website Views</div><div id="adminTodayViews" style="font-size:11px;color:#94a3b8;margin-top:3px;">Today: 0</div></div></div>
-            <div class="stat-card"><div class="stat-icon">👑</div><div><div id="adminAdminCount" class="stat-number">0</div><div class="stat-label">Admins</div></div></div>
-            <div class="stat-card"><div class="stat-icon">🛡️</div><div><div id="adminModeratorCount" class="stat-number">0</div><div class="stat-label">Moderators</div></div></div>
-            <div class="stat-card"><div class="stat-icon">🎓</div><div><div id="adminStudentTotalCount" class="stat-number">0</div><div class="stat-label">All Students</div></div></div>
-            <div class="stat-card"><div class="stat-icon">👨‍🏫</div><div><div id="adminTeacherCount" class="stat-number">0</div><div class="stat-label">Teachers</div></div></div>
-            <div class="stat-card"><div class="stat-icon">🧑‍💼</div><div><div id="adminStaffCount" class="stat-number">0</div><div class="stat-label">Staff</div></div></div>
-            <div class="stat-card"><div class="stat-icon">👨‍👩‍👧</div><div><div id="adminGuardianCount" class="stat-number">0</div><div class="stat-label">Guardians</div></div></div>
-            <div class="stat-card"><div class="stat-icon">🏅</div><div><div id="adminAlumniCount" class="stat-number">0</div><div class="stat-label">Alumni</div></div></div>
-            <div class="stat-card"><div class="stat-icon">📘</div><div><div id="adminHsc1Count" class="stat-number">0</div><div class="stat-label">HSC 1st Year</div></div></div>
-            <div class="stat-card"><div class="stat-icon">📗</div><div><div id="adminHsc2Count" class="stat-number">0</div><div class="stat-label">HSC 2nd Year</div></div></div>
-            <div class="stat-card"><div class="stat-icon">1️⃣</div><div><div id="adminDegree1Count" class="stat-number">0</div><div class="stat-label">Degree 1st Year</div></div></div>
-            <div class="stat-card"><div class="stat-icon">2️⃣</div><div><div id="adminDegree2Count" class="stat-number">0</div><div class="stat-label">Degree 2nd Year</div></div></div>
-            <div class="stat-card"><div class="stat-icon">3️⃣</div><div><div id="adminDegree3Count" class="stat-number">0</div><div class="stat-label">Degree 3rd Year</div></div></div>
-            <div class="stat-card"><div class="stat-icon">4️⃣</div><div><div id="adminDegree4Count" class="stat-number">0</div><div class="stat-label">Degree 4th Year</div></div></div>
-            <div class="stat-card"><div class="stat-icon">1️⃣</div><div><div id="adminHonours1Count" class="stat-number">0</div><div class="stat-label">Honours 1st Year</div></div></div>
-            <div class="stat-card"><div class="stat-icon">2️⃣</div><div><div id="adminHonours2Count" class="stat-number">0</div><div class="stat-label">Honours 2nd Year</div></div></div>
-            <div class="stat-card"><div class="stat-icon">3️⃣</div><div><div id="adminHonours3Count" class="stat-number">0</div><div class="stat-label">Honours 3rd Year</div></div></div>
-            <div class="stat-card"><div class="stat-icon">4️⃣</div><div><div id="adminHonours4Count" class="stat-number">0</div><div class="stat-label">Honours 4th Year</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('users')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('users')"><div class="stat-icon">👥</div><div><div id="adminTotalUsers" class="stat-number">0</div><div class="stat-label">Total Users</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('active')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('active')"><div class="stat-icon">🟢</div><div><div id="adminActiveUsers" class="stat-number">0</div><div class="stat-label">Active Users</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('views')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('views')"><div class="stat-icon">👁️</div><div><div id="adminTotalViews" class="stat-number">0</div><div class="stat-label">Total Website Views</div><div id="adminTodayViews" style="font-size:11px;color:#94a3b8;margin-top:3px;">Today: 0</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('admins')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('admins')"><div class="stat-icon">👑</div><div><div id="adminAdminCount" class="stat-number">0</div><div class="stat-label">Admins</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('moderators')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('moderators')"><div class="stat-icon">🛡️</div><div><div id="adminModeratorCount" class="stat-number">0</div><div class="stat-label">Moderators</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('students')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('students')"><div class="stat-icon">🎓</div><div><div id="adminStudentTotalCount" class="stat-number">0</div><div class="stat-label">All Students</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('teacher')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('teacher')"><div class="stat-icon">👨‍🏫</div><div><div id="adminTeacherCount" class="stat-number">0</div><div class="stat-label">Teachers</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('staff')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('staff')"><div class="stat-icon">🧑‍💼</div><div><div id="adminStaffCount" class="stat-number">0</div><div class="stat-label">Staff</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('guardian')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('guardian')"><div class="stat-icon">👨‍👩‍👧</div><div><div id="adminGuardianCount" class="stat-number">0</div><div class="stat-label">Guardians</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('alumni')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('alumni')"><div class="stat-icon">🏅</div><div><div id="adminAlumniCount" class="stat-number">0</div><div class="stat-label">Alumni</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('HSC 1st Year')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('HSC 1st Year')"><div class="stat-icon">📘</div><div><div id="adminHsc1Count" class="stat-number">0</div><div class="stat-label">HSC 1st Year</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('HSC 2nd Year')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('HSC 2nd Year')"><div class="stat-icon">📗</div><div><div id="adminHsc2Count" class="stat-number">0</div><div class="stat-label">HSC 2nd Year</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('Degree 1st Year')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('Degree 1st Year')"><div class="stat-icon">1️⃣</div><div><div id="adminDegree1Count" class="stat-number">0</div><div class="stat-label">Degree 1st Year</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('Degree 2nd Year')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('Degree 2nd Year')"><div class="stat-icon">2️⃣</div><div><div id="adminDegree2Count" class="stat-number">0</div><div class="stat-label">Degree 2nd Year</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('Degree 3rd Year')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('Degree 3rd Year')"><div class="stat-icon">3️⃣</div><div><div id="adminDegree3Count" class="stat-number">0</div><div class="stat-label">Degree 3rd Year</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('Degree 4th Year')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('Degree 4th Year')"><div class="stat-icon">4️⃣</div><div><div id="adminDegree4Count" class="stat-number">0</div><div class="stat-label">Degree 4th Year</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('Honours 1st Year')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('Honours 1st Year')"><div class="stat-icon">1️⃣</div><div><div id="adminHonours1Count" class="stat-number">0</div><div class="stat-label">Honours 1st Year</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('Honours 2nd Year')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('Honours 2nd Year')"><div class="stat-icon">2️⃣</div><div><div id="adminHonours2Count" class="stat-number">0</div><div class="stat-label">Honours 2nd Year</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('Honours 3rd Year')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('Honours 3rd Year')"><div class="stat-icon">3️⃣</div><div><div id="adminHonours3Count" class="stat-number">0</div><div class="stat-label">Honours 3rd Year</div></div></div>
+            <div class="stat-card admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('Honours 4th Year')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('Honours 4th Year')"><div class="stat-icon">4️⃣</div><div><div id="adminHonours4Count" class="stat-number">0</div><div class="stat-label">Honours 4th Year</div></div></div>
           </div>
 
           <div class="analytics-grid">
-            <div class="analytics-mini"><div id="adminGalleryCount" class="num">0</div><div class="lbl">Gallery Photos</div></div>
-            <div class="analytics-mini"><div id="adminOpenSupport" class="num">0</div><div class="lbl">Open Support Tickets</div></div>
-            <div class="analytics-mini"><div id="adminBlockedUsers" class="num">0</div><div class="lbl">Blocked Users</div></div>
+            <div class="analytics-mini admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('gallery')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('gallery')"><div id="adminGalleryCount" class="num">0</div><div class="lbl">Gallery Photos</div></div>
+            <div class="analytics-mini admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('support')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('support')"><div id="adminOpenSupport" class="num">0</div><div class="lbl">Open Support Tickets</div></div>
+            <div class="analytics-mini admin-stat-clickable" role="button" tabindex="0" onclick="openAdminStatDetails('blocked')" onkeydown="if(event.key==='Enter'||event.key===' ')openAdminStatDetails('blocked')"><div id="adminBlockedUsers" class="num">0</div><div class="lbl">Blocked Users</div></div>
           </div>
 
           <div class="admin-grid">
@@ -7915,6 +7928,81 @@ try {
         totalViewsEl.textContent = "0";
       }
     }
+
+    
+/* =========================
+   CLICKABLE ADMIN STATISTICS
+========================= */
+window.openAdminStatDetails = async function(type){
+  if(!isAdmin()) return;
+  const titles = {
+    users:"All Users", active:"Active Users", admins:"Administrators", moderators:"Moderators",
+    students:"All Students", teacher:"Teachers", staff:"Staff", guardian:"Guardians", alumni:"Alumni",
+    blocked:"Blocked Users", "HSC 1st Year":"HSC 1st Year Students", "HSC 2nd Year":"HSC 2nd Year Students",
+    "Degree 1st Year":"Degree 1st Year Students","Degree 2nd Year":"Degree 2nd Year Students",
+    "Degree 3rd Year":"Degree 3rd Year Students","Degree 4th Year":"Degree 4th Year Students",
+    "Honours 1st Year":"Honours 1st Year Students","Honours 2nd Year":"Honours 2nd Year Students",
+    "Honours 3rd Year":"Honours 3rd Year Students","Honours 4th Year":"Honours 4th Year Students",
+    gallery:"Gallery Photos",support:"Open Support Tickets",views:"Website Views"
+  };
+  let modal=document.getElementById("adminStatDetailsModal");
+  if(!modal){
+    modal=document.createElement("div");
+    modal.id="adminStatDetailsModal";
+    modal.className="modal-backdrop";
+    modal.innerHTML=`<div class="modal" style="max-width:900px;width:95%;max-height:85vh;overflow:auto">
+      <div class="modal-header"><h3 id="adminStatDetailsTitle"></h3><button class="btn btn-secondary" onclick="closeAdminStatDetails()">✕</button></div>
+      <div id="adminStatDetailsBody" style="padding:12px">Loading...</div>
+    </div>`;
+    document.body.appendChild(modal);
+  }
+  modal.classList.add("show");
+  document.getElementById("adminStatDetailsTitle").textContent=titles[type]||"Details";
+  const body=document.getElementById("adminStatDetailsBody");
+  body.innerHTML="Loading data...";
+  try{
+    if(type==="views"){
+      const [g,t]=await Promise.all([getDoc(doc(db,"siteStats","global")),getDoc(doc(db,"siteStats",getDhakaDateKey()))]);
+      body.innerHTML=`<p><b>Total Views:</b> ${g.exists()?Number(g.data().views||0):0}</p><p><b>Today:</b> ${t.exists()?Number(t.data().views||0):0}</p>`;
+      return;
+    }
+    if(type==="gallery"){
+      const snap=await getDocs(collection(db,"gallery"));
+      body.innerHTML=renderAdminStatRows(["Title","Description"],snap.docs.map(d=>[d.data().title||d.data().name||"Untitled",d.data().description||""]));
+      return;
+    }
+    if(type==="support"){
+      const snap=await getDocs(collection(db,"supportTickets"));
+      const rows=snap.docs.filter(d=>!["closed","resolved"].includes(String(d.data().status||"").toLowerCase()))
+        .map(d=>[d.data().subject||"No subject",d.data().email||d.data().userEmail||"",d.data().status||"open"]);
+      body.innerHTML=renderAdminStatRows(["Subject","Email","Status"],rows);
+      return;
+    }
+    const snap=await getDocs(collection(db,"users"));
+    const now=Date.now();
+    let rows=[];
+    snap.forEach(d=>{
+      const u=d.data()||{}, typeVal=String(u.accountType||(u.role==="student"?"student":u.role||"")).toLowerCase();
+      const year=String(u.academicYear||"");
+      let ok=false;
+      if(type==="users") ok=true;
+      else if(type==="active") ok=!!u.lastActiveAt?.toMillis && now-u.lastActiveAt.toMillis()<=15*60*1000;
+      else if(type==="admins") ok=u.role==="admin";
+      else if(type==="moderators") ok=u.role==="moderator";
+      else if(type==="blocked") ok=u.blocked===true;
+      else if(type==="students") ok=typeVal==="student";
+      else if(type==="teacher"||type==="staff"||type==="guardian"||type==="alumni") ok=typeVal===type;
+      else ok=typeVal==="student" && year===type;
+      if(ok) rows.push([u.name||u.displayName||"Unnamed",u.email||"",u.accountType||u.role||"",u.academicYear||""]);
+    });
+    body.innerHTML=renderAdminStatRows(["Name","Email","Type","Academic Year"],rows);
+  }catch(e){console.error(e);body.innerHTML="<p style='color:#dc2626'>Data load করতে সমস্যা হয়েছে। Firebase permission/check করুন।</p>";}
+};
+window.renderAdminStatRows=function(headers,rows){
+  if(!rows.length)return "<p>No data found.</p>";
+  return `<div style="overflow:auto"><table class="admin-stat-modal-table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(v=>`<td>${escapeHtml(String(v??""))}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+};
+window.closeAdminStatDetails=function(){document.getElementById("adminStatDetailsModal")?.classList.remove("show");};
 
     /* =========================
        DASHBOARD
