@@ -635,16 +635,26 @@
 
     #registerForm {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: 14px;
-      align-items: start;
+      grid-template-columns: minmax(0, 1fr);
+      column-gap: 0;
+      align-items: stretch;
+    }
+
+    /* Registration fields: every field uses the same full width as Phone Number */
+    #registerForm .form-group,
+    #registerForm .form-input,
+    #registerForm .form-select,
+    #registerForm .input-wrap {
+      width: 100%;
+      box-sizing: border-box;
     }
 
     #registerForm > h2,
     #registerForm > .auth-subtitle,
     #registerForm > #registerBtn,
     #registerForm > #registerMessage {
-      grid-column: 1 / -1;
+      grid-column: 1;
+      width: 100%;
     }
 
     #registerForm > h2 { margin-bottom: 7px; }
@@ -663,6 +673,32 @@
     #registerForm #registerBtn {
       margin-top: 4px;
     }
+
+    /* Registration page premium layout */
+    #registerForm {
+      background: linear-gradient(180deg, rgba(248,250,252,.72), rgba(255,255,255,.96));
+      border: 1px solid rgba(226,232,240,.85);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 14px 35px rgba(15,23,42,.045);
+    }
+    #registerForm h2 { font-size: 29px; letter-spacing: -.5px; }
+    #registerForm .auth-subtitle { color:#64748b; line-height:1.65; }
+    #registerForm .form-group { position:relative; }
+    #registerForm .form-label { font-weight:700; font-size:12px; margin-bottom:7px; display:block; }
+    #registerForm .form-input, #registerForm .form-select { min-height:50px; background:#fff; }
+    #registerForm .primary-btn { margin-top:7px; box-shadow:0 12px 25px rgba(79,70,229,.20); }
+    .google-register-divider { display:flex; align-items:center; gap:11px; margin:18px 0 12px; color:#94a3b8; font-size:11px; grid-column:1/-1; }
+    .google-register-divider span { height:1px; background:#e2e8f0; flex:1; }
+    .google-register-divider b { font-weight:700; color:#94a3b8; }
+    .google-register-btn { grid-column:1/-1; width:100%; min-height:50px; border-radius:13px !important; display:flex; align-items:center; justify-content:center; gap:9px; background:#fff; border:1px solid #dbe3ee !important; color:#1f2937 !important; font-weight:800 !important; box-shadow:0 7px 20px rgba(15,23,42,.055); transition:.2s; }
+    .google-register-btn:hover { transform:translateY(-1px); border-color:#c7d2fe !important; box-shadow:0 11px 26px rgba(15,23,42,.08); }
+    .google-g-icon { width:25px; height:25px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:900; font-family:Arial,sans-serif; color:#4285f4; border:1px solid #e5e7eb; background:#fff; }
+    .google-reg-intro { display:flex; align-items:center; gap:12px; padding:12px 13px; margin-bottom:14px; border:1px solid #e2e8f0; border-radius:14px; background:#f8fafc; }
+    .google-reg-icon { width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:#fff; border:1px solid #e2e8f0; font-weight:900; color:#4285f4; font-size:19px; }
+    .google-reg-intro strong { display:block; font-size:14px; color:#172033; } .google-reg-intro small { display:block; margin-top:2px; color:#64748b; font-size:11px; }
+    .google-reg-note { margin-top:4px; padding:11px 12px; border-radius:12px; background:#f8fafc; color:#64748b; font-size:11px; line-height:1.6; border:1px solid #eef2f7; }
+    @media (max-width:650px){ #registerForm{padding:16px;border-radius:17px;} }
 
     @media (max-width: 650px) {
       #authScreen {
@@ -2207,6 +2243,134 @@ body.dark-mode [style*="color: #1f2937"]{
   color:#cbd5e1 !important;
 }
 
+/* =========================
+   DARK MODE — AUTH + POPUPS + TOASTS
+   ========================= */
+body.dark-mode #authScreen{
+  background:
+    radial-gradient(circle at 8% 12%, rgba(99,102,241,.20), transparent 27%),
+    radial-gradient(circle at 92% 88%, rgba(124,58,237,.18), transparent 28%),
+    linear-gradient(135deg,#070b14 0%,#0b1220 52%,#111827 100%) !important;
+}
+body.dark-mode .auth-wrapper{
+  background:rgba(17,24,39,.94) !important;
+  border-color:#2b374b !important;
+  box-shadow:0 35px 100px rgba(0,0,0,.55) !important;
+}
+body.dark-mode .auth-panel{
+  background:#111827 !important;
+}
+body.dark-mode .auth-tabs{
+  background:#0f172a !important;
+  border-color:#334155 !important;
+}
+body.dark-mode .auth-tab{
+  color:#aebbd0 !important;
+}
+body.dark-mode .auth-tab.active{
+  background:linear-gradient(135deg,#1e293b,#252b52) !important;
+  color:#a5b4fc !important;
+  box-shadow:0 5px 16px rgba(0,0,0,.25) !important;
+}
+body.dark-mode .auth-form h2,
+body.dark-mode .form-label{
+  color:#f8fafc !important;
+}
+body.dark-mode .auth-subtitle{
+  color:#c0cad8 !important;
+}
+body.dark-mode .form-input,
+body.dark-mode .form-select,
+body.dark-mode .form-textarea{
+  background:#0b1220 !important;
+  color:#f8fafc !important;
+  border-color:#334155 !important;
+}
+body.dark-mode .form-input:focus,
+body.dark-mode .form-select:focus,
+body.dark-mode .form-textarea:focus{
+  background:#0f172a !important;
+  border-color:#818cf8 !important;
+}
+body.dark-mode .link-btn{color:#a5b4fc !important;}
+body.dark-mode .auth-message.error{
+  color:#fecaca !important;
+  background:#3a161b !important;
+  border-color:#7f1d1d !important;
+}
+body.dark-mode .auth-message.success{
+  color:#bbf7d0 !important;
+  background:#0f2a1b !important;
+  border-color:#166534 !important;
+}
+body.dark-mode .modal{
+  background:#111827 !important;
+  color:#f8fafc !important;
+  border:1px solid #2b374b !important;
+  box-shadow:0 30px 90px rgba(0,0,0,.65) !important;
+}
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer{
+  border-color:#2b374b !important;
+}
+body.dark-mode .modal-close{
+  background:#1f2937 !important;
+  color:#f8fafc !important;
+}
+body.dark-mode .modal-backdrop{
+  background:rgba(2,6,23,.78) !important;
+}
+body.dark-mode .toast{
+  background:#111827 !important;
+  color:#f8fafc !important;
+  border-color:#334155 !important;
+  box-shadow:0 16px 45px rgba(0,0,0,.55) !important;
+}
+body.dark-mode .toast.success{border-left-color:#22c55e !important;}
+body.dark-mode .toast.error{border-left-color:#ef4444 !important;}
+body.dark-mode .toast.warning{border-left-color:#f59e0b !important;}
+body.dark-mode .upload-box{
+  background:#0f172a !important;
+  border-color:#475569 !important;
+  color:#f8fafc !important;
+}
+body.dark-mode .upload-box:hover{
+  background:#182235 !important;
+  border-color:#818cf8 !important;
+}
+body.dark-mode .support-picture{
+  background:#0f172a !important;
+  border-color:#334155 !important;
+}
+body.dark-mode .support-message,
+body.dark-mode .support-reply{
+  color:#e5e7eb !important;
+}
+body.dark-mode .support-reply{
+  background:#1b2340 !important;
+}
+body.dark-mode [style*="background:#f8fafc"],
+body.dark-mode [style*="background: #f8fafc"]{
+  background:#0f172a !important;
+  color:#e5e7eb !important;
+}
+body.dark-mode input[type="file"]{
+  color:#cbd5e1 !important;
+}
+body.dark-mode input[type="file"]::file-selector-button{
+  background:#1f2937;
+  color:#f8fafc;
+  border:1px solid #475569;
+  border-radius:8px;
+  padding:6px 10px;
+  margin-right:8px;
+  cursor:pointer;
+}
+body.dark-mode ::selection{
+  background:#4f46e5;
+  color:#fff;
+}
+
 /* Mobile notification panel */
 @media(max-width:650px){
   #dashboardNotices{max-height:280px}
@@ -2587,7 +2751,7 @@ body.dark-mode #events .event-card {
             </div>
 
 
-            <div class="form-group">
+            <div class="form-group" id="registerRollGroup">
               <label class="form-label">Roll</label>
               <div class="input-wrap">
                 <span>🎓</span>
@@ -2597,20 +2761,46 @@ body.dark-mode #events .event-card {
 
 
             <div class="form-group">
-              <label class="form-label">Academic Year</label>
+              <label class="form-label">Account Type</label>
+              <div class="input-wrap">
+                <span>👥</span>
+                <select id="registerAccountType" class="form-select" onchange="updateRegistrationFields()">
+                  <option value="">Account Type নির্বাচন করুন</option>
+                  <option value="student">Student</option>
+                  <option value="teacher">Teacher</option>
+                  <option value="staff">Staff</option>
+                  <option value="guardian">Guardian</option>
+                  <option value="alumni">Alumni</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group" id="registerAcademicYearGroup">
+              <label class="form-label">Academic Year / Category</label>
               <div class="input-wrap">
                 <span>📚</span>
-                <select id="registerAcademicYear" class="form-select">
-                  <option value="">Academic Year নির্বাচন করুন</option>
+                <select id="registerAcademicYear" class="form-select" onchange="updateRegistrationFields()">
+                  <option value="">Academic Year / Category নির্বাচন করুন</option>
                   <option value="HSC 1st Year">HSC 1st Year</option>
                   <option value="HSC 2nd Year">HSC 2nd Year</option>
+                  <option value="Degree 1st Year">Degree 1st Year</option>
+                  <option value="Degree 2nd Year">Degree 2nd Year</option>
+                  <option value="Degree 3rd Year">Degree 3rd Year</option>
+                  <option value="Degree 4th Year">Degree 4th Year</option>
+                  <option value="Honours 1st Year">Honours 1st Year</option>
+                  <option value="Honours 2nd Year">Honours 2nd Year</option>
+                  <option value="Honours 3rd Year">Honours 3rd Year</option>
+                  <option value="Honours 4th Year">Honours 4th Year</option>
+                  <option value="Teacher">Teacher</option>
+                  <option value="Staff">Staff</option>
+                  <option value="Guardian">Guardian</option>
                 </select>
               </div>
             </div>
 
 
-            <div class="form-group">
-              <label class="form-label">Group</label>
+            <div class="form-group" id="registerGroupGroup">
+              <label class="form-label">Group <span id="registerGroupOptional" style="color:#94a3b8;font-size:11px;"></span></label>
               <div class="input-wrap">
                 <span>🧪</span>
                 <select id="registerGroup" class="form-select">
@@ -2618,6 +2808,7 @@ body.dark-mode #events .event-card {
                   <option value="Science">Science</option>
                   <option value="Humanities">Humanities</option>
                   <option value="Business Studies">Business Studies</option>
+                  <option value="N/A">N/A</option>
                 </select>
               </div>
             </div>
@@ -2682,14 +2873,14 @@ body.dark-mode #events .event-card {
               Register করুন
             </button>
 
-            <div style="display:flex;align-items:center;gap:10px;margin:18px 0;color:#94a3b8;font-size:12px;">
-              <span style="height:1px;background:#e2e8f0;flex:1;"></span><span>অথবা</span><span style="height:1px;background:#e2e8f0;flex:1;"></span>
-            </div>
-            <button id="googleRegisterBtn" class="secondary-btn" style="width:100%;padding:13px;" onclick="registerWithGoogle()">
-              <span style="font-weight:800;">G</span>&nbsp; Google দিয়ে Registration
-            </button>
-
             <div id="registerMessage" class="auth-message"></div>
+
+            <div class="google-register-divider">
+              <span></span><b>অথবা</b><span></span>
+            </div>
+            <button id="googleRegisterBtn" class="secondary-btn google-register-btn" onclick="registerWithGoogle()">
+              <span class="google-g-icon">G</span><span>Google দিয়ে Registration</span>
+            </button>
 
           </div>
 
@@ -3517,6 +3708,21 @@ body.dark-mode #events .event-card {
             <div class="stat-card"><div class="stat-icon">👁️</div><div><div id="adminTotalViews" class="stat-number">0</div><div class="stat-label">Total Website Views</div><div id="adminTodayViews" style="font-size:11px;color:#94a3b8;margin-top:3px;">Today: 0</div></div></div>
             <div class="stat-card"><div class="stat-icon">👑</div><div><div id="adminAdminCount" class="stat-number">0</div><div class="stat-label">Admins</div></div></div>
             <div class="stat-card"><div class="stat-icon">🛡️</div><div><div id="adminModeratorCount" class="stat-number">0</div><div class="stat-label">Moderators</div></div></div>
+            <div class="stat-card"><div class="stat-icon">🎓</div><div><div id="adminStudentTotalCount" class="stat-number">0</div><div class="stat-label">All Students</div></div></div>
+            <div class="stat-card"><div class="stat-icon">👨‍🏫</div><div><div id="adminTeacherCount" class="stat-number">0</div><div class="stat-label">Teachers</div></div></div>
+            <div class="stat-card"><div class="stat-icon">🧑‍💼</div><div><div id="adminStaffCount" class="stat-number">0</div><div class="stat-label">Staff</div></div></div>
+            <div class="stat-card"><div class="stat-icon">👨‍👩‍👧</div><div><div id="adminGuardianCount" class="stat-number">0</div><div class="stat-label">Guardians</div></div></div>
+            <div class="stat-card"><div class="stat-icon">🏅</div><div><div id="adminAlumniCount" class="stat-number">0</div><div class="stat-label">Alumni</div></div></div>
+            <div class="stat-card"><div class="stat-icon">📘</div><div><div id="adminHsc1Count" class="stat-number">0</div><div class="stat-label">HSC 1st Year</div></div></div>
+            <div class="stat-card"><div class="stat-icon">📗</div><div><div id="adminHsc2Count" class="stat-number">0</div><div class="stat-label">HSC 2nd Year</div></div></div>
+            <div class="stat-card"><div class="stat-icon">1️⃣</div><div><div id="adminDegree1Count" class="stat-number">0</div><div class="stat-label">Degree 1st Year</div></div></div>
+            <div class="stat-card"><div class="stat-icon">2️⃣</div><div><div id="adminDegree2Count" class="stat-number">0</div><div class="stat-label">Degree 2nd Year</div></div></div>
+            <div class="stat-card"><div class="stat-icon">3️⃣</div><div><div id="adminDegree3Count" class="stat-number">0</div><div class="stat-label">Degree 3rd Year</div></div></div>
+            <div class="stat-card"><div class="stat-icon">4️⃣</div><div><div id="adminDegree4Count" class="stat-number">0</div><div class="stat-label">Degree 4th Year</div></div></div>
+            <div class="stat-card"><div class="stat-icon">1️⃣</div><div><div id="adminHonours1Count" class="stat-number">0</div><div class="stat-label">Honours 1st Year</div></div></div>
+            <div class="stat-card"><div class="stat-icon">2️⃣</div><div><div id="adminHonours2Count" class="stat-number">0</div><div class="stat-label">Honours 2nd Year</div></div></div>
+            <div class="stat-card"><div class="stat-icon">3️⃣</div><div><div id="adminHonours3Count" class="stat-number">0</div><div class="stat-label">Honours 3rd Year</div></div></div>
+            <div class="stat-card"><div class="stat-icon">4️⃣</div><div><div id="adminHonours4Count" class="stat-number">0</div><div class="stat-label">Honours 4th Year</div></div></div>
           </div>
 
           <div class="analytics-grid">
@@ -3713,7 +3919,7 @@ body.dark-mode #events .event-card {
                 <thead>
 
                   <tr>
-                    <th>SL</th><th>Name</th><th>Roll</th><th>Academic Year</th><th>Group</th><th>Phone</th><th>Email</th><th>Role / Access</th><th>Status</th><th>Last Seen</th><th>Created</th>
+                    <th>SL</th><th>Name</th><th>Roll</th><th>Account Type</th><th>Academic Year</th><th>Group</th><th>Phone</th><th>Email</th><th>Role / Access</th><th>Status</th><th>Last Seen</th><th>Created</th>
                   </tr>
 
                 </thead>
@@ -4299,6 +4505,7 @@ body.dark-mode #events .event-card {
 
       const roll = document.getElementById("registerRoll")?.value.trim() || "";
       const academicYear = document.getElementById("registerAcademicYear")?.value || "";
+      const accountType = document.getElementById("registerAccountType")?.value || "student";
       const group = document.getElementById("registerGroup")?.value || "";
       const phone = document.getElementById("registerPhone")?.value.trim() || "";
 
@@ -4329,9 +4536,14 @@ body.dark-mode #events .event-card {
       }
 
 
-      if (!/^\d+$/.test(roll) || Number(roll) < 1) { setMessage("registerMessage", "Roll অবশ্যই integer number হতে হবে।", "error"); return; }
-      if (!academicYear) { setMessage("registerMessage", "Academic Year নির্বাচন করুন।", "error"); return; }
-      if (!group) { setMessage("registerMessage", "Group নির্বাচন করুন।", "error"); return; }
+      if (!["student","teacher","staff","guardian","alumni"].includes(accountType)) { setMessage("registerMessage", "Account Type নির্বাচন করুন।", "error"); return; }
+      if (accountType === "student") {
+        if (!/^\d+$/.test(roll) || Number(roll) < 1) { setMessage("registerMessage", "Student-এর Roll অবশ্যই integer number হতে হবে।", "error"); return; }
+        if (!academicYear) { setMessage("registerMessage", "Academic Year / Category নির্বাচন করুন।", "error"); return; }
+        if (!group) { setMessage("registerMessage", "Student-এর Group নির্বাচন করুন।", "error"); return; }
+      } else {
+        // Teacher / Staff / Guardian / Alumni-এর জন্য Roll, Academic Year ও Group প্রয়োজন নেই।
+      }
       if (!/^01\d{9}$/.test(phone)) { setMessage("registerMessage", "সঠিক 11 digit Phone Number দিন।", "error"); return; }
 
       if (password.length < 6) {
@@ -4379,11 +4591,12 @@ body.dark-mode #events .event-card {
             uid: credential.user.uid,
             name: name,
             email: email,
-            roll: roll,
-            academicYear: academicYear,
-            group: group,
+            roll: accountType === "student" ? roll : "",
+            academicYear: accountType === "student" ? academicYear : "",
+            group: accountType === "student" ? group : "N/A",
             phone: phone,
             role: "student",
+            accountType: accountType,
             photoURL: credential.user.photoURL || "",
             createdAt: serverTimestamp()
           }
@@ -4507,30 +4720,58 @@ body.dark-mode #events .event-card {
 
     async function collectGoogleRegistration(user) {
       const body = `
+        <div class="google-reg-intro"><div class="google-reg-icon">G</div><div><strong>Google Registration</strong><small>আপনার প্রয়োজনীয় তথ্য দিন</small></div></div>
         <div class="form-group"><label class="form-label">পূর্ণ নাম *</label><input id="googleRegName" class="form-input" value="${escapeHtml(user.displayName || "")}" placeholder="তোমার পূর্ণ নাম"></div>
-        <div class="form-group"><label class="form-label">Roll *</label><input id="googleRegRoll" class="form-input" type="number" min="1" step="1" inputmode="numeric" placeholder="তোমার Roll"></div>
-        <div class="form-group"><label class="form-label">Academic Year *</label><select id="googleRegAcademicYear" class="form-select"><option value="">Academic Year নির্বাচন করুন</option><option>HSC 1st Year</option><option>HSC 2nd Year</option></select></div>
-        <div class="form-group"><label class="form-label">Group *</label><select id="googleRegGroup" class="form-select"><option value="">Group নির্বাচন করুন</option><option>Science</option><option>Humanities</option><option>Business Studies</option></select></div>
+        <div class="form-group"><label class="form-label">Account Type *</label><select id="googleRegAccountType" class="form-select" onchange="updateGoogleRegistrationFields()"><option value="">Account Type নির্বাচন করুন</option><option value="student">Student</option><option value="teacher">Teacher</option><option value="staff">Staff</option><option value="guardian">Guardian</option><option value="alumni">Alumni</option></select></div>
+        <div class="form-group" id="googleRegRollGroup"><label class="form-label">Roll *</label><input id="googleRegRoll" class="form-input" type="number" min="1" step="1" inputmode="numeric" placeholder="তোমার Roll"></div>
+        <div class="form-group" id="googleRegAcademicYearGroup"><label class="form-label">Academic Year / Category *</label><select id="googleRegAcademicYear" class="form-select" onchange="updateGoogleRegistrationFields()"><option value="">Academic Year / Category নির্বাচন করুন</option><option>HSC 1st Year</option><option>HSC 2nd Year</option><option>Degree 1st Year</option><option>Degree 2nd Year</option><option>Degree 3rd Year</option><option>Degree 4th Year</option><option>Honours 1st Year</option><option>Honours 2nd Year</option><option>Honours 3rd Year</option><option>Honours 4th Year</option></select></div>
+        <div class="form-group" id="googleRegGroupGroup"><label class="form-label">Group *</label><select id="googleRegGroup" class="form-select"><option value="">Group নির্বাচন করুন</option><option>Science</option><option>Humanities</option><option>Business Studies</option></select></div>
         <div class="form-group"><label class="form-label">Phone Number *</label><input id="googleRegPhone" class="form-input" type="tel" inputmode="numeric" maxlength="11" placeholder="01XXXXXXXXX"></div>
         <div class="form-group"><label class="form-label">Google Email</label><input class="form-input" value="${escapeHtml(user.email || "")}" disabled></div>
-        <div style="font-size:12px;color:#64748b;background:#f8fafc;border-radius:10px;padding:10px;">Google account দিয়ে authentication হবে, কিন্তু Student registration information সম্পূর্ণ দেওয়া বাধ্যতামূলক।</div>`;
-      openModal("Complete Student Registration", body, async () => {
+        <div class="google-reg-note">Google account দিয়ে authentication হবে। Teacher, Staff ও Guardian-এর জন্য Roll/Academic Year লাগবে না।</div>`;
+      openModal("Complete Registration", body, async () => {
         const name=document.getElementById("googleRegName")?.value.trim()||"";
         const roll=document.getElementById("googleRegRoll")?.value.trim()||"";
+        const accountType=document.getElementById("googleRegAccountType")?.value||"";
         const academicYear=document.getElementById("googleRegAcademicYear")?.value||"";
         const group=document.getElementById("googleRegGroup")?.value||"";
         const phone=document.getElementById("googleRegPhone")?.value.trim()||"";
-        if(!name||!/^\d+$/.test(roll)||Number(roll)<1||!academicYear||!group||!/^01\d{9}$/.test(phone)){showToast("সব registration information সঠিকভাবে দিন।","warning");return;}
+        if(!name||!accountType||!/^01\d{9}$/.test(phone)){showToast("সব প্রয়োজনীয় registration information সঠিকভাবে দিন।","warning");return;}
+        if(accountType==="student" && (!/^\d+$/.test(roll)||Number(roll)<1||!academicYear||!group)){showToast("Student-এর Roll, Academic Year ও Group সম্পূর্ণ করুন।","warning");return;}
         try {
           await updateProfile(user,{displayName:name});
-          await setDoc(doc(db,"users",user.uid),{uid:user.uid,name,email:user.email||"",roll,academicYear,group,phone,role:"student",photoURL:user.photoURL||"",createdAt:serverTimestamp(),authProvider:"google"});
+          await setDoc(doc(db,"users",user.uid),{uid:user.uid,name,email:user.email||"",roll:accountType==="student"?roll:"",academicYear:accountType==="student"?academicYear:"",group:accountType==="student"?group:"N/A",phone,role:"student",accountType,photoURL:user.photoURL||"",createdAt:serverTimestamp(),authProvider:"google"});
           closeModal();
           showToast("Google Registration সম্পূর্ণ হয়েছে।","success");
           location.reload();
         } catch(e){console.error(e);showToast("Registration information save হয়নি।","error");}
       }, "Complete Registration");
       document.getElementById("googleRegPhone")?.addEventListener("input",function(){this.value=this.value.replace(/\D/g,"").slice(0,11);});
+      updateGoogleRegistrationFields();
     }
+
+    window.updateRegistrationFields=function(){
+      const type=document.getElementById("registerAccountType")?.value||"";
+      const rollWrap=document.getElementById("registerRollGroup");
+      const yearWrap=document.getElementById("registerAcademicYearGroup");
+      const groupWrap=document.getElementById("registerGroupGroup");
+      const roll=document.getElementById("registerRoll");
+      const year=document.getElementById("registerAcademicYear");
+      const group=document.getElementById("registerGroup");
+      const student=type==="student";
+      [rollWrap,yearWrap,groupWrap].forEach(el=>{if(el) el.classList.toggle("hidden",!student);});
+      if(roll) roll.required=student;
+      if(year) year.required=student;
+      if(group) { group.required=student; if(!student) group.value="N/A"; }
+    };
+    window.updateGoogleRegistrationFields=function(){
+      const type=document.getElementById("googleRegAccountType")?.value||"";
+      const student=type==="student";
+      ["googleRegRollGroup","googleRegAcademicYearGroup","googleRegGroupGroup"].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle("hidden",!student);});
+      const roll=document.getElementById("googleRegRoll"), year=document.getElementById("googleRegAcademicYear"), group=document.getElementById("googleRegGroup");
+      if(roll) roll.required=student; if(year) year.required=student; if(group) group.required=student;
+    };
+    updateRegistrationFields();
 
     async function googleAuthFlow(buttonId, messageId) {
       const btn=document.getElementById(buttonId);
@@ -4547,7 +4788,8 @@ body.dark-mode #events .event-card {
           return;
         }
         const data=snap.data()||{};
-        const complete=!!data.name && !!data.roll && !!data.academicYear && !!data.group && /^01\d{9}$/.test(String(data.phone||""));
+        const isStudent=(data.accountType||"student")==="student";
+        const complete=!!data.name && !!data.accountType && (!isStudent || (!!data.roll && !!data.academicYear && !!data.group)) && /^01\d{9}$/.test(String(data.phone||""));
         if(!complete){
           await collectGoogleRegistration(user);
           return;
@@ -6942,8 +7184,7 @@ try {
             <div class="support-message">
               ${escapeHtml(t.message || "")}
             </div>
-            ${t.imageUrl?`<div class="support-picture"><a href="${escapeHtml(t.imageUrl)}" target="_blank" rel="noopener"><img src="${escapeHtml(t.imageUrl)}" alt="Support attachment"></a></div>`:""}
-            ${t.imageUrl?`<div class="support-picture"><a href="${escapeHtml(t.imageUrl)}" target="_blank" rel="noopener"><img src="${escapeHtml(t.imageUrl)}" alt="Support attachment"></a></div>`:""}
+            ${t.imageUrl ? `<div class="support-picture"><a href="${escapeHtml(t.imageUrl)}" target="_blank" rel="noopener"><img src="${escapeHtml(t.imageUrl)}" alt="Support attachment"></a></div>` : ""}
 
             ${
               t.adminReply
@@ -7386,7 +7627,7 @@ try {
 
           tbody.innerHTML =
             `<tr>
-              <td colspan="9">
+              <td colspan="12">
                 কোনো user পাওয়া যায়নি।
               </td>
             </tr>`;
@@ -7409,6 +7650,7 @@ try {
               </td>
 
               <td>${escapeHtml(u.roll || "—")}</td>
+              <td>${escapeHtml(u.accountType || "student")}</td>
               <td>${escapeHtml(u.academicYear || "—")}</td>
               <td>${escapeHtml(u.group || "—")}</td>
               <td>${escapeHtml(u.phone || "—")}</td>
@@ -7571,6 +7813,23 @@ try {
       const totalViewsEl = document.getElementById("adminTotalViews");
       const adminEl = document.getElementById("adminAdminCount");
       const modEl = document.getElementById("adminModeratorCount");
+      const studentTotalEl = document.getElementById("adminStudentTotalCount");
+      const teacherEl = document.getElementById("adminTeacherCount");
+      const staffEl = document.getElementById("adminStaffCount");
+      const guardianEl = document.getElementById("adminGuardianCount");
+      const alumniEl = document.getElementById("adminAlumniCount");
+      const yearCountEls = {
+        "HSC 1st Year": document.getElementById("adminHsc1Count"),
+        "HSC 2nd Year": document.getElementById("adminHsc2Count"),
+        "Degree 1st Year": document.getElementById("adminDegree1Count"),
+        "Degree 2nd Year": document.getElementById("adminDegree2Count"),
+        "Degree 3rd Year": document.getElementById("adminDegree3Count"),
+        "Degree 4th Year": document.getElementById("adminDegree4Count"),
+        "Honours 1st Year": document.getElementById("adminHonours1Count"),
+        "Honours 2nd Year": document.getElementById("adminHonours2Count"),
+        "Honours 3rd Year": document.getElementById("adminHonours3Count"),
+        "Honours 4th Year": document.getElementById("adminHonours4Count")
+      };
       const galleryEl = document.getElementById("adminGalleryCount");
       const supportEl = document.getElementById("adminOpenSupport");
       const blockedEl = document.getElementById("adminBlockedUsers");
@@ -7586,6 +7845,9 @@ try {
         ]);
 
         let active = 0, admins = 0, moderators = 0, blocked = 0;
+        let studentTotal = 0, teachers = 0, staff = 0, guardians = 0, alumni = 0;
+        const yearCounts = {};
+        Object.keys(yearCountEls).forEach(k => yearCounts[k] = 0);
         const now = Date.now();
         usersSnap.forEach(d => {
           const u = d.data() || {};
@@ -7594,12 +7856,27 @@ try {
           if (u.role === "admin") admins++;
           if (u.role === "moderator") moderators++;
           if (u.blocked === true) blocked++;
+          const type = String(u.accountType || (u.role === "student" ? "student" : u.role || "")).toLowerCase();
+          if (type === "student") {
+            studentTotal++;
+            const year = String(u.academicYear || "");
+            if (Object.prototype.hasOwnProperty.call(yearCounts, year)) yearCounts[year]++;
+          } else if (type === "teacher") teachers++;
+          else if (type === "staff") staff++;
+          else if (type === "guardian") guardians++;
+          else if (type === "alumni") alumni++;
         });
 
         totalEl.textContent = usersSnap.size;
         activeEl.textContent = active;
         adminEl.textContent = admins;
         modEl.textContent = moderators;
+        if (studentTotalEl) studentTotalEl.textContent = studentTotal;
+        if (teacherEl) teacherEl.textContent = teachers;
+        if (staffEl) staffEl.textContent = staff;
+        if (guardianEl) guardianEl.textContent = guardians;
+        if (alumniEl) alumniEl.textContent = alumni;
+        Object.keys(yearCountEls).forEach(k => { if (yearCountEls[k]) yearCountEls[k].textContent = yearCounts[k]; });
         if(galleryEl) galleryEl.textContent = gallerySnap.size;
         if(blockedEl) blockedEl.textContent = blocked;
         if(supportEl) supportEl.textContent = supportSnap.docs.filter(d => !["closed","resolved"].includes(String(d.data()?.status||"").toLowerCase())).length;
@@ -7628,6 +7905,12 @@ try {
         activeEl.textContent = "0";
         adminEl.textContent = "0";
         modEl.textContent = "0";
+        if (studentTotalEl) studentTotalEl.textContent = "0";
+        if (teacherEl) teacherEl.textContent = "0";
+        if (staffEl) staffEl.textContent = "0";
+        if (guardianEl) guardianEl.textContent = "0";
+        if (alumniEl) alumniEl.textContent = "0";
+        Object.keys(yearCountEls).forEach(k => { if (yearCountEls[k]) yearCountEls[k].textContent = "0"; });
         viewsEl.textContent = "Today: 0";
         totalViewsEl.textContent = "0";
       }
