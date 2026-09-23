@@ -8468,5 +8468,95 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
 
   </script>
 
+
+  <!-- =========================
+       BACKGROUND MUSIC
+       YouTube video: jZOy8gbkYMQ
+       Autoplay + loop (browser policies may require muted autoplay)
+  ========================= -->
+  <div id="backgroundMusicPlayer" aria-hidden="true">
+    <iframe
+      id="backgroundMusicFrame"
+      src="https://www.youtube.com/embed/jZOy8gbkYMQ?autoplay=1&mute=1&loop=1&playlist=jZOy8gbkYMQ&controls=0&playsinline=1&rel=0"
+      title="Background Music"
+      allow="autoplay; encrypted-media"
+      frameborder="0"
+      scrolling="no">
+    </iframe>
+  </div>
+
+  <style>
+    #backgroundMusicPlayer{
+      position:fixed;
+      width:1px;
+      height:1px;
+      left:-10px;
+      bottom:-10px;
+      overflow:hidden;
+      opacity:0;
+      pointer-events:none;
+      z-index:-1;
+    }
+    #backgroundMusicPlayer iframe{
+      width:1px;
+      height:1px;
+      border:0;
+    }
+  </style>
+
+  <script>
+    /*
+      Background music:
+      - Starts automatically in muted mode because modern browsers block
+        audible autoplay without a user gesture.
+      - Loops the same YouTube video automatically.
+      - A user's first click/tap on the page attempts to unmute it.
+    */
+    (function(){
+      const frame = document.getElementById("backgroundMusicFrame");
+      if(!frame) return;
+
+      let unmuted = false;
+
+      function tryUnmuteMusic(){
+        if(unmuted) return;
+        try{
+          frame.contentWindow.postMessage(
+            JSON.stringify({
+              event: "command",
+              func: "unMute",
+              args: []
+            }),
+            "https://www.youtube.com"
+          );
+          unmuted = true;
+        }catch(e){
+          console.warn("Background music unmute:", e);
+        }
+      }
+
+      ["click","touchstart","keydown"].forEach(type=>{
+        document.addEventListener(type, tryUnmuteMusic, {
+          once:true,
+          passive:true
+        });
+      });
+
+      /* If the iframe is reloaded by the browser, keep the loop URL active. */
+      frame.addEventListener("load", ()=>{
+        try{
+          frame.contentWindow.postMessage(
+            JSON.stringify({
+              event: "command",
+              func: "setLoop",
+              args: [[ "jZOy8gbkYMQ" ]]
+            }),
+            "https://www.youtube.com"
+          );
+        }catch(e){}
+      });
+    })();
+  </script>
+
 </body>
 </html>
