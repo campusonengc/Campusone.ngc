@@ -2546,32 +2546,26 @@ body.dark-mode #events .event-card {
 }
 
 
-/* CampusOne NGC dashboard feature carousel */
-.feature-slider{position:relative;min-height:225px;margin-bottom:25px;border-radius:16px;overflow:hidden;background:linear-gradient(120deg,#064e32,#08783e 58%,#24945a);box-shadow:0 12px 30px rgba(5,83,47,.13);isolation:isolate}
-.feature-slider-track{position:relative;min-height:225px}
-.feature-slide{position:absolute;inset:0;display:flex;align-items:center;min-height:225px;opacity:0;visibility:hidden;transition:opacity .65s ease,visibility .65s ease;overflow:hidden;background:linear-gradient(115deg,#064e32,#16864e)}
+/* CampusOne NGC photo-only featured carousel: preserve each image's full aspect ratio */
+.feature-slider{position:relative;height:auto;min-height:0;margin-bottom:25px;border-radius:16px;overflow:hidden;background:#f1f5f9;box-shadow:0 12px 30px rgba(5,83,47,.10);isolation:isolate}
+.feature-slider.is-empty{display:none}
+.feature-slider-track{position:relative;height:auto;min-height:0}
+.feature-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;min-height:0;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility .45s ease;overflow:hidden;background:#f1f5f9}
 .feature-slide.is-active{position:relative;opacity:1;visibility:visible}
-.feature-slide-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
-.feature-slide-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,35,21,.91) 0%,rgba(0,48,28,.72) 52%,rgba(0,45,25,.12) 100%)}
-.feature-slide-copy{position:relative;z-index:2;width:min(760px,82%);padding:42px 54px;color:#fff}
-.feature-slide-copy h2{font-size:clamp(25px,3vw,36px);font-weight:800;line-height:1.3;margin:10px 0 8px;text-shadow:0 2px 12px rgba(0,0,0,.2)}
-.feature-slide-copy p{font-size:15px;line-height:1.8;color:rgba(255,255,255,.94);max-width:700px;white-space:pre-line}
-.feature-eyebrow{font:700 10px Inter,sans-serif;letter-spacing:1.8px;color:#c4f5d7}
-.feature-slide-empty{background:radial-gradient(circle at 90% 20%,rgba(255,255,255,.17),transparent 26%),linear-gradient(120deg,#034b2b,#238d56)}
-.feature-slide-art{position:absolute;right:6%;bottom:-75px;font-size:205px;color:rgba(255,255,255,.13);line-height:1}
-.feature-arrow{position:absolute;z-index:5;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid rgba(255,255,255,.35);border-radius:50%;background:rgba(0,0,0,.24);color:#fff;font-size:27px;line-height:1;display:grid;place-items:center;backdrop-filter:blur(8px);cursor:pointer}
+.feature-slide-image{position:relative;display:block;width:100%;height:auto;max-height:72vh;object-fit:contain;object-position:center;margin:0 auto;background:#f1f5f9}
+.feature-arrow{position:absolute;z-index:5;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid rgba(255,255,255,.65);border-radius:50%;background:rgba(15,23,42,.48);color:#fff;font-size:27px;line-height:1;display:grid;place-items:center;backdrop-filter:blur(8px);cursor:pointer}
 .feature-prev{left:12px}.feature-next{right:12px}
 .feature-slider.is-single .feature-arrow,.feature-slider.is-single .feature-slider-footer{display:none}
-.feature-slider-footer{position:absolute;z-index:6;left:0;right:0;bottom:0;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(0deg,rgba(0,0,0,.38),transparent)}
+.feature-slider-footer{position:absolute;z-index:6;left:0;right:0;bottom:0;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(0deg,rgba(0,0,0,.42),transparent)}
 .feature-dots{display:flex;align-items:center;gap:7px}
-.feature-dot{width:8px;height:8px;border:0;border-radius:20px;background:rgba(255,255,255,.55);padding:0;cursor:pointer;transition:width .25s ease,background .25s ease}
+.feature-dot{width:8px;height:8px;border:0;border-radius:20px;background:rgba(255,255,255,.65);padding:0;cursor:pointer;transition:width .25s ease,background .25s ease}
 .feature-dot.active{width:24px;background:#fff}
 .feature-counter{font:600 11px Inter,sans-serif;color:#fff}
 .feature-admin-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
 .feature-admin-row:last-child{border-bottom:0}
-.feature-admin-row img{width:110px;height:68px;object-fit:cover;border-radius:9px;background:#e2e8f0}
-.feature-admin-info{flex:1;min-width:0}.feature-admin-info p{font-size:12px;color:var(--muted);margin:3px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.feature-admin-info small{font-size:11px;color:#16a34a}
-@media(max-width:650px){.feature-slider,.feature-slider-track,.feature-slide{min-height:190px}.feature-slide-copy{width:90%;padding:28px 30px}.feature-slide-copy h2{font-size:23px}.feature-slide-copy p{font-size:13px;line-height:1.6}.feature-arrow{width:31px;height:31px;font-size:22px}.feature-prev{left:7px}.feature-next{right:7px}.feature-slide-art{font-size:145px;right:2%}.feature-admin-row img{width:82px;height:58px}.feature-admin-row{gap:9px}}
+.feature-admin-row img{width:110px;height:68px;object-fit:contain;border-radius:9px;background:#f1f5f9}
+.feature-admin-info{flex:1;min-width:0}.feature-admin-info small{font-size:11px;color:#16a34a}
+@media(max-width:650px){.feature-slider{border-radius:10px;margin-bottom:18px}.feature-slide-image{max-height:62vh}.feature-arrow{width:31px;height:31px;font-size:22px}.feature-prev{left:7px}.feature-next{right:7px}.feature-admin-row img{width:82px;height:58px}.feature-admin-row{gap:9px}}
 
 </style>
 
@@ -3184,17 +3178,9 @@ body.dark-mode #events .event-card {
 
         <section id="page-dashboard" class="page active">
 
-          <div class="feature-slider" id="dashboardFeatureSlider" aria-label="CampusOne featured updates">
-            <div class="feature-slider-track" id="featureSliderTrack">
-              <div class="feature-slide feature-slide-empty is-active">
-                <div class="feature-slide-copy">
-                  <span class="feature-eyebrow">CAMPUSONE NGC • FEATURED</span>
-                  <h2 id="welcomeName">স্বাগতম! 👋</h2>
-                  <p>আজকের CampusOne NGC overview এখানে দেখতে পারবে।</p>
-                </div>
-                <div class="feature-slide-art" aria-hidden="true">✦</div>
-              </div>
-            </div>
+          <div class="feature-slider is-empty" id="dashboardFeatureSlider" aria-label="CampusOne featured photos">
+            <div class="feature-slider-track" id="featureSliderTrack"></div>
+            <span id="welcomeName" hidden></span>
             <button class="feature-arrow feature-prev" type="button" aria-label="Previous slide" onclick="changeFeatureSlide(-1)">‹</button>
             <button class="feature-arrow feature-next" type="button" aria-label="Next slide" onclick="changeFeatureSlide(1)">›</button>
             <div class="feature-slider-footer">
@@ -8062,32 +8048,29 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
       const track = document.getElementById("featureSliderTrack");
       const dots = document.getElementById("featureSliderDots");
       const counter = document.getElementById("featureSliderCounter");
-      if (!track || !dots || !counter) return;
+      const slider = document.getElementById("dashboardFeatureSlider");
+      if (!track || !dots || !counter || !slider) return;
 
       if (!featureSlidesCache.length) {
-        const welcome = document.getElementById("welcomeName")?.textContent || "স্বাগতম! 👋";
-        track.innerHTML = `<div class="feature-slide feature-slide-empty is-active"><div class="feature-slide-copy"><span class="feature-eyebrow">CAMPUSONE NGC • FEATURED</span><h2>${escapeHtml(welcome)}</h2><p>আজকের CampusOne NGC overview এখানে দেখতে পারবে।</p></div><div class="feature-slide-art" aria-hidden="true">✦</div></div>`;
+        track.innerHTML = "";
         dots.innerHTML = "";
-        counter.textContent = "01 / 01";
-        document.getElementById("dashboardFeatureSlider")?.classList.add("is-single");
+        counter.textContent = "";
+        slider.classList.add("is-empty");
+        slider.classList.add("is-single");
+        if (featureSlideTimer) clearInterval(featureSlideTimer);
         return;
       }
 
+      slider.classList.remove("is-empty");
       featureSlideIndex = ((featureSlideIndex % featureSlidesCache.length) + featureSlidesCache.length) % featureSlidesCache.length;
       track.innerHTML = featureSlidesCache.map((slide, index) => `
         <article class="feature-slide ${index === featureSlideIndex ? "is-active" : ""}" aria-hidden="${index !== featureSlideIndex}">
-          <img class="feature-slide-image" src="${escapeHtml(slide.imageUrl || "")}" alt="${escapeHtml(slide.title || "Featured update")}" loading="${index === featureSlideIndex ? "eager" : "lazy"}">
-          <div class="feature-slide-shade"></div>
-          <div class="feature-slide-copy">
-            <span class="feature-eyebrow">CAMPUSONE NGC • FEATURED</span>
-            <h2>${escapeHtml(slide.title || "")}</h2>
-            ${slide.description ? `<p>${escapeHtml(slide.description)}</p>` : ""}
-          </div>
+          <img class="feature-slide-image" src="${escapeHtml(slide.imageUrl || "")}" alt="CampusOne featured photo ${index + 1}" loading="${index === featureSlideIndex ? "eager" : "lazy"}">
         </article>`).join("");
 
-      dots.innerHTML = featureSlidesCache.map((_, index) => `<button type="button" class="feature-dot ${index === featureSlideIndex ? "active" : ""}" aria-label="Go to slide ${index + 1}" onclick="goToFeatureSlide(${index})"></button>`).join("");
+      dots.innerHTML = featureSlidesCache.map((_, index) => `<button type="button" class="feature-dot ${index === featureSlideIndex ? "active" : ""}" aria-label="Go to photo ${index + 1}" onclick="goToFeatureSlide(${index})"></button>`).join("");
       counter.textContent = `${String(featureSlideIndex + 1).padStart(2,"0")} / ${String(featureSlidesCache.length).padStart(2,"0")}`;
-      document.getElementById("dashboardFeatureSlider")?.classList.toggle("is-single", featureSlidesCache.length < 2);
+      slider.classList.toggle("is-single", featureSlidesCache.length < 2);
       restartFeatureSlideTimer();
     }
 
@@ -8141,7 +8124,7 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
         const rows = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.position??999999)-(b.position??999999)||(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
         const list = document.getElementById("featureSlidesAdminList");
         if (!rows.length) { list.innerHTML = `<div class="empty">এখনো কোনো Slide যোগ করা হয়নি। Add Slide চাপুন।</div>`; return; }
-        list.innerHTML = rows.map((x,i)=>`<div class="feature-admin-row"><img src="${escapeHtml(x.imageUrl||"")}" alt=""><div class="feature-admin-info"><strong>${escapeHtml(x.title||"Untitled")}</strong><p>${escapeHtml(x.description||"No description")}</p><small>Slide ${i+1}</small></div><button class="danger-btn" type="button" onclick="deleteFeatureSlide('${escapeHtml(x.id)}')">Delete</button></div>`).join("");
+        list.innerHTML = rows.map((x,i)=>`<div class="feature-admin-row"><img src="${escapeHtml(x.imageUrl||"")}" alt="Featured photo ${i+1}"><div class="feature-admin-info"><small>Photo ${i+1}</small></div><button class="danger-btn" type="button" onclick="deleteFeatureSlide('${escapeHtml(x.id)}')">Delete</button></div>`).join("");
       } catch(e) {
         console.error("Feature slider admin load:",e);
         document.getElementById("featureSlidesAdminList").innerHTML = `<div class="empty">Slide load হয়নি। Firestore Rules এবং Admin role পরীক্ষা করুন।</div>`;
@@ -8150,33 +8133,28 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
 
     window.openFeatureSlideModal = function() {
       if (!isAdmin()) return;
-      const body = `<div class="form-group"><label class="form-label">Slide Title</label><input id="featureSlideTitle" class="form-input" maxlength="100" placeholder="যেমন: ভর্তি সংক্রান্ত জরুরি বিজ্ঞপ্তি"></div>
-        <div class="form-group"><label class="form-label">Description / Text</label><textarea id="featureSlideDescription" class="form-textarea" maxlength="280" placeholder="ছবির উপরে যে লেখা দেখাতে চান..."></textarea></div>
-        <div class="form-group"><label class="form-label">Feature Image</label><input id="featureSlideImage" class="form-input" type="file" accept="image/jpeg,image/png,image/webp"><div id="featureSlidePreview" style="margin-top:10px"></div><small style="color:var(--muted)">JPG, PNG বা WebP • Landscape image recommended</small></div>`;
-      openModal("Add Dashboard Feature Slide", body, saveFeatureSlide, "Upload Slide");
+      const body = `<div class="form-group"><label class="form-label">ছবি নির্বাচন করুন</label><input id="featureSlideImage" class="form-input" type="file" accept="image/jpeg,image/png,image/webp"><div id="featureSlidePreview" style="margin-top:10px"></div><small style="color:var(--muted)">JPG, PNG বা WebP • ছবির আসল অনুপাত ঠিক রেখে সম্পূর্ণ ছবি দেখানো হবে।</small></div>`;
+      openModal("Add Featured Photo", body, saveFeatureSlide, "Upload Photo");
       document.getElementById("featureSlideImage")?.addEventListener("change", () => {
         const file = document.getElementById("featureSlideImage")?.files?.[0];
         const preview = document.getElementById("featureSlidePreview");
         if (!file || !preview) return;
         const reader = new FileReader();
-        reader.onload = () => preview.innerHTML = `<img src="${reader.result}" style="width:100%;max-height:180px;object-fit:cover;border-radius:10px" alt="Preview">`;
+        reader.onload = () => preview.innerHTML = `<img src="${reader.result}" style="display:block;width:100%;max-height:260px;object-fit:contain;border-radius:10px;background:#f1f5f9" alt="Photo preview">`;
         reader.readAsDataURL(file);
       });
     };
 
     async function saveFeatureSlide() {
       if (!isAdmin()) return;
-      const title = document.getElementById("featureSlideTitle")?.value.trim() || "";
-      const description = document.getElementById("featureSlideDescription")?.value.trim() || "";
       const file = document.getElementById("featureSlideImage")?.files?.[0] || null;
-      if (!title || !file) { showToast("Slide Title এবং Image দুটোই দিতে হবে।","warning"); return; }
+      if (!file) { showToast("একটি ছবি নির্বাচন করুন।","warning"); return; }
       if (!["image/jpeg","image/png","image/webp"].includes(file.type)) { showToast("JPG, PNG বা WebP image দিন।","error"); return; }
       const btn = document.getElementById("modalSaveBtn");
       try {
         if (btn) { btn.disabled = true; btn.textContent = "Uploading..."; }
         const uploaded = await uploadImageToCloudinary(file);
         await addDoc(collection(db,"featureSlides"), {
-          title, description,
           imageUrl: uploaded.secure_url || "",
           imagePublicId: uploaded.public_id || "",
           position: Date.now(),
@@ -8191,7 +8169,7 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
         console.error("Feature slide save:",e);
         showToast("Slide upload হয়নি। Cloudinary settings ও Firestore Rules পরীক্ষা করুন।","error");
       } finally {
-        if (btn) { btn.disabled = false; btn.textContent = "Upload Slide"; }
+        if (btn) { btn.disabled = false; btn.textContent = "Upload Photo"; }
       }
     }
 
