@@ -2546,26 +2546,26 @@ body.dark-mode #events .event-card {
 }
 
 
-/* CampusOne NGC photo-only featured carousel: preserve each image's full aspect ratio */
-.feature-slider{position:relative;height:auto;min-height:0;margin-bottom:25px;border-radius:16px;overflow:hidden;background:#f1f5f9;box-shadow:0 12px 30px rgba(5,83,47,.10);isolation:isolate}
-.feature-slider.is-empty{display:none}
-.feature-slider-track{position:relative;height:auto;min-height:0}
-.feature-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;min-height:0;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility .45s ease;overflow:hidden;background:#f1f5f9}
-.feature-slide.is-active{position:relative;opacity:1;visibility:visible}
-.feature-slide-image{position:relative;display:block;width:100%;height:auto;max-height:72vh;object-fit:contain;object-position:center;margin:0 auto;background:#f1f5f9}
-.feature-arrow{position:absolute;z-index:5;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid rgba(255,255,255,.65);border-radius:50%;background:rgba(15,23,42,.48);color:#fff;font-size:27px;line-height:1;display:grid;place-items:center;backdrop-filter:blur(8px);cursor:pointer}
+/* CampusOne NGC fixed-size photo-only feature carousel */
+.feature-slider{position:relative;width:100%;height:clamp(190px,32vw,360px);margin-bottom:25px;border-radius:16px;overflow:hidden;background:#e9eef3;box-shadow:0 12px 30px rgba(5,83,47,.10);isolation:isolate}
+.feature-slider-track{position:relative;width:100%;height:100%}
+.feature-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;width:100%;height:100%;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility .45s ease;overflow:hidden;background:#e9eef3}
+.feature-slide.is-active{opacity:1;visibility:visible}
+.feature-slide-image{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.feature-slide-shade,.feature-slide-copy,.feature-eyebrow,.feature-slide-art{display:none!important}
+.feature-arrow{position:absolute;z-index:5;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid rgba(255,255,255,.35);border-radius:50%;background:rgba(0,0,0,.24);color:#fff;font-size:27px;line-height:1;display:grid;place-items:center;backdrop-filter:blur(8px);cursor:pointer}
 .feature-prev{left:12px}.feature-next{right:12px}
 .feature-slider.is-single .feature-arrow,.feature-slider.is-single .feature-slider-footer{display:none}
-.feature-slider-footer{position:absolute;z-index:6;left:0;right:0;bottom:0;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(0deg,rgba(0,0,0,.42),transparent)}
+.feature-slider-footer{position:absolute;z-index:6;left:0;right:0;bottom:0;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(0deg,rgba(0,0,0,.38),transparent)}
 .feature-dots{display:flex;align-items:center;gap:7px}
-.feature-dot{width:8px;height:8px;border:0;border-radius:20px;background:rgba(255,255,255,.65);padding:0;cursor:pointer;transition:width .25s ease,background .25s ease}
+.feature-dot{width:8px;height:8px;border:0;border-radius:20px;background:rgba(255,255,255,.55);padding:0;cursor:pointer;transition:width .25s ease,background .25s ease}
 .feature-dot.active{width:24px;background:#fff}
 .feature-counter{font:600 11px Inter,sans-serif;color:#fff}
 .feature-admin-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
 .feature-admin-row:last-child{border-bottom:0}
-.feature-admin-row img{width:110px;height:68px;object-fit:contain;border-radius:9px;background:#f1f5f9}
-.feature-admin-info{flex:1;min-width:0}.feature-admin-info small{font-size:11px;color:#16a34a}
-@media(max-width:650px){.feature-slider{border-radius:10px;margin-bottom:18px}.feature-slide-image{max-height:62vh}.feature-arrow{width:31px;height:31px;font-size:22px}.feature-prev{left:7px}.feature-next{right:7px}.feature-admin-row img{width:82px;height:58px}.feature-admin-row{gap:9px}}
+.feature-admin-row img{width:110px;height:68px;object-fit:cover;border-radius:9px;background:#e2e8f0}
+.feature-admin-info{flex:1;min-width:0}.feature-admin-info p{font-size:12px;color:var(--muted);margin:3px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.feature-admin-info small{font-size:11px;color:#16a34a}
+@media(max-width:650px){.feature-slider{height:clamp(150px,42vw,250px);border-radius:10px;margin-bottom:18px}.feature-arrow{width:31px;height:31px;font-size:22px}.feature-prev{left:7px}.feature-next{right:7px}.feature-admin-row img{width:82px;height:58px}.feature-admin-row{gap:9px}}
 
 </style>
 
@@ -3178,9 +3178,17 @@ body.dark-mode #events .event-card {
 
         <section id="page-dashboard" class="page active">
 
-          <div class="feature-slider is-empty" id="dashboardFeatureSlider" aria-label="CampusOne featured photos">
-            <div class="feature-slider-track" id="featureSliderTrack"></div>
-            <span id="welcomeName" hidden></span>
+          <div class="feature-slider" id="dashboardFeatureSlider" aria-label="CampusOne featured updates">
+            <div class="feature-slider-track" id="featureSliderTrack">
+              <div class="feature-slide feature-slide-empty is-active">
+                <div class="feature-slide-copy">
+                  <span class="feature-eyebrow">CAMPUSONE NGC • FEATURED</span>
+                  <h2 id="welcomeName">স্বাগতম! 👋</h2>
+                  <p>আজকের CampusOne NGC overview এখানে দেখতে পারবে।</p>
+                </div>
+                <div class="feature-slide-art" aria-hidden="true">✦</div>
+              </div>
+            </div>
             <button class="feature-arrow feature-prev" type="button" aria-label="Previous slide" onclick="changeFeatureSlide(-1)">‹</button>
             <button class="feature-arrow feature-next" type="button" aria-label="Next slide" onclick="changeFeatureSlide(1)">›</button>
             <div class="feature-slider-footer">
@@ -6915,11 +6923,13 @@ const progress =
         }
       );
 
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error("Cloudinary image upload failed");
+        const cloudMessage = data?.error?.message || `HTTP ${response.status}`;
+        const uploadError = new Error(`Cloudinary: ${cloudMessage}`);
+        uploadError.http_code = response.status;
+        throw uploadError;
       }
-
-      const data = await response.json();
 
       if (!data.secure_url) {
         throw new Error("Image URL পাওয়া যায়নি");
@@ -8048,29 +8058,32 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
       const track = document.getElementById("featureSliderTrack");
       const dots = document.getElementById("featureSliderDots");
       const counter = document.getElementById("featureSliderCounter");
-      const slider = document.getElementById("dashboardFeatureSlider");
-      if (!track || !dots || !counter || !slider) return;
+      if (!track || !dots || !counter) return;
 
       if (!featureSlidesCache.length) {
-        track.innerHTML = "";
+        const welcome = document.getElementById("welcomeName")?.textContent || "স্বাগতম! 👋";
+        track.innerHTML = `<div class="feature-slide feature-slide-empty is-active"><div class="feature-slide-copy"><span class="feature-eyebrow">CAMPUSONE NGC • FEATURED</span><h2>${escapeHtml(welcome)}</h2><p>আজকের CampusOne NGC overview এখানে দেখতে পারবে।</p></div><div class="feature-slide-art" aria-hidden="true">✦</div></div>`;
         dots.innerHTML = "";
-        counter.textContent = "";
-        slider.classList.add("is-empty");
-        slider.classList.add("is-single");
-        if (featureSlideTimer) clearInterval(featureSlideTimer);
+        counter.textContent = "01 / 01";
+        document.getElementById("dashboardFeatureSlider")?.classList.add("is-single");
         return;
       }
 
-      slider.classList.remove("is-empty");
       featureSlideIndex = ((featureSlideIndex % featureSlidesCache.length) + featureSlidesCache.length) % featureSlidesCache.length;
       track.innerHTML = featureSlidesCache.map((slide, index) => `
         <article class="feature-slide ${index === featureSlideIndex ? "is-active" : ""}" aria-hidden="${index !== featureSlideIndex}">
-          <img class="feature-slide-image" src="${escapeHtml(slide.imageUrl || "")}" alt="CampusOne featured photo ${index + 1}" loading="${index === featureSlideIndex ? "eager" : "lazy"}">
+          <img class="feature-slide-image" src="${escapeHtml(slide.imageUrl || "")}" alt="${escapeHtml(slide.title || "Featured update")}" loading="${index === featureSlideIndex ? "eager" : "lazy"}">
+          <div class="feature-slide-shade"></div>
+          <div class="feature-slide-copy">
+            <span class="feature-eyebrow">CAMPUSONE NGC • FEATURED</span>
+            <h2>${escapeHtml(slide.title || "")}</h2>
+            ${slide.description ? `<p>${escapeHtml(slide.description)}</p>` : ""}
+          </div>
         </article>`).join("");
 
-      dots.innerHTML = featureSlidesCache.map((_, index) => `<button type="button" class="feature-dot ${index === featureSlideIndex ? "active" : ""}" aria-label="Go to photo ${index + 1}" onclick="goToFeatureSlide(${index})"></button>`).join("");
+      dots.innerHTML = featureSlidesCache.map((_, index) => `<button type="button" class="feature-dot ${index === featureSlideIndex ? "active" : ""}" aria-label="Go to slide ${index + 1}" onclick="goToFeatureSlide(${index})"></button>`).join("");
       counter.textContent = `${String(featureSlideIndex + 1).padStart(2,"0")} / ${String(featureSlidesCache.length).padStart(2,"0")}`;
-      slider.classList.toggle("is-single", featureSlidesCache.length < 2);
+      document.getElementById("dashboardFeatureSlider")?.classList.toggle("is-single", featureSlidesCache.length < 2);
       restartFeatureSlideTimer();
     }
 
@@ -8133,14 +8146,14 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
 
     window.openFeatureSlideModal = function() {
       if (!isAdmin()) return;
-      const body = `<div class="form-group"><label class="form-label">ছবি নির্বাচন করুন</label><input id="featureSlideImage" class="form-input" type="file" accept="image/jpeg,image/png,image/webp"><div id="featureSlidePreview" style="margin-top:10px"></div><small style="color:var(--muted)">JPG, PNG বা WebP • ছবির আসল অনুপাত ঠিক রেখে সম্পূর্ণ ছবি দেখানো হবে।</small></div>`;
+      const body = `<div class="form-group"><label class="form-label">ছবি নির্বাচন করুন</label><input id="featureSlideImage" class="form-input" type="file" accept="image/jpeg,image/png,image/webp"><div id="featureSlidePreview" style="margin-top:10px"></div><small style="color:var(--muted)">JPG, PNG বা WebP ছবি আপলোড করুন।</small></div>`;
       openModal("Add Featured Photo", body, saveFeatureSlide, "Upload Photo");
       document.getElementById("featureSlideImage")?.addEventListener("change", () => {
         const file = document.getElementById("featureSlideImage")?.files?.[0];
         const preview = document.getElementById("featureSlidePreview");
         if (!file || !preview) return;
         const reader = new FileReader();
-        reader.onload = () => preview.innerHTML = `<img src="${reader.result}" style="display:block;width:100%;max-height:260px;object-fit:contain;border-radius:10px;background:#f1f5f9" alt="Photo preview">`;
+        reader.onload = () => preview.innerHTML = `<img src="${reader.result}" style="width:100%;max-height:220px;object-fit:contain;border-radius:10px;background:#e9eef3" alt="Preview">`;
         reader.readAsDataURL(file);
       });
     };
@@ -8149,12 +8162,15 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
       if (!isAdmin()) return;
       const file = document.getElementById("featureSlideImage")?.files?.[0] || null;
       if (!file) { showToast("একটি ছবি নির্বাচন করুন।","warning"); return; }
+      if (file.size > 10 * 1024 * 1024) { showToast("ছবির সাইজ ১০ MB-এর মধ্যে রাখুন।","warning"); return; }
       if (!["image/jpeg","image/png","image/webp"].includes(file.type)) { showToast("JPG, PNG বা WebP image দিন।","error"); return; }
       const btn = document.getElementById("modalSaveBtn");
       try {
         if (btn) { btn.disabled = true; btn.textContent = "Uploading..."; }
         const uploaded = await uploadImageToCloudinary(file);
         await addDoc(collection(db,"featureSlides"), {
+          title: "Featured Photo",
+          description: "",
           imageUrl: uploaded.secure_url || "",
           imagePublicId: uploaded.public_id || "",
           position: Date.now(),
@@ -8166,8 +8182,9 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
         await loadFeatureSlides();
         await openFeatureSlidesManager();
       } catch(e) {
-        console.error("Feature slide save:",e);
-        showToast("Slide upload হয়নি। Cloudinary settings ও Firestore Rules পরীক্ষা করুন।","error");
+        console.error("Feature photo upload/save failed:", e?.code || "", e?.message || e, e);
+        const detail = e?.http_code ? `Cloudinary HTTP ${e.http_code}` : (e?.code === "permission-denied" ? "Firestore permission-denied" : (e?.message || "Unknown error"));
+        showToast(`ছবি যোগ হয়নি: ${detail}`,"error");
       } finally {
         if (btn) { btn.disabled = false; btn.textContent = "Upload Photo"; }
       }
