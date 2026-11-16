@@ -3908,7 +3908,7 @@ body.dark-mode #events .event-card {
             <div id="adminFeatureSlidesAction" class="admin-action" onclick="openAdminFeature('featureSlides')">
               <div class="admin-action-icon">🎞️</div>
               <h3>Dashboard Feature Slider</h3>
-              <p>Dashboard-এর banner image ও text manage করুন।</p>
+              <p>Dashboard-এর Feature Slider manage করুন।</p>
             </div>
 
             <div id="adminMaintenanceAction" class="admin-action" onclick="openMaintenanceModal()">
@@ -8132,40 +8132,42 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
 
     window.openFeatureSlidesManager = async function() {
       if (!isAdmin()) { showToast("শুধুমাত্র Admin Feature Slider manage করতে পারবেন।","error"); return; }
-      let overlay = document.getElementById("featureSlidesFullWindow");
-      if (!overlay) {
-        overlay = document.createElement("div");
-        overlay.id = "featureSlidesFullWindow";
-        overlay.style.cssText = "position:fixed;inset:0;z-index:10050;background:var(--bg,#f8fafc);overflow:auto;padding:clamp(14px,3vw,32px);";
-        document.body.appendChild(overlay);
+      let page = document.getElementById("featureSlidesFullPage");
+      if (!page) {
+        page = document.createElement("section");
+        page.id = "featureSlidesFullPage";
+        page.style.cssText = "position:fixed;inset:0;z-index:10060;overflow-y:auto;background:var(--bg);padding:clamp(14px,3vw,32px);";
+        document.body.appendChild(page);
       }
-      overlay.innerHTML = `
-        <div style="max-width:1200px;margin:0 auto;min-height:100%;">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:8px 0 22px;border-bottom:1px solid var(--border);">
-            <div><div style="font-size:clamp(22px,3vw,30px);font-weight:800;">🎞️ Dashboard Feature Slider</div><div style="color:var(--muted);font-size:13px;margin-top:5px;">ছবি যোগ, দেখা ও মুছে ফেলার সম্পূর্ণ আলাদা ম্যানেজমেন্ট পেজ</div></div>
-            <div style="display:flex;gap:9px;flex-wrap:wrap;"><button class="primary-btn" type="button" onclick="openFeatureSlideModal()">＋ Add Photo</button><button class="secondary-btn" type="button" onclick="closeFeatureSlidesManager()">✕ Close</button></div>
-          </div>
-          <div id="featureSlidesAdminList" style="padding:20px 0;"><div class="empty">Loading...</div></div>
-        </div>`;
-      overlay.classList.remove("hidden");
+      page.classList.remove("hidden");
       document.body.style.overflow = "hidden";
+      page.innerHTML = `
+        <div style="max-width:1180px;margin:0 auto;">
+          <div class="card" style="overflow:hidden;">
+            <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+              <div><div class="card-title">Dashboard Feature Slider</div><div style="font-size:12px;color:var(--muted);margin-top:4px;">Dashboard-এর Featured Banner ও Slide পরিচালনা করুন।</div></div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="primary-btn" type="button" onclick="openFeatureSlideModal()">＋ Add Slide</button><button class="secondary-btn" type="button" onclick="closeFeatureSlidesManager()">✕ Close</button></div>
+            </div>
+            <div class="card-body" id="featureSlidesAdminList"><div class="empty">Loading...</div></div>
+          </div>
+        </div>`;
       try {
         const snap = await getDocs(collection(db,"featureSlides"));
         const rows = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.position??999999)-(b.position??999999)||(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
         const list = document.getElementById("featureSlidesAdminList");
         if (!list) return;
-        if (!rows.length) { list.innerHTML = `<div class="empty">এখনো কোনো ছবি যোগ করা হয়নি। উপরের Add Photo বাটনে ক্লিক করুন।</div>`; return; }
-        list.innerHTML = rows.map((x,i)=>`<div class="feature-admin-row" style="padding:16px 0;"><img src="${escapeHtml(x.imageUrl||"")}" alt="Featured photo ${i+1}" style="width:clamp(110px,20vw,220px);height:clamp(75px,13vw,135px);object-fit:contain;background:#eef2f7;"><div class="feature-admin-info"><strong>Photo ${i+1}</strong><small>Dashboard Featured Image</small></div><button class="danger-btn" type="button" onclick="deleteFeatureSlide('${escapeHtml(x.id)}')">Delete</button></div>`).join("");
+        if (!rows.length) { list.innerHTML = `<div class="empty">এখনো কোনো Slide যোগ করা হয়নি। Add Slide চাপুন।</div>`; return; }
+        list.innerHTML = rows.map((x,i)=>`<div class="feature-admin-row"><img src="${escapeHtml(x.imageUrl||"")}" alt=""><div class="feature-admin-info"><strong>${escapeHtml(x.title||"Untitled")}</strong><p>${escapeHtml(x.description||"")}</p><small>Slide ${i+1}</small></div><button class="danger-btn" type="button" onclick="deleteFeatureSlide('${escapeHtml(x.id)}')">Delete</button></div>`).join("");
       } catch(e) {
         console.error("Feature slider admin load:",e);
         const list = document.getElementById("featureSlidesAdminList");
-        if (list) list.innerHTML = `<div class="empty">ছবির তালিকা লোড হয়নি। Firestore Rules এবং Admin role পরীক্ষা করুন।</div>`;
+        if (list) list.innerHTML = `<div class="empty">Slide load হয়নি। Firestore Rules এবং Admin role পরীক্ষা করুন।</div>`;
       }
     };
 
     window.closeFeatureSlidesManager = function() {
-      const overlay = document.getElementById("featureSlidesFullWindow");
-      if (overlay) overlay.classList.add("hidden");
+      const page = document.getElementById("featureSlidesFullPage");
+      if (page) page.classList.add("hidden");
       document.body.style.overflow = "";
     };
 
