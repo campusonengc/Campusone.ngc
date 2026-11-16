@@ -4970,158 +4970,71 @@ body.dark-mode #events .event-card {
     }
 
     function updateUserUI() {
-
       if (!currentUser) return;
 
+      const name = currentProfile?.name || currentUser.displayName || currentUser.email?.split("@")[0] || "User";
+      const email = currentProfile?.email || currentUser.email || "";
+      const role = currentProfile?.role || "student";
+      const initial = getInitial(name);
+      const roleLabel = role === "admin" ? "Administrator" : role === "moderator" ? "Moderator" : "Student";
 
-      const name =
-        currentProfile?.name ||
-        currentUser.displayName ||
-        currentUser.email?.split("@")[0] ||
-        "User";
+      // Optional UI elements may not exist on every page/layout. Never let a
+      // missing element interrupt Firebase Auth/profile initialization.
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+      const toggleHidden = (id, hidden) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("hidden", hidden);
+      };
 
-
-      const email =
-        currentProfile?.email ||
-        currentUser.email ||
-        "";
-
-
-      const role =
-        currentProfile?.role ||
-        "student";
-
-
-      const initial =
-        getInitial(name);
-
-
-      document
-        .getElementById("welcomeName")
-        .textContent =
-        `স্বাগতম, ${name}! 👋`;
-
-
-      document
-        .getElementById("sideUserName")
-        .textContent = name;
-
-
-      document
-        .getElementById("sideUserRole")
-        .textContent =
-        role === "admin"
-          ? "Administrator"
-          : role === "moderator"
-            ? "Moderator"
-            : "Student";
-
-
-      document
-        .getElementById("topUserName")
-        .textContent = name;
-
-
-      document
-        .getElementById("topUserEmail")
-        .textContent = email;
-
+      setText("welcomeName", `স্বাগতম, ${name}! 👋`);
+      setText("sideUserName", name);
+      setText("sideUserRole", roleLabel);
+      setText("topUserName", name);
+      setText("topUserEmail", email);
+      setText("profileName", name);
+      setText("profileEmail", email);
+      setText("detailName", name);
+      setText("detailEmail", email);
+      setText("detailRole", roleLabel);
+      setText("detailUid", currentUser.uid);
+      setText("profileRoleBadge", roleLabel);
 
       setAvatar(document.getElementById("sideAvatar"), initial, currentProfile?.photoURL);
       setAvatar(document.getElementById("topAvatar"), initial, currentProfile?.photoURL);
       setAvatar(document.getElementById("profileAvatar"), initial, currentProfile?.photoURL);
 
-
-      document
-        .getElementById("profileName")
-        .textContent = name;
-
-
-      document
-        .getElementById("profileEmail")
-        .textContent = email;
-
-
-      document
-        .getElementById("detailName")
-        .textContent = name;
-
-
-      document
-        .getElementById("detailEmail")
-        .textContent = email;
-
-
-      document
-        .getElementById("detailRole")
-        .textContent =
-        role === "admin"
-          ? "Administrator"
-          : role === "moderator"
-            ? "Moderator"
-            : "Student";
-
-
-      document
-        .getElementById("detailUid")
-        .textContent =
-        currentUser.uid;
-
-
-      document
-        .getElementById("profileRoleBadge")
-        .textContent =
-        role === "admin"
-          ? "Administrator"
-          : role === "moderator"
-            ? "Moderator"
-            : "Student";
-
-
-      const isAdminUser =
-        role === "admin";
-
+      const isAdminUser = role === "admin";
       const isMod = role === "moderator";
-
-      document.getElementById("adminNav").classList.toggle("hidden", !(isAdminUser || isMod));
-      if (isAdminUser) renderModeratorPermissionPanel();
-      const adminBadge = document.getElementById("adminPanelRoleBadge");
-      if (adminBadge) adminBadge.textContent = isAdminUser ? "Administrator" : "Moderator";
+      toggleHidden("adminNav", !(isAdminUser || isMod));
+      if (isAdminUser && typeof renderModeratorPermissionPanel === "function") {
+        renderModeratorPermissionPanel();
+      }
+      setText("adminPanelRoleBadge", isAdminUser ? "Administrator" : "Moderator");
 
       const permissionElements = {
-        notices: "adminNoticeAction",
-        materials: "adminMaterialAction",
-        routine: "adminRoutineAction",
-        events: "adminEventAction",
-        results: "adminResultAction",
-        support: "adminSupportAction",
-        users: "adminUsersAction",
-        staff: "adminStaffAction",
-        gallery: "adminGalleryAction",
+        notices: "adminNoticeAction", materials: "adminMaterialAction", routine: "adminRoutineAction",
+        events: "adminEventAction", results: "adminResultAction", support: "adminSupportAction",
+        users: "adminUsersAction", staff: "adminStaffAction", gallery: "adminGalleryAction",
         maintenance: "adminMaintenanceAction"
       };
       Object.entries(permissionElements).forEach(([key, id]) => {
-        const el = document.getElementById(id);
-        if (el) el.classList.toggle("hidden", key === "maintenance" ? !isAdminUser : !canManage(key));
+        const hidden = key === "maintenance" ? !isAdminUser : !canManage(key);
+        toggleHidden(id, hidden);
       });
-      const staffBtn=document.getElementById("staffAdminBtn");
-      if(staffBtn) staffBtn.classList.toggle("hidden",!canManage("staff"));
-      const galleryBtn=document.getElementById("galleryAdminBtn");
-      if(galleryBtn) galleryBtn.classList.toggle("hidden",!canManage("gallery"));
-      const pageControls={notices:"noticeAdminBtn",materials:"materialAdminBtn",routine:"routineAdminBtn",events:"eventAdminBtn",results:"resultAdminBtn",gallery:"galleryAdminBtn"};
-      Object.entries(pageControls).forEach(([key,id])=>{const el=document.getElementById(id);if(el)el.classList.toggle("hidden",!canManage(key));});
-      const permPanel = document.getElementById("moderatorPermissionPanel");
-      if (permPanel) permPanel.classList.add("hidden");
-      const featureSlidesAction = document.getElementById("adminFeatureSlidesAction");
-      if (featureSlidesAction) featureSlidesAction.classList.toggle("hidden", !isAdminUser);
+      toggleHidden("staffAdminBtn", !canManage("staff"));
+      toggleHidden("galleryAdminBtn", !canManage("gallery"));
 
-      const modAccessAction = document.getElementById("adminModeratorAccessAction");
-      if (modAccessAction) modAccessAction.classList.toggle("hidden", !isAdminUser);
-
-
-
-
-
+      const pageControls = {
+        notices: "noticeAdminBtn", materials: "materialAdminBtn", routine: "routineAdminBtn",
+        events: "eventAdminBtn", results: "resultAdminBtn", gallery: "galleryAdminBtn"
+      };
+      Object.entries(pageControls).forEach(([key, id]) => toggleHidden(id, !canManage(key)));
+      document.getElementById("moderatorPermissionPanel")?.classList.add("hidden");
+      toggleHidden("adminFeatureSlidesAction", !isAdminUser);
+      toggleHidden("adminModeratorAccessAction", !isAdminUser);
     }
 
 
