@@ -4892,32 +4892,43 @@ body.dark-mode #events .event-card {
 
     async function loadUserProfile(user) {
 
-      const ref =
-        doc(db, "users", user.uid);
+      const ref = doc(db, "users", user.uid);
+      let snap = null;
+      let lastError = null;
 
-      const snap =
-        await getDoc(ref);
-
-
-      if (snap.exists()) {
-
-        currentProfile = snap.data();
-
-        if (currentProfile.blocked === true) {
-          showToast("আপনার account বর্তমানে Blocked। Admin-এর সাথে যোগাযোগ করুন।", "error");
-          await signOut(auth);
-          throw new Error("ACCOUNT_BLOCKED");
+      // নতুন account তৈরি হওয়ার সময় Firebase Auth state আগে update হতে পারে,
+      // কিন্তু users/{uid} Firestore document লেখা তখনও সম্পূর্ণ নাও হতে পারে।
+      // তাই প্রথম read-এ document না পেলে অল্প সময় অপেক্ষা করে পুনরায় read করি।
+      for (let attempt = 0; attempt < 6; attempt++) {
+        try {
+          snap = await getDoc(ref);
+          if (snap.exists()) break;
+        } catch (error) {
+          lastError = error;
+          console.warn(`Profile read attempt ${attempt + 1} failed:`, error);
         }
-
-      } else {
-        currentProfile = null;
-        throw new Error("PROFILE_REQUIRED");
+        if (attempt < 5) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
       }
 
+      if (!snap || !snap.exists()) {
+        currentProfile = null;
+        const error = new Error(lastError ? "PROFILE_READ_FAILED" : "PROFILE_REQUIRED");
+        error.cause = lastError || null;
+        throw error;
+      }
+
+      currentProfile = snap.data() || {};
+
+      if (currentProfile.blocked === true) {
+        showToast("আপনার account বর্তমানে Blocked। Admin-এর সাথে যোগাযোগ করুন।", "error");
+        await signOut(auth);
+        throw new Error("ACCOUNT_BLOCKED");
+      }
 
       await loadModeratorPermissions();
       updateUserUI();
-
     }
 
 
@@ -5067,15 +5078,15 @@ body.dark-mode #events .event-card {
             : "Student";
 
 
-      const isAdmin =
+      const isAdminUser =
         role === "admin";
 
       const isMod = role === "moderator";
 
-      document.getElementById("adminNav").classList.toggle("hidden", !(isAdmin || isMod));
-      if (isAdmin) renderModeratorPermissionPanel();
+      document.getElementById("adminNav").classList.toggle("hidden", !(isAdminUser || isMod));
+      if (isAdminUser) renderModeratorPermissionPanel();
       const adminBadge = document.getElementById("adminPanelRoleBadge");
-      if (adminBadge) adminBadge.textContent = isAdmin ? "Administrator" : "Moderator";
+      if (adminBadge) adminBadge.textContent = isAdminUser ? "Administrator" : "Moderator";
 
       const permissionElements = {
         notices: "adminNoticeAction",
@@ -5091,7 +5102,7 @@ body.dark-mode #events .event-card {
       };
       Object.entries(permissionElements).forEach(([key, id]) => {
         const el = document.getElementById(id);
-        if (el) el.classList.toggle("hidden", key === "maintenance" ? !isAdmin : !canManage(key));
+        if (el) el.classList.toggle("hidden", key === "maintenance" ? !isAdminUser : !canManage(key));
       });
       const staffBtn=document.getElementById("staffAdminBtn");
       if(staffBtn) staffBtn.classList.toggle("hidden",!canManage("staff"));
@@ -5102,10 +5113,10 @@ body.dark-mode #events .event-card {
       const permPanel = document.getElementById("moderatorPermissionPanel");
       if (permPanel) permPanel.classList.add("hidden");
       const featureSlidesAction = document.getElementById("adminFeatureSlidesAction");
-      if (featureSlidesAction) featureSlidesAction.classList.toggle("hidden", !isAdmin);
+      if (featureSlidesAction) featureSlidesAction.classList.toggle("hidden", !isAdminUser);
 
       const modAccessAction = document.getElementById("adminModeratorAccessAction");
-      if (modAccessAction) modAccessAction.classList.toggle("hidden", !isAdmin);
+      if (modAccessAction) modAccessAction.classList.toggle("hidden", !isAdminUser);
 
 
 
@@ -8585,28 +8596,21 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
           );
 
 
-          document
-            .getElementById(
-              "app"
-            )
-            .classList.add(
-              "hidden"
+          // Profile load ব্যর্থ হলে user-কে signed-out দেখাব না। Firebase Auth
+          // session অক্ষত থাকলে login form-এ পাঠানোর বদলে refresh/retry করা যায়।
+          const app = document.getElementById("app");
+          const authScreen = document.getElementById("authScreen");
+          if (auth.currentUser && error?.message !== "ACCOUNT_BLOCKED") {
+            app?.classList.add("hidden");
+            authScreen?.classList.remove("hidden");
+            showToast(
+              "Account information এখনো load হয়নি। Internet/Firebase connection check করে আবার refresh করুন।",
+              "error"
             );
-
-
-          document
-            .getElementById(
-              "authScreen"
-            )
-            .classList.remove(
-              "hidden"
-            );
-
-
-          showToast(
-            "Account information load করতে সমস্যা হয়েছে।",
-            "error"
-          );
+          } else {
+            app?.classList.add("hidden");
+            authScreen?.classList.remove("hidden");
+          }
 
         } finally {
 
