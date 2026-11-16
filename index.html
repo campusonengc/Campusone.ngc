@@ -2545,35 +2545,6 @@ body.dark-mode #events .event-card {
   padding: 3px;
 }
 
-
-/* Dashboard feature carousel */
-.feature-slider{position:relative;min-height:220px;margin-bottom:25px;border-radius:16px;overflow:hidden;background:linear-gradient(120deg,#064e32,#08783e 58%,#24945a);box-shadow:0 12px 30px rgba(5,83,47,.13);isolation:isolate}
-.feature-slider-track{position:relative;min-height:220px}
-.feature-slide{position:absolute;inset:0;display:flex;align-items:center;min-height:220px;opacity:0;visibility:hidden;transition:opacity .65s ease,visibility .65s ease;overflow:hidden;background:linear-gradient(115deg,#064e32,#16864e)}
-.feature-slide.is-active{position:relative;opacity:1;visibility:visible}
-.feature-slide-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
-.feature-slide-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,42,25,.91) 0%,rgba(0,57,33,.75) 48%,rgba(0,55,31,.16) 100%)}
-.feature-slide-copy{position:relative;z-index:2;width:min(760px,78%);padding:42px 54px;color:#fff}
-.feature-slide-copy h2{font-size:clamp(25px,3vw,36px);font-weight:800;line-height:1.3;margin:10px 0 8px;text-shadow:0 2px 12px rgba(0,0,0,.2)}
-.feature-slide-copy p{font-size:15px;line-height:1.8;color:rgba(255,255,255,.92);max-width:700px;white-space:pre-line}
-.feature-eyebrow{font:700 10px Inter,sans-serif;letter-spacing:1.8px;color:#c4f5d7}
-.feature-slide-empty{background:radial-gradient(circle at 90% 20%,rgba(255,255,255,.17),transparent 26%),linear-gradient(120deg,#034b2b,#238d56)}
-.feature-slide-art{position:absolute;right:6%;bottom:-75px;font-size:205px;color:rgba(255,255,255,.13);line-height:1}
-.feature-arrow{position:absolute;z-index:5;top:50%;transform:translateY(-50%);width:38px;height:38px;border:1px solid rgba(255,255,255,.35);border-radius:50%;background:rgba(0,0,0,.24);color:#fff;font-size:27px;line-height:1;display:grid;place-items:center;backdrop-filter:blur(8px)}
-.feature-prev{left:12px}.feature-next{right:12px}
-.feature-slider.is-single .feature-arrow,.feature-slider.is-single .feature-slider-footer{display:none}
-.feature-slider-footer{position:absolute;z-index:6;left:0;right:0;bottom:0;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(0deg,rgba(0,0,0,.38),transparent)}
-.feature-dots{display:flex;align-items:center;gap:7px}
-.feature-dot{width:8px;height:8px;border:0;border-radius:20px;background:rgba(255,255,255,.55);padding:0;transition:width .25s ease,background .25s ease}
-.feature-dot.active{width:24px;background:#fff}
-.feature-counter{font:600 11px Inter,sans-serif;color:#fff}
-.feature-admin-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
-.feature-admin-row:last-child{border-bottom:0}
-.feature-admin-row img{width:110px;height:68px;object-fit:cover;border-radius:9px;background:#e2e8f0}
-.feature-admin-info{flex:1;min-width:0}.feature-admin-info p{font-size:12px;color:var(--muted);margin:3px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.feature-admin-info small{font-size:11px;color:#16a34a}
-body.dark-mode .feature-admin-row{border-color:#2a4032}
-@media(max-width:650px){.feature-slider,.feature-slider-track,.feature-slide{min-height:190px}.feature-slide-copy{width:88%;padding:28px 30px}.feature-slide-copy h2{font-size:23px}.feature-slide-copy p{font-size:13px;line-height:1.6}.feature-arrow{width:31px;height:31px;font-size:22px}.feature-prev{left:7px}.feature-next{right:7px}.feature-slide-art{font-size:145px;right:2%}.feature-admin-row img{width:82px;height:58px}.feature-admin-row{gap:9px}.feature-admin-row .danger-btn{padding:7px 9px;font-size:11px}}
-
 </style>
 
 <style>
@@ -3185,23 +3156,16 @@ body.dark-mode .feature-admin-row{border-color:#2a4032}
 
         <section id="page-dashboard" class="page active">
 
-          <div class="feature-slider" id="dashboardFeatureSlider" aria-label="Featured updates">
-            <div class="feature-slider-track" id="featureSliderTrack">
-              <div class="feature-slide feature-slide-empty">
-                <div class="feature-slide-copy">
-                  <span class="feature-eyebrow">CAMPUSONE NGC • FEATURED</span>
-                  <h2 id="welcomeName">স্বাগতম! 👋</h2>
-                  <p>আজকের CampusOne NGC overview এখানে দেখতে পারবে।</p>
-                </div>
-                <div class="feature-slide-art" aria-hidden="true">✦</div>
-              </div>
-            </div>
-            <button class="feature-arrow feature-prev" type="button" aria-label="Previous slide" onclick="changeFeatureSlide(-1)">‹</button>
-            <button class="feature-arrow feature-next" type="button" aria-label="Next slide" onclick="changeFeatureSlide(1)">›</button>
-            <div class="feature-slider-footer">
-              <div class="feature-dots" id="featureSliderDots"></div>
-              <span class="feature-counter" id="featureSliderCounter">01 / 01</span>
-            </div>
+          <div class="welcome-card">
+
+            <h2 id="welcomeName">
+              স্বাগতম! 👋
+            </h2>
+
+            <p>
+              আজকের CampusOne NGC overview এখানে দেখতে পারবে।
+            </p>
+
           </div>
 
 
@@ -3904,12 +3868,6 @@ body.dark-mode .feature-admin-row{border-color:#2a4032}
               <p>College gallery photo add/manage করুন।</p>
             </div>
 
-            <div id="adminFeatureSlidesAction" class="admin-action" onclick="openAdminFeature('featureSlides')">
-              <div class="admin-action-icon">🎞️</div>
-              <h3>Dashboard Feature Slider</h3>
-              <p>Dashboard-এর ছবি, লেখা ও slide manage করুন।</p>
-            </div>
-
             <div id="adminMaintenanceAction" class="admin-action" onclick="openMaintenanceModal()">
               <div class="admin-action-icon">🛠️</div>
               <h3>Maintenance Mode</h3>
@@ -3923,8 +3881,6 @@ body.dark-mode .feature-admin-row{border-color:#2a4032}
             </div>
 
           </div>
-
-          <div id="featureSlidesManager" class="card hidden" style="margin-top:20px;"></div>
 
           <div id="moderatorPermissionPanel" class="card hidden" style="margin-top:20px;">
             <div class="card-header">
@@ -4898,33 +4854,73 @@ body.dark-mode .feature-admin-row{border-color:#2a4032}
     ========================= */
 
     async function loadUserProfile(user) {
+      const ref = doc(db, "users", user.uid);
+      let snap = null;
 
-      const ref =
-        doc(db, "users", user.uid);
-
-      const snap =
-        await getDoc(ref);
-
-
-      if (snap.exists()) {
-
-        currentProfile = snap.data();
-
-        if (currentProfile.blocked === true) {
-          showToast("আপনার account বর্তমানে Blocked। Admin-এর সাথে যোগাযোগ করুন।", "error");
-          await signOut(auth);
-          throw new Error("ACCOUNT_BLOCKED");
+      // Registration writes the Auth account first and the Firestore profile
+      // immediately afterwards. Auth state can fire between those two steps,
+      // so retry briefly before deciding that the profile is missing.
+      for (let attempt = 0; attempt < 7; attempt++) {
+        try {
+          snap = await getDoc(ref);
+        } catch (error) {
+          console.error("Profile read failed:", error?.code || error, error);
+          const wrapped = new Error("PROFILE_READ_FAILED");
+          wrapped.code = error?.code || "unknown";
+          throw wrapped;
         }
 
-      } else {
-        currentProfile = null;
-        throw new Error("PROFILE_REQUIRED");
+        if (snap.exists()) break;
+        if (attempt < 6) {
+          await new Promise(resolve => setTimeout(resolve, 400));
+        }
       }
 
+      // Recover older Auth-only accounts safely as Student accounts.
+      // Never infer or grant Admin/Moderator privileges here.
+      if (!snap || !snap.exists()) {
+        const basicProfile = {
+          uid: user.uid,
+          name: user.displayName || user.email?.split("@")[0] || "Student",
+          email: user.email || "",
+          role: "student",
+          accountType: "student",
+          roll: "",
+          academicYear: "",
+          group: "",
+          phone: "",
+          photoURL: user.photoURL || "",
+          profileAutoCreated: true,
+          createdAt: serverTimestamp()
+        };
 
+        try {
+          await setDoc(ref, basicProfile, { merge: true });
+          snap = await getDoc(ref);
+        } catch (error) {
+          console.error("Profile recovery failed:", error?.code || error, error);
+          const wrapped = new Error("PROFILE_CREATE_FAILED");
+          wrapped.code = error?.code || "unknown";
+          throw wrapped;
+        }
+      }
+
+      if (!snap || !snap.exists()) {
+        throw new Error("PROFILE_DOCUMENT_MISSING");
+      }
+
+      currentProfile = snap.data() || {};
+
+      if (currentProfile.blocked === true) {
+        showToast("আপনার account বর্তমানে Blocked। Admin-এর সাথে যোগাযোগ করুন।", "error");
+        await signOut(auth);
+        throw new Error("ACCOUNT_BLOCKED");
+      }
+
+      // Only Admin/Moderator are allowed to read moderatorAccess.
+      // Students must not request this protected settings document.
       await loadModeratorPermissions();
       updateUserUI();
-
     }
 
 
@@ -4946,10 +4942,11 @@ body.dark-mode .feature-admin-row{border-color:#2a4032}
         results: false, support: false, users: false, staff: false, gallery: false
       };
 
-      // Always read the saved Firebase configuration. Admin-এর own
-      // permissions সবসময় true হলেও control panel-এ saved Moderator
-      // permissions-ই দেখাতে হবে।
       moderatorPermissions = { ...defaults };
+
+      // Firestore rules intentionally restrict this settings document to
+      // Admins and Moderators. A Student must skip this read completely.
+      if (!isAdmin() && !isModerator()) return;
 
       try {
         const ref = doc(db, "settings", "moderatorAccess");
@@ -5108,8 +5105,6 @@ body.dark-mode .feature-admin-row{border-color:#2a4032}
       Object.entries(pageControls).forEach(([key,id])=>{const el=document.getElementById(id);if(el)el.classList.toggle("hidden",!canManage(key));});
       const permPanel = document.getElementById("moderatorPermissionPanel");
       if (permPanel) permPanel.classList.add("hidden");
-      const featureSlidesAction = document.getElementById("adminFeatureSlidesAction");
-      if (featureSlidesAction) featureSlidesAction.classList.toggle("hidden", !isAdmin());
       const modAccessAction = document.getElementById("adminModeratorAccessAction");
       if (modAccessAction) modAccessAction.classList.toggle("hidden", !isAdmin);
 
@@ -7381,7 +7376,6 @@ try {
 
 
     window.openAdminFeature=function(feature){
-      if(feature==="featureSlides"){if(!isAdmin()){showToast("শুধুমাত্র Admin এই Feature Slider manage করতে পারবেন।","error");return;}openFeatureSlidesManager();return;}
       if(feature==="users"){openAdminUsersPanel();return;}
       if(feature==="support"){loadAdminSupport();return;}
       if(feature==="notices"||feature==="materials"||feature==="routine"||feature==="events"||feature==="results"||feature==="staff"||feature==="gallery"){
@@ -8052,147 +8046,10 @@ window.renderAdminStatRows=function(headers,rows){
 window.closeAdminStatDetails=function(){document.getElementById("adminStatDetailsModal")?.classList.remove("show");};
 
     /* =========================
-       DASHBOARD FEATURE SLIDER
-    ========================= */
-    let featureSlidesCache = [];
-    let featureSlideIndex = 0;
-    let featureSlideTimer = null;
-
-    function renderFeatureSlider() {
-      const track = document.getElementById("featureSliderTrack");
-      const dots = document.getElementById("featureSliderDots");
-      const counter = document.getElementById("featureSliderCounter");
-      if (!track || !dots || !counter) return;
-
-      if (!featureSlidesCache.length) {
-        const welcome = document.getElementById("welcomeName")?.textContent || "স্বাগতম! 👋";
-        track.innerHTML = `<div class="feature-slide feature-slide-empty"><div class="feature-slide-copy"><span class="feature-eyebrow">CAMPUSONE NGC • FEATURED</span><h2>${escapeHtml(welcome)}</h2><p>আজকের CampusOne NGC overview এখানে দেখতে পারবে।</p></div><div class="feature-slide-art" aria-hidden="true">✦</div></div>`;
-        dots.innerHTML = "";
-        counter.textContent = "01 / 01";
-        document.getElementById("dashboardFeatureSlider")?.classList.add("is-single");
-        return;
-      }
-
-      featureSlideIndex = ((featureSlideIndex % featureSlidesCache.length) + featureSlidesCache.length) % featureSlidesCache.length;
-      track.innerHTML = featureSlidesCache.map((slide, index) => `
-        <article class="feature-slide ${index === featureSlideIndex ? "is-active" : ""}" aria-hidden="${index !== featureSlideIndex}">
-          <img class="feature-slide-image" src="${escapeHtml(slide.imageUrl || "")}" alt="${escapeHtml(slide.title || "Featured update")}" loading="${index === featureSlideIndex ? "eager" : "lazy"}">
-          <div class="feature-slide-shade"></div>
-          <div class="feature-slide-copy">
-            <span class="feature-eyebrow">CAMPUSONE NGC • FEATURED</span>
-            <h2>${escapeHtml(slide.title || "")}</h2>
-            ${slide.description ? `<p>${escapeHtml(slide.description)}</p>` : ""}
-          </div>
-        </article>`).join("");
-      dots.innerHTML = featureSlidesCache.map((_, index) => `<button type="button" class="feature-dot ${index === featureSlideIndex ? "active" : ""}" aria-label="Go to slide ${index + 1}" onclick="goToFeatureSlide(${index})"></button>`).join("");
-      counter.textContent = `${String(featureSlideIndex + 1).padStart(2,"0")} / ${String(featureSlidesCache.length).padStart(2,"0")}`;
-      document.getElementById("dashboardFeatureSlider")?.classList.toggle("is-single", featureSlidesCache.length < 2);
-      restartFeatureSlideTimer();
-    }
-
-    function restartFeatureSlideTimer() {
-      if (featureSlideTimer) clearInterval(featureSlideTimer);
-      if (featureSlidesCache.length > 1 && !document.hidden) {
-        featureSlideTimer = setInterval(() => {
-          featureSlideIndex = (featureSlideIndex + 1) % featureSlidesCache.length;
-          renderFeatureSlider();
-        }, 6000);
-      }
-    }
-
-    window.changeFeatureSlide = function(direction) {
-      if (featureSlidesCache.length < 2) return;
-      featureSlideIndex = (featureSlideIndex + direction + featureSlidesCache.length) % featureSlidesCache.length;
-      renderFeatureSlider();
-    };
-    window.goToFeatureSlide = function(index) {
-      if (!Number.isInteger(index) || index < 0 || index >= featureSlidesCache.length) return;
-      featureSlideIndex = index;
-      renderFeatureSlider();
-    };
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden && featureSlideTimer) clearInterval(featureSlideTimer);
-      else restartFeatureSlideTimer();
-    });
-
-    async function loadFeatureSlides() {
-      try {
-        const snap = await getDocs(collection(db, "featureSlides"));
-        featureSlidesCache = snap.docs.map(d => ({id:d.id, ...d.data()}));
-        featureSlidesCache.sort((a,b) => (a.position ?? 999999) - (b.position ?? 999999) || (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
-        renderFeatureSlider();
-      } catch (error) {
-        console.error("Feature slider load:", error);
-        renderFeatureSlider();
-      }
-    }
-
-    window.openFeatureSlidesManager = async function() {
-      if (!isAdmin()) { showToast("শুধুমাত্র Admin এই Feature Slider manage করতে পারবেন।","error"); return; }
-      const section = document.getElementById("featureSlidesManager");
-      if (!section) return;
-      section.classList.remove("hidden");
-      section.innerHTML = `<div class="card-header"><div><div class="card-title">Dashboard Feature Slider</div><div style="font-size:12px;color:#64748b;margin-top:3px;">ছবি ও লেখা যোগ করুন। একাধিক slide থাকলে প্রতি ৬ সেকেন্ডে স্বয়ংক্রিয়ভাবে পরিবর্তন হবে।</div></div><button class="primary-btn" type="button" onclick="openFeatureSlideModal()">＋ Add Slide</button></div><div class="card-body" id="featureSlidesAdminList"><div class="empty">Loading...</div></div>`;
-      try {
-        const snap = await getDocs(collection(db,"featureSlides"));
-        const rows = snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.position??999999)-(b.position??999999)||(b.createdAt?.toMillis?.()||0)-(a.createdAt?.toMillis?.()||0));
-        const list = document.getElementById("featureSlidesAdminList");
-        if (!rows.length) { list.innerHTML = `<div class="empty">এখনো কোনো Feature Slide যোগ করা হয়নি।</div>`; return; }
-        list.innerHTML = rows.map((x,i)=>`<div class="feature-admin-row"><img src="${escapeHtml(x.imageUrl||"")}" alt=""><div class="feature-admin-info"><strong>${escapeHtml(x.title||"Untitled")}</strong><p>${escapeHtml(x.description||"No description")}</p><small>Slide ${i+1}</small></div><button class="danger-btn" type="button" onclick="deleteFeatureSlide('${escapeHtml(x.id)}')">Delete</button></div>`).join("");
-      } catch(e) { console.error(e); document.getElementById("featureSlidesAdminList").innerHTML = `<div class="empty">Feature slides load হয়নি। Firestore rules check করুন।</div>`; }
-    };
-
-    window.openFeatureSlideModal = function() {
-      if (!isAdmin()) return;
-      const body = `<div class="form-group"><label class="form-label">Slide Title</label><input id="featureSlideTitle" class="form-input" maxlength="100" placeholder="যেমন: ভর্তি সংক্রান্ত জরুরি বিজ্ঞপ্তি"></div>
-        <div class="form-group"><label class="form-label">Description / Text</label><textarea id="featureSlideDescription" class="form-textarea" maxlength="280" placeholder="ছবির উপরে যে লেখা দেখাতে চান..."></textarea></div>
-        <div class="upload-box"><div style="font-size:30px">🖼️</div><strong>Feature Image</strong><p style="font-size:12px;color:#64748b">JPG, PNG বা WebP • Landscape image recommended</p><input id="featureSlideImage" type="file" accept="image/jpeg,image/png,image/webp"><div id="featureSlidePreview" style="margin-top:10px"></div></div>`;
-      openModal("Add Dashboard Feature Slide", body, saveFeatureSlide, "Upload Slide");
-      document.getElementById("featureSlideImage")?.addEventListener("change", () => {
-        const file = document.getElementById("featureSlideImage")?.files?.[0];
-        const preview = document.getElementById("featureSlidePreview");
-        if (!file || !preview) return;
-        const reader = new FileReader();
-        reader.onload = () => preview.innerHTML = `<img src="${reader.result}" style="width:100%;max-height:180px;object-fit:cover;border-radius:10px" alt="Preview">`;
-        reader.readAsDataURL(file);
-      });
-    };
-
-    async function saveFeatureSlide() {
-      if (!isAdmin()) return;
-      const title = document.getElementById("featureSlideTitle")?.value.trim() || "";
-      const description = document.getElementById("featureSlideDescription")?.value.trim() || "";
-      const file = document.getElementById("featureSlideImage")?.files?.[0] || null;
-      if (!title || !file) { showToast("Slide Title এবং Image দুটোই দিতে হবে।","warning"); return; }
-      if (!["image/jpeg","image/png","image/webp"].includes(file.type)) { showToast("JPG, PNG বা WebP image দিন।","error"); return; }
-      const btn = document.getElementById("modalSaveBtn");
-      try {
-        btn.disabled = true; btn.textContent = "Uploading...";
-        const uploaded = await uploadImageToCloudinary(file);
-        await addDoc(collection(db,"featureSlides"), {title,description,imageUrl:uploaded.secure_url||"",imagePublicId:uploaded.public_id||"",position:Date.now(),createdAt:serverTimestamp(),createdBy:currentUser.uid});
-        closeModal(); showToast("Feature slide যোগ হয়েছে।","success");
-        await loadFeatureSlides(); await openFeatureSlidesManager();
-      } catch(e) { console.error(e); showToast("Feature slide upload হয়নি। Cloudinary/Firebase settings check করুন।","error"); }
-      finally { if(btn) { btn.disabled=false; btn.textContent="Upload Slide"; } }
-    }
-
-    window.deleteFeatureSlide = async function(id) {
-      if (!isAdmin() || !id) return;
-      if (!confirm("এই Feature Slide delete করতে চান?")) return;
-      try {
-        await deleteDoc(doc(db,"featureSlides",id));
-        showToast("Feature slide delete হয়েছে।","success");
-        await loadFeatureSlides(); await openFeatureSlidesManager();
-      } catch(e) { console.error(e); showToast("Feature slide delete হয়নি।","error"); }
-    };
-
-    /* =========================
        DASHBOARD
     ========================= */
 
     async function loadDashboard() {
-
-      loadFeatureSlides();
 
       try {
 
@@ -8585,10 +8442,23 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
             );
 
 
-          showToast(
-            "Account information load করতে সমস্যা হয়েছে।",
-            "error"
-          );
+          const code = error?.code || error?.message || "unknown";
+          console.error("Auth/profile diagnostic:", code, error);
+
+          let message = "Account information load করতে সমস্যা হয়েছে।";
+          if (code === "permission-denied" || code.includes("PROFILE_READ_FAILED")) {
+            message = "Firestore permission denied: users/{UID} profile পড়া যাচ্ছে না। Firebase Console-এ সঠিক Project-এর Rules Publish করুন।";
+          } else if (code.includes("PROFILE_CREATE_FAILED")) {
+            message = "Firestore profile তৈরি করা যাচ্ছে না। users collection-এর create permission পরীক্ষা করুন।";
+          } else if (code === "PROFILE_DOCUMENT_MISSING") {
+            message = "Account profile পাওয়া যায়নি। আবার Login করুন।";
+          } else if (code === "ACCOUNT_BLOCKED") {
+            message = "এই Accountটি Admin দ্বারা Block করা হয়েছে।";
+          }
+
+          const loginMessage = document.getElementById("loginMessage");
+          if (loginMessage) setMessage("loginMessage", message, "error");
+          showToast(message, "error");
 
         } finally {
 
