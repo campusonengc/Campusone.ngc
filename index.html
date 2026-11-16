@@ -2921,7 +2921,7 @@ body.dark-mode #events .event-card {
         <div class="brand-icon"><img src="https://campusonengc.github.io/Campusone.ngc/logo.png" alt="CampusOne NGC logo" /></div>
 
         <span>CampusOne NGC</span>
-
+        <button class="logout-btn brand-logout" onclick="logout()" aria-label="Logout">↪ Logout</button>
       </div>
 
 
@@ -3031,37 +3031,7 @@ body.dark-mode #events .event-card {
         </div>
 
       </div>
-
-
-      <div class="sidebar-bottom">
-
-        <div class="user-mini">
-
-          <div id="sideAvatar" class="avatar">U</div>
-
-          <div class="user-mini-info">
-
-            <div id="sideUserName" class="user-mini-name">
-              User
-            </div>
-
-            <div id="sideUserRole" class="user-mini-role">
-              Student
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <button
-          class="logout-btn"
-          onclick="logout()"
-        >
-          ↪ Logout
-        </button>
-
-      </div>
+      <div class="sidebar-bottom"></div>
 
     </aside>
 
@@ -3116,7 +3086,7 @@ body.dark-mode #events .event-card {
 
           <button id="installAppBtn" class="small-btn install-app-btn hidden" type="button" onclick="installApp()">📱 Install App</button>
 
-          <div class="top-user">
+          <div class="top-user hidden">
 
             <div class="top-user-info">
 
@@ -3156,16 +3126,17 @@ body.dark-mode #events .event-card {
 
         <section id="page-dashboard" class="page active">
 
-          <div class="welcome-card">
-
-            <h2 id="welcomeName">
-              স্বাগতম! 👋
-            </h2>
-
-            <p>
-              আজকের CampusOne NGC overview এখানে দেখতে পারবে।
-            </p>
-
+          <div class="welcome-card" id="dashboardFeatureBox" aria-label="CampusOne featured announcements">
+            <div class="feature-slide-content">
+              <div class="feature-copy">
+                <span class="feature-kicker">CAMPUSONE NGC • FEATURED</span>
+                <h2 id="featureSlideTitle">স্বাগতম! 👋</h2>
+                <p id="featureSlideText">আজকের CampusOne NGC overview এখানে দেখতে পারবে।</p>
+              </div>
+            </div>
+            <div class="feature-slide-indicators" id="featureSlideIndicators" aria-label="Slide navigation"></div>
+            <button class="feature-arrow feature-prev" type="button" onclick="changeFeatureSlide(-1)" aria-label="Previous slide">‹</button>
+            <button class="feature-arrow feature-next" type="button" onclick="changeFeatureSlide(1)" aria-label="Next slide">›</button>
           </div>
 
 
@@ -3746,6 +3717,12 @@ body.dark-mode #events .event-card {
 
           <div class="admin-grid">
 
+            <div id="adminFeatureSlidesAction" class="admin-action" onclick="openAdminFeatureSlides()">
+              <div class="admin-action-icon">🖼️</div>
+              <h3>Homepage Feature Box</h3>
+              <p>Home page-এর slide image, title ও description add / edit / delete করুন।</p>
+            </div>
+
             <div
               id="adminNoticeAction"
               class="admin-action"
@@ -3880,6 +3857,14 @@ body.dark-mode #events .event-card {
               <p>Click করে Moderator-এর Block / Unlock control করুন।</p>
             </div>
 
+          </div>
+
+          <div id="adminFeatureSlidesSection" class="card hidden" style="margin-top:20px;">
+            <div class="card-header">
+              <div><div class="card-title">Homepage Feature Slides</div><div style="font-size:12px;color:#718078;margin-top:3px;">একাধিক slide যোগ করুন। প্রতিটি slide ৫ সেকেন্ড পরপর পরিবর্তন হবে।</div></div>
+              <button class="primary-btn" type="button" onclick="openFeatureSlideModal()">＋ Add Slide</button>
+            </div>
+            <div class="card-body" id="adminFeatureSlidesList"><div class="empty">Loading...</div></div>
           </div>
 
           <div id="moderatorPermissionPanel" class="card hidden" style="margin-top:20px;">
@@ -5050,11 +5035,12 @@ body.dark-mode #events .event-card {
         users: "adminUsersAction",
         staff: "adminStaffAction",
         gallery: "adminGalleryAction",
-        maintenance: "adminMaintenanceAction"
+        maintenance: "adminMaintenanceAction",
+        dashboardSlides: "adminFeatureSlidesAction"
       };
       Object.entries(permissionElements).forEach(([key, id]) => {
         const el = document.getElementById(id);
-        if (el) el.classList.toggle("hidden", key === "maintenance" ? !isAdmin : !canManage(key));
+        if (el) el.classList.toggle("hidden", (key === "maintenance" || key === "dashboardSlides") ? !isAdmin : !canManage(key));
       });
       const staffBtn=document.getElementById("staffAdminBtn");
       if(staffBtn) staffBtn.classList.toggle("hidden",!canManage("staff"));
@@ -8008,9 +7994,102 @@ window.closeAdminStatDetails=function(){document.getElementById("adminStatDetail
        DASHBOARD
     ========================= */
 
-    async function loadDashboard() {
+    
+/* =========================
+   HOMEPAGE FEATURE SLIDES
+========================= */
+let featureSlidesCache = [];
+let activeFeatureSlide = 0;
+let featureSlideTimer = null;
+const FEATURE_SLIDE_INTERVAL = 5000;
+
+async function loadFeatureSlides(){
+  try{
+    const snap = await getDocs(query(collection(db,"dashboardSlides"), orderBy("createdAt","asc")));
+    featureSlidesCache = snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.active !== false);
+    activeFeatureSlide = Math.min(activeFeatureSlide, Math.max(0,featureSlidesCache.length-1));
+    renderFeatureSlide();
+  }catch(error){
+    console.warn("Feature slides load failed:",error);
+    renderFeatureSlide();
+  }
+}
+function renderFeatureSlide(){
+  const box=document.getElementById("dashboardFeatureBox");
+  const title=document.getElementById("featureSlideTitle");
+  const desc=document.getElementById("featureSlideText");
+  const dots=document.getElementById("featureSlideIndicators");
+  if(!box||!title||!desc||!dots)return;
+  const slide=featureSlidesCache[activeFeatureSlide];
+  if(!slide){
+    box.classList.remove("has-image","multi-slide");box.style.backgroundImage="";
+    title.textContent="স্বাগতম! 👋";desc.textContent="আজকের CampusOne NGC overview এখানে দেখতে পারবে।";dots.innerHTML="";
+  }else{
+    title.textContent=slide.title||"CampusOne NGC";desc.textContent=slide.description||"";
+    if(slide.imageUrl){box.classList.add("has-image");box.style.backgroundImage=`url("${String(slide.imageUrl).replace(/"/g,"%22")}")`;}else{box.classList.remove("has-image");box.style.backgroundImage="";}
+    box.classList.toggle("multi-slide",featureSlidesCache.length>1);
+    dots.innerHTML=featureSlidesCache.map((_,i)=>`<button type="button" class="feature-dot ${i===activeFeatureSlide?'active':''}" aria-label="Go to slide ${i+1}" onclick="goToFeatureSlide(${i})"></button>`).join("");
+  }
+  clearInterval(featureSlideTimer);
+  if(featureSlidesCache.length>1) featureSlideTimer=setInterval(()=>changeFeatureSlide(1),FEATURE_SLIDE_INTERVAL);
+}
+window.changeFeatureSlide=function(direction){if(featureSlidesCache.length<2)return;activeFeatureSlide=(activeFeatureSlide+direction+featureSlidesCache.length)%featureSlidesCache.length;renderFeatureSlide();};
+window.goToFeatureSlide=function(index){if(index<0||index>=featureSlidesCache.length)return;activeFeatureSlide=index;renderFeatureSlide();};
+window.openAdminFeatureSlides=async function(){
+  if(!canManage("dashboardSlides") && !isAdmin()){showToast("Admin access প্রয়োজন।","error");return;}
+  document.getElementById("adminFeatureSlidesSection")?.classList.remove("hidden");
+  await loadAdminFeatureSlides();
+  document.getElementById("adminFeatureSlidesSection")?.scrollIntoView({behavior:"smooth",block:"start"});
+};
+async function loadAdminFeatureSlides(){
+  const wrap=document.getElementById("adminFeatureSlidesList");if(!wrap)return;
+  wrap.innerHTML='<div class="empty">Loading...</div>';
+  try{
+    const snap=await getDocs(query(collection(db,"dashboardSlides"),orderBy("createdAt","asc")));
+    const items=snap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!items.length){wrap.innerHTML='<div class="empty">এখনো কোনো feature slide যোগ করা হয়নি।</div>';return;}
+    wrap.innerHTML=items.map((item,i)=>`<div class="feature-admin-item"><img src="${escapeHtml(item.imageUrl||"")}" alt="Slide ${i+1}" onerror="this.style.visibility='hidden'"><div><h4>${escapeHtml(item.title||"Untitled slide")}</h4><p>${escapeHtml(item.description||"No description")} · ${item.active===false?'Hidden':'Visible'}</p></div><div class="feature-admin-actions"><button class="small-btn" type="button" onclick="editFeatureSlide('${item.id}')">Edit</button> <button class="danger-btn" type="button" onclick="deleteFeatureSlide('${item.id}')">Delete</button></div></div>`).join("");
+  }catch(e){console.error(e);wrap.innerHTML='<div class="empty">Slide load করা যায়নি।</div>';}
+}
+window.openFeatureSlideModal=function(id=null){
+  if(!isAdmin()){showToast("শুধু Admin feature slide manage করতে পারবেন।","error");return;}
+  const existing=id?featureSlidesCache.find(x=>x.id===id):null;
+  const body=`<div class="form-group"><label class="form-label">Slide Title</label><input id="featureTitleInput" class="form-input" maxlength="100" placeholder="শিরোনাম লিখুন" value="${escapeHtml(existing?.title||"")}"></div><div class="form-group"><label class="form-label">Description / Text</label><textarea id="featureDescriptionInput" class="form-textarea" maxlength="350" placeholder="ছোট বিবরণ লিখুন">${escapeHtml(existing?.description||"")}</textarea></div><div class="upload-box"><div style="font-size:28px">🖼️</div><b>Feature Image</b><p style="font-size:12px;color:#718078">JPG, PNG বা WebP · নতুন ছবি দিলে পুরোনোটি replace হবে</p><input id="featureImageInput" type="file" accept="image/jpeg,image/png,image/webp"><div id="featureImagePreview" style="margin-top:10px">${existing?.imageUrl?`<img src="${escapeHtml(existing.imageUrl)}" style="max-width:100%;max-height:150px;border-radius:9px">`:""}</div></div><label style="display:flex;align-items:center;gap:8px;margin-top:14px"><input id="featureActiveInput" type="checkbox" ${existing?.active===false?'':'checked'}> Homepage-এ দেখাবে</label>`;
+  openModal(id?"Edit Feature Slide":"Add Homepage Feature Slide",body,()=>saveFeatureSlide(id),id?"Save Changes":"Upload Slide");
+  document.getElementById("featureImageInput")?.addEventListener("change",e=>{const f=e.target.files?.[0],p=document.getElementById("featureImagePreview");if(f&&p){if(!["image/jpeg","image/png","image/webp"].includes(f.type)){showToast("JPG, PNG বা WebP image দিন।","error");e.target.value="";return;}const r=new FileReader();r.onload=()=>p.innerHTML=`<img src="${r.result}" style="max-width:100%;max-height:150px;border-radius:9px">`;r.readAsDataURL(f);}});
+};
+window.editFeatureSlide=function(id){openFeatureSlideModal(id);};
+async function saveFeatureSlide(id){
+  if(!isAdmin())return;
+  const title=document.getElementById("featureTitleInput")?.value.trim()||"";
+  const description=document.getElementById("featureDescriptionInput")?.value.trim()||"";
+  const file=document.getElementById("featureImageInput")?.files?.[0]||null;
+  const active=document.getElementById("featureActiveInput")?.checked||false;
+  if(!title){showToast("Slide title লিখুন।","warning");return;}
+  if(file&&!["image/jpeg","image/png","image/webp"].includes(file.type)){showToast("JPG, PNG বা WebP image দিন।","error");return;}
+  const btn=document.getElementById("modalSaveBtn");
+  try{
+    if(btn){btn.disabled=true;btn.textContent="Uploading...";}
+    const old=id?featureSlidesCache.find(x=>x.id===id):null;
+    let imageUrl=old?.imageUrl||"",imagePublicId=old?.imagePublicId||"";
+    if(file){const uploaded=await uploadImageToCloudinary(file);imageUrl=uploaded.secure_url;imagePublicId=uploaded.public_id||"";}
+    const payload={title,description,imageUrl,imagePublicId,active,updatedAt:serverTimestamp(),updatedBy:currentUser.uid};
+    if(id)await updateDoc(doc(db,"dashboardSlides",id),payload);
+    else await addDoc(collection(db,"dashboardSlides"),{...payload,createdAt:serverTimestamp(),createdBy:currentUser.uid});
+    closeModal();showToast("Homepage feature slide save হয়েছে।","success");await loadFeatureSlides();await loadAdminFeatureSlides();
+  }catch(e){console.error(e);showToast("Slide save হয়নি। Cloudinary upload preset / Firestore permission check করুন।","error");}
+  finally{if(btn){btn.disabled=false;btn.textContent=id?"Save Changes":"Upload Slide";}}
+}
+window.deleteFeatureSlide=async function(id){
+  if(!isAdmin()||!confirm("এই feature slide delete করবেন?"))return;
+  try{await deleteDoc(doc(db,"dashboardSlides",id));showToast("Slide delete হয়েছে।","success");if(activeFeatureSlide>=featureSlidesCache.length-1)activeFeatureSlide=0;await loadFeatureSlides();await loadAdminFeatureSlides();}
+  catch(e){console.error(e);showToast("Slide delete করা যায়নি।","error");}
+};
+
+async function loadDashboard() {
 
       try {
+        await loadFeatureSlides();
 
         const [
           noticesSnap,
@@ -8700,6 +8779,46 @@ th,td{border-bottom-color:#e4ece6}
   .card-header{padding:14px}
   .quick-btn{padding:13px 10px}
 }
+
+/* Homepage feature carousel and compact account controls */
+.sidebar-brand{display:flex;align-items:center;min-width:0}
+.brand-logout{margin-left:auto;flex:0 0 auto;white-space:nowrap}
+.sidebar-bottom{display:none!important}
+.top-user{display:none!important}
+.welcome-card{min-height:220px;position:relative;isolation:isolate;background:#075c32;overflow:hidden;padding:0!important;display:block!important}
+.welcome-card.has-image{background-size:cover;background-position:center;background-repeat:no-repeat}
+.welcome-card:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,54,30,.88),rgba(0,75,40,.55) 58%,rgba(0,50,28,.18));z-index:-1}
+.welcome-card:after{z-index:-1;pointer-events:none}
+.feature-slide-content{min-height:220px;padding:34px 38px;display:flex;align-items:center;position:relative;z-index:1}
+.feature-copy{max-width:min(720px,78%)}
+.feature-kicker{display:block;font:700 10px Inter,sans-serif;letter-spacing:2px;color:rgba(255,255,255,.78);margin-bottom:12px}
+.feature-copy h2{font-size:clamp(25px,3vw,36px);line-height:1.25;margin-bottom:8px;color:#fff}
+.feature-copy p{font-size:15px;line-height:1.7;color:rgba(255,255,255,.92);margin:0}
+.feature-slide-indicators{position:absolute;z-index:3;bottom:18px;left:38px;display:flex;gap:7px}
+.feature-dot{width:8px;height:8px;border:0;border-radius:20px;background:rgba(255,255,255,.5);padding:0;cursor:pointer;transition:.2s}
+.feature-dot.active{width:25px;background:#fff}
+.feature-arrow{position:absolute;z-index:4;top:50%;transform:translateY(-50%);width:36px;height:36px;border:1px solid rgba(255,255,255,.35);border-radius:50%;background:rgba(0,0,0,.18);color:white;font-size:25px;line-height:1;display:none;cursor:pointer}
+.welcome-card.multi-slide .feature-arrow{display:block}
+.feature-prev{right:54px}.feature-next{right:12px}
+.feature-slide-content{animation:featureFade .45s ease}
+@keyframes featureFade{from{opacity:.45;transform:translateY(5px)}to{opacity:1;transform:none}}
+.feature-admin-item{display:grid;grid-template-columns:150px 1fr auto;align-items:center;gap:14px;padding:12px;border:1px solid #e2ebe4;border-radius:12px;margin-bottom:10px}
+.feature-admin-item img{width:150px;height:82px;object-fit:cover;border-radius:8px;background:#edf4ef}
+.feature-admin-item h4{margin:0 0 4px;font-size:15px}.feature-admin-item p{margin:0;color:#718078;font-size:12px}
+@media(max-width:650px){
+ .sidebar-brand{display:flex!important;align-items:center;height:58px;padding:0 10px!important;gap:8px}
+ .sidebar-brand .brand-icon{width:34px!important;height:34px!important;flex:0 0 34px}
+ .sidebar-brand span:last-child{font-size:15px!important;white-space:nowrap}
+ .brand-logout{font-size:11px!important;padding:7px 9px!important;margin-left:auto}
+ .welcome-card{min-height:190px!important}
+ .feature-slide-content{min-height:190px;padding:22px 18px 42px}
+ .feature-copy{max-width:88%}.feature-copy h2{font-size:23px}.feature-copy p{font-size:13px}
+ .feature-slide-indicators{left:18px;bottom:15px}
+ .feature-prev{right:48px}.feature-next{right:9px}
+ .feature-arrow{width:30px;height:30px;font-size:21px}
+ .feature-admin-item{grid-template-columns:90px 1fr;gap:9px}.feature-admin-item img{width:90px;height:65px}.feature-admin-item .feature-admin-actions{grid-column:1/-1;display:flex;justify-content:flex-end}
+}
+
 /* Dark mode harmonization */
 body.dark-mode{--primary:#20a45e;--primary-dark:#08783e;--secondary:#35b875;--bg:#0b1510;--card:#142019;--text:#e8f3eb;--muted:#a8b9ad;--border:#2a4032}
 body.dark-mode .sidebar{background:#064326}
