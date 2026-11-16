@@ -4840,45 +4840,32 @@ body.dark-mode #events .event-card {
 
     async function loadUserProfile(user) {
 
-      const ref = doc(db, "users", user.uid);
-      let snap = null;
+      const ref =
+        doc(db, "users", user.uid);
 
-      try {
-        snap = await getDoc(ref);
-      } catch (error) {
-        // Firebase Auth session থাকলে Firestore profile read ব্যর্থ হলেও
-        // basic account information দিয়ে portal চালু রাখবে।
-        console.error("Firestore account profile read error:", error);
-      }
+      const snap =
+        await getDoc(ref);
 
-      if (snap && snap.exists()) {
-        currentProfile = snap.data() || {};
+
+      if (snap.exists()) {
+
+        currentProfile = snap.data();
 
         if (currentProfile.blocked === true) {
           showToast("আপনার account বর্তমানে Blocked। Admin-এর সাথে যোগাযোগ করুন।", "error");
           await signOut(auth);
           throw new Error("ACCOUNT_BLOCKED");
         }
-      } else {
-        // পুরোনো/অসম্পূর্ণ account বা users/{uid} document না থাকলে
-        // Firebase Authentication-এর তথ্য দিয়ে নিরাপদ basic profile তৈরি।
-        // এখানে কখনো admin/moderator role অনুমান করা হবে না।
-        currentProfile = {
-          uid: user.uid,
-          name: user.displayName || user.email?.split("@")[0] || "User",
-          email: user.email || "",
-          photoURL: user.photoURL || "",
-          role: "student",
-          accountType: "student"
-        };
 
-        console.warn(
-          "Account profile document is missing or unreadable. Showing basic Firebase Auth information."
-        );
+      } else {
+        currentProfile = null;
+        throw new Error("PROFILE_REQUIRED");
       }
+
 
       await loadModeratorPermissions();
       updateUserUI();
+
     }
 
 
@@ -7082,17 +7069,15 @@ try {
           Student cannot change own role.
         */
 
-        await setDoc(
-          doc(db, "users", currentUser.uid),
+        await updateDoc(
+          doc(
+            db,
+            "users",
+            currentUser.uid
+          ),
           {
-            uid: currentUser.uid,
-            name,
-            email: currentUser.email || "",
-            photoURL: currentProfile?.photoURL || currentUser.photoURL || "",
-            role: currentProfile?.role || "student",
-            accountType: currentProfile?.accountType || "student"
-          },
-          { merge: true }
+            name
+          }
         );
 
 
