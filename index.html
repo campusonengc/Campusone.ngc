@@ -5108,7 +5108,7 @@ body.dark-mode #events .event-card {
       const permPanel = document.getElementById("moderatorPermissionPanel");
       if (permPanel) permPanel.classList.add("hidden");
       const featureSlidesAction = document.getElementById("adminFeatureSlidesAction");
-      if (featureSlidesAction) featureSlidesAction.classList.toggle("hidden", !isAdmin());
+      if (featureSlidesAction) featureSlidesAction.classList.toggle("hidden", !isAdmin);
 
       const modAccessAction = document.getElementById("adminModeratorAccessAction");
       if (modAccessAction) modAccessAction.classList.toggle("hidden", !isAdmin);
